@@ -1,0 +1,28 @@
+# edited 01 jun 2016 - Arduino Srl (http://www.arduino.org/) - Francesco Alessi (alfran) - francesco@arduino.org
+
+##############################################################
+star_otto.name=Arduino Star OTTO
+
+star_otto.upload.tool=dfuse
+star_otto.upload.protocol=dfuse
+
+star_otto.upload.use_1200bps_touch=true
+star_otto.upload.file_type=bin
+star_otto.upload.ram.maximum_size=323584
+star_otto.upload.flash.maximum_size=2097152
+star_otto.upload.maximum_size=2097152
+star_otto.upload.mem_start=0x08000000
+
+star_otto.upload.usbID=0483:DF11
+star_otto.upload.altID=0
+
+star_otto.build.mcu=cortex-m4
+star_otto.build.f_cpu=180000000L
+star_otto.build.core=arduino
+star_otto.build.extra_flags=-DMCU_STM32F469NI -mthumb -DSTM32_HIGH_DENSITY -DSTM32F2 -DSTM32F4 -DBOARD_discovery_f4
+star_otto.build.ldscript=link-tools/jtag.ld
+star_otto.build.variant=otto
+star_otto.build.variant_system_lib=lib_f469.a
+star_otto.build.vect=VECT_TAB_BASE
+star_otto.build.density=STM32_HIGH_DENSITY
+##############################################################

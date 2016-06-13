@@ -1,0 +1,136 @@
+# Arduino STM32 Core and platform
+#
+# For more info:
+# https://github.com/arduino/Arduino/wiki/Arduino-IDE-1.5---3rd-party-Hardware-specification
+
+#
+# edited 1 Jun 2016 - Arduino srl - Francesco Alessi (alfran) - francesco@arduino.org
+#
+
+name=Arduino STM32 (32-bits) boards
+version=1.7.0
+
+# STM32 compiler variables
+# ------------------------
+
+compiler.path={runtime.ide.path}/hardware/tools/gcc-arm-none-eabi-4.8.3-2014q1/bin/
+compiler.c.cmd=arm-none-eabi-gcc
+compiler.c.flags=-c -g -Os -w -MMD -ffunction-sections -fdata-sections -nostdlib --param max-inline-insns-single=500 -DBOARD_{build.variant} -D{build.vect}  -gdwarf-3 -mcpu=cortex-m4 -mthumb -mlittle-endian -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb-interwork -lm -lc 
+compiler.c.elf.cmd=arm-none-eabi-g++
+compiler.c.elf.flags=-Os -Wl,--gc-sections -gdwarf-3 -mcpu=cortex-m4 -mthumb -mlittle-endian -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb-interwork  -lm -lc  
+compiler.S.cmd=arm-none-eabi-gcc
+compiler.S.flags=-c -g -gdwarf-3 -x assembler-with-cpp -MMD  -mcpu=cortex-m4 -mthumb -mlittle-endian -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb-interwork  -lm -lc 
+compiler.cpp.cmd=arm-none-eabi-g++
+compiler.cpp.flags=-c -g -gdwarf-3 -Os -w -MMD -ffunction-sections -fdata-sections -nostdlib --param max-inline-insns-single=500 -fno-rtti -fno-exceptions -DBOARD_{build.variant} -D{build.vect} -mcpu=cortex-m4 -mthumb -mlittle-endian -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb-interwork  -lm -lc 
+compiler.ar.cmd=arm-none-eabi-ar
+compiler.ar.flags=rcs
+compiler.objcopy.cmd=arm-none-eabi-objcopy
+compiler.objcopy.eep.flags=-O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma .eeprom=0
+compiler.elf2hex.flags=-O binary
+compiler.elf2hex.cmd=arm-none-eabi-objcopy
+compiler.ldflags= -mcpu=cortex-m4 -mthumb -mlittle-endian -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb-interwork  -lm -lc
+compiler.size.cmd=arm-none-eabi-size
+compiler.define=-DARDUINO=                            
+
+# this can be overriden in boards.txt
+build.cpu_flags=
+build.hs_flag=
+build.common_flags=
+build.extra_flags= {build.cpu_flags} {build.hs_flag} {build.common_flags}
+
+# These can be overridden in platform.local.txt
+compiler.c.extra_flags=
+#compiler.c.elf.extra_flags="-L{build.variant.path}/ld"
+compiler.c.elf.extra_flags="-L{build.variant.path}/link-tools"
+compiler.cpp.extra_flags=
+compiler.S.extra_flags=
+compiler.ar.extra_flags=
+compiler.elf2hex.extra_flags=
+compiler.libs.c.flags="-I{build.core.path}" "-I{build.core.path}/usb/STM32_USB_Device_Library/Class/CDC/Inc" "-I{build.core.path}/usb/STM32_USB_Device_Library/Core/Inc" "-I{build.core.path}/usb" "-I{build.core.path}/HAL/Device" "-I{build.core.path}/HAL/inc" "-DUSE_HAL_DRIVER" "-DSTM32F469xx"
+#compiler.libs.c.flags="-I{build.core.path}/libmaple" "-I{build.core.path}/libmaple/usb/STM32_USB_Device_Library/Class/CDC/Inc" "-I{build.core.path}/libmaple/usb/STM32_USB_Device_Library/Core/Inc" "-I{build.core.path}/libmaple/usb" "-I{build.core.path}/libmaple/HAL/Device" "-I{build.core.path}/libmaple/HAL/inc" "-DUSE_HAL_DRIVER" "-DSTM32F469xx"
+
+# STM32 copmpile patterns
+# -----------------------
+
+## Compile c files
+recipe.c.o.pattern="{compiler.path}{compiler.c.cmd}" {compiler.c.flags} -mcpu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.c.extra_flags} {build.extra_flags} {compiler.libs.c.flags} {includes} "{source_file}" -o "{object_file}"
+
+## Compile c++ files
+recipe.cpp.o.pattern="{compiler.path}{compiler.cpp.cmd}" {compiler.cpp.flags} -mcpu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {build.cpu_flags} {build.hs_flag} {build.common_flags} {compiler.libs.c.flags} {includes} "{source_file}" -o "{object_file}"
+
+## Compile S files
+recipe.S.o.pattern="{compiler.path}{compiler.c.cmd}" {compiler.S.flags} -mcpu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.S.extra_flags} {build.extra_flags} {build.cpu_flags} {build.hs_flag} {build.common_flags} {compiler.libs.c.flags} {includes} "{source_file}" -o "{object_file}"
+
+## Create archives
+recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} {compiler.ar.extra_flags} "{build.path}/{archive_file}" "{object_file}"
+
+## Combine gc-sections, archives, and objects
+recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" {compiler.c.elf.flags} -mcpu={build.mcu} "-T{build.variant.path}/{build.ldscript}" "-Wl,-Map,{build.path}/{build.project_name}.map" {compiler.c.elf.extra_flags} -o "{build.path}/{build.project_name}.elf" "-L{build.path}" -lm -lgcc -mthumb -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl,--warn-section-align -Wl,--warn-unresolved-symbols -Wl,--start-group {object_files} -Wl,--whole-archive "{build.path}/{archive_file}" -Wl,--no-whole-archive -Wl,--end-group
+
+## Create eeprom
+recipe.objcopy.eep.pattern=
+
+## Create hex
+recipe.objcopy.hex.pattern="{compiler.path}{compiler.elf2hex.cmd}" {compiler.elf2hex.flags} {compiler.elf2hex.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.bin"
+
+## Compute size
+recipe.size.pattern="{compiler.path}{compiler.size.cmd}" -A "{build.path}/{build.project_name}.elf"
+recipe.size.regex=^(?:\.text|\.rodata|\.ARM.exidx)\s+([0-9]+).*
+recipe.size.regex.data=^(?:\.data|\.bss|\.noinit)\s+([0-9]+).*
+
+# STM32 Uploader/Programmers tools
+# --------------------------------
+
+# Generic STM32 upload via serial to Serial Port 1 (pins PA9 and PA10) - note. Boot0 line needs to high on board reset to enable upload via serial
+# at the end of the upload the program is automatically run, without the board being reset
+
+tools.serial_upload.cmd=serial_upload
+tools.serial_upload.cmd.windows=serial_upload.bat
+tools.serial_upload.cmd.macosx=serial_upload
+#tools.serial_upload.cmd.linux=
+
+tools.serial_upload.path={runtime.hardware.path}/tools/win
+tools.serial_upload.path.macosx={runtime.hardware.path}/tools/macosx
+
+tools.serial_upload.upload.params.verbose=-d
+tools.serial_upload.upload.params.quiet=
+tools.serial_upload.upload.pattern="{path}/{cmd}" {serial.port.file} {upload.altID} {upload.usbID} "{build.path}/{build.project_name}.bin"
+
+# STLINK/V2
+
+tools.stlink.cmd=stlink
+tools.stlink.cmd.windows=stlink_upload.bat
+tools.stlink.cmd.macosx=stlink_upload
+#tools.stlink.cmd.linux=
+
+tools.stlink.path.windows={runtime.hardware.path}/tools/win
+tools.stlink.path.macosx={runtime.hardware.path}/tools/macosx
+
+tools.stlink.upload.params.verbose=-d
+tools.stlink.upload.params.quiet=
+tools.stlink.upload.pattern="{path}/{cmd}" {serial.port.file} {upload.altID} {upload.usbID} "{build.path}/{build.project_name}.bin"
+
+# DfuSe
+
+tools.dfuse.cmd=dfuse
+tools.dfuse.cmd.windows=StAr_Write.bat
+tools.dfuse.cmd.macosx=dfu-util
+#tools.dfuse.cmd.linux=
+
+tools.dfuse.path.windows={runtime.ide.path}/hardware/tools/dfu-util/win/bin 
+#tools.dfuse.path.macosx={runtime.hardware.path}/tools/dfu-util/mac/bin
+tools.dfuse.path.macosx={runtime.ide.path}/hardware/tools/dfu-util/mac/bin
+
+tools.dfuse.upload.params.verbose=-v
+tools.dfuse.upload.params.quiet=
+tools.dfuse.upload.pattern="{path}/{cmd}" "{path}" {upload.usbID} {upload.altID} {upload.mem_start} "{build.path}/{build.project_name}.bin"
+
+# USB Flags
+# ---------
+
+# Default usb manufacturer will be replaced at compile time using
+# numeric vendor ID if available or by board's specific value.
+build.usb_manufacturer="Unknown"
+build.usb_flags=-DUSB_VID={build.vid} -DUSB_PID={build.pid} -DUSBCON '-DUSB_MANUFACTURER={build.usb_manufacturer}' '-DUSB_PRODUCT={build.usb_product}'
+
+
