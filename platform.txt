@@ -15,13 +15,13 @@ version=1.7.0
 
 compiler.path={runtime.ide.path}/hardware/tools/gcc-arm-none-eabi-4.8.3-2014q1/bin/
 compiler.c.cmd=arm-none-eabi-gcc
-compiler.c.flags=-c -g -Os -w -MMD -ffunction-sections -fdata-sections -nostdlib --param max-inline-insns-single=500 -DBOARD_{build.variant} -D{build.vect}  -gdwarf-3 -mcpu=cortex-m4 -mthumb -mlittle-endian -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb-interwork -lm -lc 
+compiler.c.flags=-c -g -Os -w -MMD -ffunction-sections -fdata-sections -nostdlib --param max-inline-insns-single=500 -DBOARD_{build.variant} -D{build.vect}  -gdwarf-3 -mcpu=cortex-m4 -mthumb -mlittle-endian -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb-interwork -lm -lc
 compiler.c.elf.cmd=arm-none-eabi-g++
-compiler.c.elf.flags=-Os -Wl,--gc-sections -gdwarf-3 -mcpu=cortex-m4 -mthumb -mlittle-endian -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb-interwork  -lm -lc  
+compiler.c.elf.flags=-Os -Wl,--gc-sections -gdwarf-3 -mcpu=cortex-m4 -mthumb -mlittle-endian -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb-interwork  -lm -lc
 compiler.S.cmd=arm-none-eabi-gcc
-compiler.S.flags=-c -g -gdwarf-3 -x assembler-with-cpp -MMD  -mcpu=cortex-m4 -mthumb -mlittle-endian -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb-interwork  -lm -lc 
+compiler.S.flags=-c -g -gdwarf-3 -x assembler-with-cpp -MMD  -mcpu=cortex-m4 -mthumb -mlittle-endian -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb-interwork  -lm -lc
 compiler.cpp.cmd=arm-none-eabi-g++
-compiler.cpp.flags=-c -g -gdwarf-3 -Os -w -MMD -ffunction-sections -fdata-sections -nostdlib --param max-inline-insns-single=500 -fno-rtti -fno-exceptions -DBOARD_{build.variant} -D{build.vect} -mcpu=cortex-m4 -mthumb -mlittle-endian -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb-interwork  -lm -lc 
+compiler.cpp.flags=-c -g -gdwarf-3 -Os -w -MMD -ffunction-sections -fdata-sections -nostdlib --param max-inline-insns-single=500 -fno-rtti -fno-exceptions -DBOARD_{build.variant} -D{build.vect} -mcpu=cortex-m4 -mthumb -mlittle-endian -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb-interwork  -lm -lc
 compiler.ar.cmd=arm-none-eabi-ar
 compiler.ar.flags=rcs
 compiler.objcopy.cmd=arm-none-eabi-objcopy
@@ -30,7 +30,7 @@ compiler.elf2hex.flags=-O binary
 compiler.elf2hex.cmd=arm-none-eabi-objcopy
 compiler.ldflags= -mcpu=cortex-m4 -mthumb -mlittle-endian -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb-interwork  -lm -lc
 compiler.size.cmd=arm-none-eabi-size
-compiler.define=-DARDUINO=                            
+compiler.define=-DARDUINO=
 
 # this can be overriden in boards.txt
 build.cpu_flags=
@@ -110,20 +110,16 @@ tools.stlink.upload.params.verbose=-d
 tools.stlink.upload.params.quiet=
 tools.stlink.upload.pattern="{path}/{cmd}" {serial.port.file} {upload.altID} {upload.usbID} "{build.path}/{build.project_name}.bin"
 
-# DfuSe
+# DFU Util
 
-tools.dfuse.cmd=dfuse
-tools.dfuse.cmd.windows=StAr_Write.bat
-tools.dfuse.cmd.macosx=dfu-util
-#tools.dfuse.cmd.linux=
+tools.dfu-util.cmd=dfu-util
+tools.dfu-util.cmd.windows=StAr_Write.bat
 
-tools.dfuse.path.windows={runtime.ide.path}/hardware/tools/dfu-util/win/bin 
-#tools.dfuse.path.macosx={runtime.hardware.path}/tools/dfu-util/mac/bin
-tools.dfuse.path.macosx={runtime.ide.path}/hardware/tools/dfu-util/mac/bin
+tools.dfu-util.path={runtime.ide.path}/hardware/tools/dfu-util/bin
 
-tools.dfuse.upload.params.verbose=-v
-tools.dfuse.upload.params.quiet=
-tools.dfuse.upload.pattern="{path}/{cmd}" "{path}" {upload.usbID} {upload.altID} {upload.mem_start} "{build.path}/{build.project_name}.bin"
+tools.dfu-util.upload.params.verbose=-v
+tools.dfu-util.upload.params.quiet=
+tools.dfu-util.upload.pattern="{path}/{cmd}" "{path}" {upload.usbID} {upload.altID} {upload.mem_start} "{build.path}/{build.project_name}.bin"
 
 # USB Flags
 # ---------
@@ -132,5 +128,3 @@ tools.dfuse.upload.pattern="{path}/{cmd}" "{path}" {upload.usbID} {upload.altID}
 # numeric vendor ID if available or by board's specific value.
 build.usb_manufacturer="Unknown"
 build.usb_flags=-DUSB_VID={build.vid} -DUSB_PID={build.pid} -DUSBCON '-DUSB_MANUFACTURER={build.usb_manufacturer}' '-DUSB_PRODUCT={build.usb_product}'
-
-

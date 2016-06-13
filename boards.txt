@@ -3,7 +3,10 @@
 ##############################################################
 star_otto.name=Arduino Star OTTO
 
-star_otto.upload.tool=dfuse
+star_otto.vid.0=0x2341
+star_otto.pid.0=0x0058
+
+star_otto.upload.tool=dfu-util
 star_otto.upload.protocol=dfuse
 
 star_otto.upload.use_1200bps_touch=true
