@@ -41,6 +41,8 @@
 #include "memory.h"
 #include "nvic.h"
 #include "bitband.h"
+#include "../../../libraries/agfx/src/star_ts.h"
+//#include "/Users/Francesco/Documents/Arduino/libraries/agfx/src/star_ts.h"
 
 static inline void dispatch_single_exti(uint32 exti_num);
 static inline void dispatch_extis(uint32 start, uint32 stop);
@@ -98,6 +100,11 @@ void exti_attach_interrupt(afio_exti_num num,
                            voidFuncPtr handler,
                            exti_trigger_mode mode) {
     ASSERT(handler);
+    #ifdef ENABLE_STAR_TS_IRQ
+    // Reserved for StAr TS irq
+        if (num == 0)
+            return
+    #endif
 
     /* Register the handler */
     exti_channels[num].handler = handler;
@@ -132,6 +139,12 @@ void exti_attach_interrupt(afio_exti_num num,
  * @see afio_exti_num
  */
 void exti_detach_interrupt(afio_exti_num num) {
+    #ifdef ENABLE_STAR_TS_IRQ
+        // Reserved for StAr TS irq
+        if (num == 0)
+            return
+    #endif
+
     /* First, mask the interrupt request */
     bb_peri_set_bit(&EXTI_BASE->IMR, num, 0);
 
@@ -147,9 +160,12 @@ void exti_detach_interrupt(afio_exti_num num) {
  * Interrupt handlers
  */
 
+//#if !defined(ENABLE_STAR_TS_IRQ)
+#ifndef ENABLE_STAR_TS_IRQ
 void __irq_exti0(void) {
     dispatch_single_exti(AFIO_EXTI_0);
 }
+#endif
 
 void __irq_exti1(void) {
     dispatch_single_exti(AFIO_EXTI_1);
