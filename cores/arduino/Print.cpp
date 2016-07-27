@@ -104,7 +104,7 @@ size_t Print::print(unsigned long n, int base) {
 }
 
 size_t Print::print(long long n, int base) {
-    if (base == BYTE)
+    if (base == Byte)
 	{
         return write((uint8)n);
     }
@@ -117,7 +117,7 @@ size_t Print::print(long long n, int base) {
 
 size_t Print::print(unsigned long long n, int base) {
 size_t c=0;
-    if (base == BYTE) {
+    if (base == Byte) {
         c= write((uint8)n);
     } else {
         c= printNumber(n, base);
