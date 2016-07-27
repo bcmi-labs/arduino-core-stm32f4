@@ -41,8 +41,7 @@
 #include "memory.h"
 #include "nvic.h"
 #include "bitband.h"
-#include "../../../libraries/agfx/src/star_ts.h"
-//#include "/Users/Francesco/Documents/Arduino/libraries/agfx/src/star_ts.h"
+#include "../../../../../libraries/agfx/src/star_ts.h"
 
 static inline void dispatch_single_exti(uint32 exti_num);
 static inline void dispatch_extis(uint32 start, uint32 stop);
