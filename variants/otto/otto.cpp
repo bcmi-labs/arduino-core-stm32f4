@@ -52,6 +52,7 @@ void boardInit(void)
 {
 
     // PWM output setting
+
     gpio_set_af_mode(GPIOA,  0, 2); // D00 - TIM5_CH1
     gpio_set_af_mode(GPIOA,  1, 2); // D01 - TIM5_CH2
     gpio_set_af_mode(GPIOH,  6, 9); // D02 - TIM12_CH1
@@ -95,7 +96,7 @@ extern const stm32_pin_info PIN_MAP[GPIO_PINS] = {
 //   GPIO   BIT  TIMER  TIM_CH  ADC  DC_CH
 // D0...D13                                          NAME        - IRQ   - TIMER                           -  ADC          - ALTERNATE             -
     {GPIOA,  0, TIMER5,  1,    NULL, ADCx}, // PA0:  D00         -       - TIM2_CH1/TIM5_CH1               -  ADC123_IN0   - UART4_TX (Serial0)    - TX and RX pins are inverted in HW
-    {GPIOA,  1, TIMER5,  2,    NULL, ADCx}, // PA1:  D01         -       - TIM2_CH2/TIM5_CH2               -  ADC123_IN1   - UART4_TX (Serial0)    - TX and RX pins are inverted in HW
+    {GPIOA,  1, TIMER5,  2,    NULL, ADCx}, // PA1:  D01         -       - TIM2_CH2/TIM5_CH2               -  ADC123_IN1   - UART4_RX (Serial0)    - TX and RX pins are inverted in HW
     {GPIOH,  6, TIMER12, 1,    NULL, ADCx}, // PH6:  D02         -       - TIM12_CH1                       -               -
     {GPIOB, 15, TIMER12, 2,    NULL, ADCx}, // PB15: D03         -       - TIM1_CH3N/TIM8_CH3N/TIM12_CH2   -               -
     {GPIOC,  7, TIMER8,  2,    NULL, ADCx}, // PC7:  D04         -       - TIM3_CH2/TIM8_CH2               -               -
@@ -113,10 +114,10 @@ extern const stm32_pin_info PIN_MAP[GPIO_PINS] = {
     {GPIOG,  9, NULL,    0,    NULL, ADCx}, // PG9:  D15         -       -                                 -               - USART6_RX (Serial3)   -
     {GPIOD,  5, NULL,    0,    NULL, ADCx}, // PD5:  D16         -       -                                 -               - USART2_TX (Serial2)   -
     {GPIOD,  6, NULL,    0,    NULL, ADCx}, // PD6:  D17         -       -                                 -               - USART2_RX (Serial2)   -
-    {GPIOB, 11, TIMER2,  4,    NULL, ADCx}, // PB11: D18         -       - TIM2_CH4                        -               - USART3_RX (Serial3)   - TX and RX pins are inverted in HW
-    {GPIOB, 10, TIMER2,  3,    NULL, ADCx}, // PB10: D19         -       - TIM2_CH3                        -               - USART3_RX (Serial3)   - TX and RX pins are inverted in HW
-    {GPIOH,  5, NULL,    0,    NULL, ADCx}, // PH5:  D20         -       -                                 -               - I2C2_SDA      -
-    {GPIOH,  4, NULL,    0,    NULL, ADCx}, // PH4:  D21         -       -                                 -               - I2C2_SCL      -
+    {GPIOB, 10, TIMER2,  3,    NULL, ADCx}, // PB10: D18         -       - TIM2_CH3                        -               - USART3_TX (Serial3)   - TX and RX pins are inverted in HW
+    {GPIOB, 11, TIMER2,  4,    NULL, ADCx}, // PB11: D19         -       - TIM2_CH4                        -               - USART3_RX (Serial3)   - TX and RX pins are inverted in HW
+    {GPIOH,  5, NULL,    0,    NULL, ADCx}, // PH5:  D20         -       -                                 -               - I2C2_SDA              -
+    {GPIOH,  4, NULL,    0,    NULL, ADCx}, // PH4:  D21         -       -                                 -               - I2C2_SCL              -
 // D22...D53
     {GPIOE,  5, TIMER9,  1,    NULL, ADCx}, // PE5:  D22         -       - TIM9_CH1                        -               -
     {GPIOE,  6, TIMER9,  2,    NULL, ADCx}, // PE6:  D23         -       - TIM9_CH2                        -               -
