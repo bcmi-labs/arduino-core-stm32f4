@@ -1,10 +1,10 @@
-/**
+  /**
   ******************************************************************************
-  * @file    stm32469i_discovery_sd.c
+  * @file    stm32469i_otto_sd.c
   * @author  MCD Application Team
-  * @version V1.0.2
-  * @date    13-January-2016
-  * @brief   This file includes the uSD card driver mounted on STM32469I-Discovery
+  * @version V1.0.0
+  * @date    10-June-2016
+  * @brief   This file includes the uSD card driver mounted on STM32469I-otto
   *          board.
   ******************************************************************************
   * @attention
@@ -40,7 +40,7 @@
                                    User NOTES
 1. How To use this driver:
 --------------------------
-   - This driver is used to drive the micro SD external card mounted on STM32469I-Discovery
+   - This driver is used to drive the micro SD external card mounted on STM32469I-otto
      board.
    - This driver does not need a specific component driver for the micro SD device
      to be included with.
@@ -57,7 +57,7 @@
      o If SD presence detection interrupt mode is desired, you must configure the
        SD detection interrupt mode by calling the function BSP_SD_ITConfig(). The interrupt
        is generated as an external interrupt whenever the micro SD card is
-       plugged/unplugged in/from the discovery board. The SD detection interrupt
+       plugged/unplugged in/from the otto board. The SD detection interrupt
        is handled by calling the function BSP_SD_DetectIT() which is called in the IRQ
        handler file, the user callback is implemented in the function BSP_SD_DetectCallback().
      o The function BSP_SD_GetCardInfo() is used to get the micro SD card information
@@ -80,43 +80,43 @@
 ------------------------------------------------------------------------------*/
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32469i_discovery_sd.h"
+#include "stm32469i_otto_sd.h"
 
 /** @addtogroup BSP
   * @{
   */
 
-/** @addtogroup STM32469I_Discovery
+/** @addtogroup STM32469I_otto
   * @{
   */
 
-/** @defgroup STM32469I-Discovery_SD STM32469I Discovery SD
+/** @defgroup STM32469I-otto_SD STM32469I otto SD
   * @{
   */
 
 
-/** @defgroup STM32469I-Discovery_SD_Private_TypesDefinitions STM32469I Discovery SD Private TypesDef
-  * @{
-  */
-/**
-  * @}
-  */
-
-/** @defgroup STM32469I-Discovery_SD_Private_Defines STM32469I Discovery SD Private Defines
+/** @defgroup STM32469I-otto_SD_Private_TypesDefinitions STM32469I otto SD Private TypesDef
   * @{
   */
 /**
   * @}
   */
 
-/** @defgroup STM32469I-Discovery_SD_Private_Macros STM32469I Discovery SD Private Macro
+/** @defgroup STM32469I-otto_SD_Private_Defines STM32469I otto SD Private Defines
   * @{
   */
 /**
   * @}
   */
 
-/** @defgroup STM32469I-Discovery_SD_Private_Variables STM32469I Discovery SD Private Variables
+/** @defgroup STM32469I-otto_SD_Private_Macros STM32469I otto SD Private Macro
+  * @{
+  */
+/**
+  * @}
+  */
+
+/** @defgroup STM32469I-otto_SD_Private_Variables STM32469I otto SD Private Variables
   * @{
   */
 static SD_HandleTypeDef uSdHandle;
@@ -126,14 +126,14 @@ static SD_CardInfo uSdCardInfo;
   * @}
   */
 
-/** @defgroup STM32469I-Discovery_SD_Private_FunctionPrototypes STM32469I Discovery SD Private Prototypes
+/** @defgroup STM32469I-otto_SD_Private_FunctionPrototypes STM32469I otto SD Private Prototypes
   * @{
   */
 /**
   * @}
   */
 
-/** @defgroup STM32469I-Discovery_SD_Private_Functions STM32469I Discovery SD Private Functions
+/** @defgroup STM32469I-otto_SD_Private_Functions STM32469I otto SD Private Functions
   * @{
   */
 

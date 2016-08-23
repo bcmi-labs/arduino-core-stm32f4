@@ -17,12 +17,9 @@
 
 #include <Arduino.h>
 /* DISCOVERY includes component */
-//#include "libmaple/BSP/stm32469i_discovery_sd.h"
-#include "BSP/stm32469i_discovery_sd.h"
+#include "BSP/OTTO/stm32469i_otto_sd.h"
 
 /* FatFs includes component */
-// #include "libmaple/FatFs/src/ff_gen_drv.h"
-// #include "libmaple/FatFs/src/drivers/sd_diskio.h"
 #include "FatFs/src/ff_gen_drv.h"
 #include "FatFs/src/drivers/sd_diskio.h"
 

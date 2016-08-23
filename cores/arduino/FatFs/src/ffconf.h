@@ -13,7 +13,7 @@
 / Additional user header to be used
 /-----------------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
-#include "BSP/stm32469i_discovery_sd.h"
+#include "BSP/OTTO/stm32469i_otto_sd.h"
 /*-----------------------------------------------------------------------------/
 / Functions and Buffer Configurations
 /-----------------------------------------------------------------------------*/

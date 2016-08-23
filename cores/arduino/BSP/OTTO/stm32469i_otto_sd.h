@@ -1,11 +1,11 @@
 /**
   ******************************************************************************
-  * @file    stm32469i_discovery_sd.h
+  * @file    stm32469i_otto_sd.h
   * @author  MCD Application Team
   * @version V1.0.2
   * @date    13-January-2016
   * @brief   This file contains the common defines and functions prototypes for
-  *          the stm32469i_discovery_sd.c driver.
+  *          the stm32469i_otto_sd.c driver.
   ******************************************************************************
   * @attention
   *
@@ -37,8 +37,8 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32469I_DISCOVERY_SD_H
-#define __STM32469I_DISCOVERY_SD_H
+#ifndef __STM32469I_OTTO_SD_H
+#define __STM32469I_OTTO_SD_H
 
 #ifdef __cplusplus
  extern "C" {
@@ -50,15 +50,15 @@
   * @{
   */
 
-/** @addtogroup STM32469I_Discovery
+/** @addtogroup STM32469I_otto
   * @{
   */
 
-/** @addtogroup STM32469I-Discovery_SD 
+/** @addtogroup STM32469I-otto_SD 
   * @{
   */
 
-/** @defgroup STM32469I-Discovery_SD_Exported_Types STM32469I Discovery SD Exported Types
+/** @defgroup STM32469I-otto_SD_Exported_Types STM32469I otto SD Exported Types
   * @{
   */
 
@@ -77,7 +77,7 @@
 #define   MSD_ERROR                     ((uint8_t)0x01)
 #define   MSD_ERROR_SD_NOT_PRESENT      ((uint8_t)0x02)
 
-/** @defgroup STM32469I-Discovery_SD_Exported_Constants STM32469I Discovery SD Exported Constants
+/** @defgroup STM32469I-otto_SD_Exported_Constants STM32469I otto SD Exported Constants
   * @{
   */
 #define SD_PRESENT               ((uint8_t)0x01)
@@ -88,7 +88,7 @@
 /**
   * @brief SD-detect signal
   */
-#define SD_DETECT_PIN                        GPIO_PIN_2
+#define SD_DETECT_PIN                        GPIO_PIN_10
 #define SD_DETECT_GPIO_PORT                  HAL_GPIOG
 #define SD_DETECT_GPIO_CLK_ENABLE()          __HAL_RCC_GPIOG_CLK_ENABLE()
 #define SD_DETECT_GPIO_CLK_DISABLE()         __HAL_RCC_GPIOG_CLK_DISABLE()
@@ -98,14 +98,14 @@
   * @}
   */
 
-/** @defgroup STM32469I-Discovery_SD_Exported_Macro STM32469I Discovery SD Exported Macro
+/** @defgroup STM32469I-otto_SD_Exported_Macro STM32469I otto SD Exported Macro
   * @{
   */
 /**
   * @}
   */
 
-/** @defgroup STM32469I-Discovery_SD_Exported_Functions STM32469I Discovery SD Exported Functions
+/** @defgroup STM32469I-otto_SD_Exported_Functions STM32469I otto SD Exported Functions
   * @{
   */
 uint8_t BSP_SD_Init(void);
@@ -146,6 +146,6 @@ void    BSP_SD_MspDeInit(SD_HandleTypeDef *hsd, void *Params);
 }
 #endif
 
-#endif /* __STM32469I_DISCOVERY_SD_H */
+#endif /* __STM32469I_OTTO_SD_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
