@@ -179,4 +179,6 @@ void analogReadResolution (int resolution);
 
 uint32_t pulseIn( uint8 pin, uint32_t state, uint32_t timeout = 1000000);
 
+#define microsecondsToClockCycles(a) ( (a) * (SystemCoreClock / 1000000L) )
+
 #endif
