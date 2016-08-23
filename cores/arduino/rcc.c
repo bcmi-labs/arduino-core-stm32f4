@@ -301,8 +301,8 @@ void SetupClock() // to be setted properly
 
 
   PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_CK48;
-  PeriphClkInitStruct.PLLSAI.PLLSAIN = 96;
-  PeriphClkInitStruct.PLLSAI.PLLSAIP = RCC_PLLSAIP_DIV4;
+  PeriphClkInitStruct.PLLSAI.PLLSAIN = 192;
+  PeriphClkInitStruct.PLLSAI.PLLSAIP = RCC_PLLSAIP_DIV8;
   PeriphClkInitStruct.Clk48ClockSelection = RCC_CK48CLKSOURCE_PLLSAIP;
   HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct);
 
