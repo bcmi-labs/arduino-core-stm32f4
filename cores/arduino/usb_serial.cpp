@@ -58,6 +58,7 @@ extern __IO uint32_t UserRxBufPtrOut;
 __IO  uint32_t usbEnableBlockingTx;
 
 USBSerial Serial;
+USBSerial SerialUSB;
 
 
 USBSerial::USBSerial(void) {

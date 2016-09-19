@@ -72,5 +72,6 @@ public:
 };
 
 extern USBSerial Serial;
+extern USBSerial SerialUSB;
 
 #endif
