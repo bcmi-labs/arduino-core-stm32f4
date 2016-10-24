@@ -84,10 +84,6 @@ typedef struct dma_reg_map {
     dma_stream_t  STREAM[8];
 } dma_reg_map;
 
-/** DMA controller register map base pointers */
-#define DMA1_BASE                       ((struct dma_reg_map*)0x40026000)
-#define DMA2_BASE                       ((struct dma_reg_map*)0x40026400)
-
 /*
  * Register bit definitions
  */

@@ -38,6 +38,10 @@
 #include "bitband.h"
 #include "util.h"
 
+/** DMA controller register map base pointers */
+#define DMA1_BASE                       ((struct dma_reg_map*)0x40026000)
+#define DMA2_BASE                       ((struct dma_reg_map*)0x40026400)
+
 /*
  * Devices
  */
@@ -158,8 +162,8 @@ static inline void dispatch_handler(dma_dev *dev, dma_stream stream) {
     void (*handler)(void) = dev->handlers[stream].handler;
     if (handler) {
         handler();
-        dma_clear_isr_bits(dev, stream); /* in case handler doesn't */
     }
+    dma_clear_isr_bits(dev, stream); /* in case handler doesn't */
 }
 
 void __irq_dma1_channel1(void) {
