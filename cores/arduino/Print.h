@@ -27,7 +27,7 @@
 #include "WString.h"
 
 enum {
-    BYTE = 0,
+    Byte = 0,
     BIN  = 2,
     OCT  = 8,
     DEC  = 10,

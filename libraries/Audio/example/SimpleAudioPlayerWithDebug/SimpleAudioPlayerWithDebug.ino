@@ -12,6 +12,7 @@
  Original by Massimo Banzi September 20, 2012
  Modified by Scott Fitzgerald October 19, 2012
  Modified by Laurent Meunier 2016 - based with STM32 MCD Application examples support
+ Modified by Francesco Alessi October 24, 2016
 
  This example code is in the public domain
 
@@ -49,7 +50,9 @@ void setup() {
 
   // initialize serial communication at 9600 bits per second:
   Serial.begin(115200);
-  delay(15000);
+  while(!Serial);
+  Serial.println("Starting...");
+
 
   /* Test begin() method */
   while (SD.begin(SD_DETECT_PIN) != TRUE)
@@ -64,7 +67,7 @@ void loop() {
   const int S = 1024; // Number of samples to read in block
   uint32_t buffer[S];
   int duration;
-  delay(5000);        // delay for console
+  //delay(5000);        // delay for console
 
   File myFile = SD.open("test.wav");
   if (!myFile.available()) {
@@ -76,27 +79,30 @@ void loop() {
   }
 
   myFile.read((void*) &WaveFormat, sizeof(WaveFormat));
-  Serial.print("Sample rate : (Hz) ");
-  Serial.println(WaveFormat.SampleRate);
-  Serial.print("Byte rate : (Hz) ByteRate");
-  Serial.println(WaveFormat.ByteRate);
-  Serial.print("Bytes per sample");
+  Serial.print("Sample rate: ");
+  Serial.print(WaveFormat.SampleRate);
+  Serial.println(" Hz ");
+  Serial.print("Byte rate: ");
+  Serial.print(WaveFormat.ByteRate);
+  Serial.println(" Hz");
+  Serial.print("Bytes per sample: ");
   Serial.println(WaveFormat.ByteRate / WaveFormat.SampleRate);
-  Serial.print("Channels number : ");
+  Serial.print("Channels number: ");
   Serial.println(WaveFormat.NbrChannels);
   duration = WaveFormat.FileSize / WaveFormat.ByteRate;
-  Serial.print("Duration: (sec)");
-  Serial.println(duration);
-  Serial.print("File Size :");
+  Serial.print("Duration: ");
+  Serial.print(duration);
+  Serial.println(" sec");
+  Serial.print("File Size : ");
   Serial.print((int)(WaveFormat.FileSize/1024));
-  Serial.println("KB");
+  Serial.println(" KB");
 
-  delay(1000);
+  //delay(1000);
   Serial.println("STARTUP AUDIO\r\n");
-  delay(1000);
+  //delay(1000);
   audio_status = Audio.begin(WaveFormat.SampleRate, 100);
 
-  delay(1000);
+ // delay(1000);
 
   if(audio_status > 0) {
     Serial.println("ERROR in AUDIO INIT");
@@ -105,7 +111,7 @@ void loop() {
   Serial.println("Prepare Playing");
 
   // Prepare samples
-  int volume = 50;
+  int volume = 100;
   Audio.prepare(NULL, S, volume);
 
   Serial.println("Playing");
@@ -115,12 +121,12 @@ void loop() {
   Serial.println(Audio.getLast());
   Serial.println(Audio.getBufferSize());
 
-  delay(1000);
+  //delay(1000);
 
   while (myFile.available()) {
     // Every 100 block print a '.'
     count++;
-    if (count == 1000) {
+    if (count == 100) {
       Serial.print(".");
       count = 0;
     }
@@ -137,18 +143,18 @@ void loop() {
 
   Serial.println("Printing info");
 
-  while(1) {
-  Serial.println("i2c_status");
+  //while(1) {
+  Serial.print("i2c_status: ");
   Serial.println(i2c_status);
-  Serial.println("error_status");
+  Serial.print("error_status: ");
   Serial.println(error_status);
-  Serial.println("playedBytes");
+  Serial.print("playedBytes: ");
   Serial.println(Audio.playedBytes());
-  Serial.println("receivedBytes");
+  Serial.print("receivedBytes: ");
   Serial.println(Audio.receivedBytes());
-  Serial.println("cb_error");
+  Serial.print("cb_error: ");
   Serial.println(cb_error);
   delay(5000);//delay in between reads for stability
-  };
+  //};
 
 }

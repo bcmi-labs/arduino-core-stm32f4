@@ -34,13 +34,6 @@ public:
 	virtual size_t write(const uint32_t *data, size_t size);
 
 	void debug() {
-//		Serial1.print(running-buffer, DEC);
-//		Serial1.print(" ");
-//		Serial1.print(current-buffer, DEC);
-//		Serial1.print(" ");
-//		Serial1.print(next-buffer, DEC);
-//		Serial1.print(" ");
-//		Serial1.println(last-buffer, DEC);
 	}
 
   uint32_t bufferSize;

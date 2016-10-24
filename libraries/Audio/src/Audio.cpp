@@ -17,17 +17,10 @@ AudioClass Audio;
 /*  Begin class can be extended to support more options */
 int AudioClass::begin(uint32_t sampleRate, uint32_t msPreBuffer) {
 
-
-
-
-    // Allocate a buffer to keep msPreBuffer milliseconds of audio
-	//bufferSize = msPreBuffer * sampleRate / 1000;
-	//if (bufferSize < 1024)
-
     bufferSize = 2 * 1024 * sizeof(uint32_t);
     buffer = (uint8_t *) malloc(bufferSize);
 
-	// Buffering starts from the beginning
+	/* Buffering starts from the beginning */
 	running = NULL;
 	half = buffer + bufferSize/2;
     last = buffer + bufferSize;
@@ -51,17 +44,8 @@ void AudioClass::prepare(int16_t *buffer, int S, int volume){
         volume = 100;
     if (volume <= 10)
         volume = 10;
-
-    /*for (int i=0; i<S; i++) {
-        // set volume amplitude (signed multiply)
-        buffer[i] = buffer[i] * volume / 1024;
-        // convert from signed 16 bit to unsigned 12 bit for DAC.
-        ubuffer[i] += 0x8000;
-        ubuffer[i] >>= 4;
-    }*/
 }
-extern int cb_error;
-int test_flag;
+
 size_t AudioClass::write(const uint32_t *data, size_t size) {
 	int i;
 
@@ -89,19 +73,8 @@ size_t AudioClass::write(const uint32_t *data, size_t size) {
 
     _receivedBytes += size;
 
-    /*  check state of running */
-    test_flag = 0;
-
-    if(next == half)
-        written_half++;
-    if(next == buffer)
-        written_buffer++;
-
     /*  If running is not next there is room in fifo */
     memcpy(next,(uint8_t *) data, size);
-
-    if(test_flag)
-        cb_error++;
 
     if(next == buffer) {
         next = half;
@@ -142,7 +115,6 @@ extern int begin_status;
 void BSP_AUDIO_OUT_HalfTransfer_CallBack(void)
 {
     if(Audio.running != NULL) {
-        test_flag = 1;
         /*  tell write function we're now playing the 2nd half*/
         Audio.running = Audio.half;
         Audio._playedBytes = (Audio.bufferSize/2);
@@ -152,7 +124,6 @@ void BSP_AUDIO_OUT_HalfTransfer_CallBack(void)
 void BSP_AUDIO_OUT_TransferComplete_CallBack(void)
 {
    if(Audio.running != NULL) {
-        test_flag = 1;
          /*  tell write function we're now playing the 1st half*/
         Audio.running = Audio.buffer;
         Audio._playedBytes += (Audio.bufferSize/2);
@@ -160,5 +131,5 @@ void BSP_AUDIO_OUT_TransferComplete_CallBack(void)
 }
 void BSP_AUDIO_OUT_Error_CallBack()
 {
-    //cb_error++;
+
 }

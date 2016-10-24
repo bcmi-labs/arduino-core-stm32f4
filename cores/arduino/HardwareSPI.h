@@ -19,9 +19,9 @@ extern SPI_HandleTypeDef hSPIx;
 
 #define SPIx                             HAL_SPI2
 #define SPIx_CLK_ENABLE()                __HAL_RCC_SPI2_CLK_ENABLE()
-#define SPIx_SCK_CLK_ENABLE()            __HAL_RCC_GPIOB_CLK_ENABLE()
+#define SPIx_SCK_CLK_ENABLE()            __HAL_RCC_GPIOD_CLK_ENABLE()
 #define SPIx_MISO_CLK_ENABLE()           __HAL_RCC_GPIOB_CLK_ENABLE()
-#define SPIx_MOSI_CLK_ENABLE()           __HAL_RCC_GPIOB_CLK_ENABLE()
+#define SPIx_MOSI_CLK_ENABLE()           __HAL_RCC_GPIOC_CLK_ENABLE()
 #define SPIx_NSS_CLK_ENABLE()            __HAL_RCC_GPIOA_CLK_ENABLE()
 
 #define SPIx_FORCE_RESET()               __HAL_RCC_SPI2_FORCE_RESET()
@@ -29,14 +29,14 @@ extern SPI_HandleTypeDef hSPIx;
 #define SPIx_NSS_CLK_DISABLE             __HAL_RCC_GPIOA_CLK_DISABLE
 
 /* Definition for SPIx Pins */
-#define SPIx_SCK_PIN                     GPIO_PIN_10
-#define SPIx_SCK_GPIO_PORT               HAL_GPIOB
+#define SPIx_SCK_PIN                     GPIO_PIN_3
+#define SPIx_SCK_GPIO_PORT               HAL_GPIOD
 #define SPIx_SCK_AF                      GPIO_AF5_SPI2
 #define SPIx_MISO_PIN                    GPIO_PIN_14
 #define SPIx_MISO_GPIO_PORT              HAL_GPIOB
 #define SPIx_MISO_AF                     GPIO_AF5_SPI2
-#define SPIx_MOSI_PIN                    GPIO_PIN_15
-#define SPIx_MOSI_GPIO_PORT              HAL_GPIOB
+#define SPIx_MOSI_PIN                    GPIO_PIN_3
+#define SPIx_MOSI_GPIO_PORT              HAL_GPIOC
 #define SPIx_MOSI_AF                     GPIO_AF5_SPI2
 
 #define SPIx_NSS_PIN                     GPIO_PIN_15
