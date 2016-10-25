@@ -12,6 +12,7 @@
  Original by Massimo Banzi September 20, 2012
  Modified by Scott Fitzgerald October 19, 2012
  Modified by Laurent Meunier 2016 - based with STM32 MCD Application examples support
+ Modified by Francesco Alessi October 25, 2016
 
  This example code is in the public domain
 */
@@ -59,10 +60,10 @@ void loop() {
   File myFile = SD.open("test.wav");
   if (!myFile.available()) {
     // if the file didn't open, print an error and stop
-    Serial.println("error opening .wav");
+    Serial.println("error opening test.wav");
     while (true);
   } else {
-    Serial.println(".wav open OK");
+    Serial.println("test.wav open OK");
   }
 
   myFile.read((void*) &WaveFormat, sizeof(WaveFormat));
@@ -98,7 +99,7 @@ void loop() {
   Audio.end();
   myFile.close();
 
-  while(1) {
-  };
+  delay(5000);
+  Serial.println("Restart Playing");
 
   }
