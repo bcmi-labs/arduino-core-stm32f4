@@ -12,7 +12,7 @@
  Original by Massimo Banzi September 20, 2012
  Modified by Scott Fitzgerald October 19, 2012
  Modified by Laurent Meunier 2016 - based with STM32 MCD Application examples support
- Modified by Francesco Alessi October 24, 2016
+ Modified by Francesco Alessi October 25, 2016
 
  This example code is in the public domain
 
@@ -126,7 +126,7 @@ void loop() {
   while (myFile.available()) {
     // Every 100 block print a '.'
     count++;
-    if (count == 100) {
+    if (count == 1000) {
       Serial.print(".");
       count = 0;
     }
@@ -137,13 +137,14 @@ void loop() {
     Audio.write(buffer, sizeof(buffer));
   }
   /* reaching end of file */
+  Serial.println("");
   Serial.println("End of file. Thank you for listening!");
   Audio.end();
   myFile.close();
 
   Serial.println("Printing info");
 
-  //while(1) {
+
   Serial.print("i2c_status: ");
   Serial.println(i2c_status);
   Serial.print("error_status: ");
@@ -155,6 +156,6 @@ void loop() {
   Serial.print("cb_error: ");
   Serial.println(cb_error);
   delay(5000);//delay in between reads for stability
-  //};
+  Serial.println("Restart Playing");
 
 }
