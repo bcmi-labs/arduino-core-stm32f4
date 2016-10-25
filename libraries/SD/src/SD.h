@@ -17,7 +17,7 @@
 
 #include <Arduino.h>
 /* DISCOVERY includes component */
-#include "BSP/OTTO/stm32469i_otto_sd.h"
+#include "BSP/OTTO/otto_sd.h"
 
 /* FatFs includes component */
 #include "FatFs/src/ff_gen_drv.h"

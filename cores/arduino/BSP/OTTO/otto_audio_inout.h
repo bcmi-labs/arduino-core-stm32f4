@@ -1,11 +1,11 @@
 /**
   ******************************************************************************
-  * @file    stm32469i_otto_audio_inout.h
+  * @file    otto_audio_inout.h
   * @author  MCD Application Team
   * @version V1.0.3
   * @date    05-Oct-2016
   * @brief   This file contains the common defines and functions prototypes for
-  *          the stm32469i_otto_audio_inout.c driver.
+  *          the otto_audio_inout.c driver.
   ******************************************************************************
   * @attention
   *
@@ -37,8 +37,8 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32469I_OTTO_AUDIO_INOUT_H
-#define __STM32469I_OTTO_AUDIO_INOUT_H
+#ifndef __OTTO_AUDIO_INOUT_H
+#define __OTTO_AUDIO_INOUT_H
 
 #ifdef __cplusplus
  extern "C" {
@@ -47,7 +47,7 @@
 /* Includes ------------------------------------------------------------------*/
 /* Include audio component Driver */
 #include "wm8994/wm8994.h"
-#include "stm32469i_otto_codec.h"
+#include "otto_codec.h"
 
 
 /*------------------------------------------------------------------------------
@@ -326,6 +326,6 @@ void BSP_AUDIO_IN_MspDeInit(SAI_HandleTypeDef *hsai, void *Params);
 }
 #endif
 
-#endif /* __STM32469I_OTTO_AUDIO_INOUT_H */
+#endif /* __OTTO_AUDIO_INOUT_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

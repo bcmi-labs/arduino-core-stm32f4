@@ -9,7 +9,7 @@
  */
 
 #include "Audio.h"
-#include "BSP/OTTO/stm32469i_otto_audio_inout.h"
+#include "BSP/OTTO/otto_audio_inout.h"
 
 
 AudioClass Audio;

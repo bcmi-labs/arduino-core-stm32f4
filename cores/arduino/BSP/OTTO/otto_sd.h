@@ -1,11 +1,11 @@
 /**
   ******************************************************************************
-  * @file    stm32469i_otto_sd.h
+  * @file    otto_sd.h
   * @author  MCD Application Team
   * @version V1.0.2
   * @date    13-January-2016
   * @brief   This file contains the common defines and functions prototypes for
-  *          the stm32469i_otto_sd.c driver.
+  *          the otto_sd.c driver.
   ******************************************************************************
   * @attention
   *
@@ -37,8 +37,8 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32469I_OTTO_SD_H
-#define __STM32469I_OTTO_SD_H
+#ifndef __OTTO_SD_H
+#define __OTTO_SD_H
 
 #ifdef __cplusplus
  extern "C" {
@@ -54,7 +54,7 @@
   * @{
   */
 
-/** @addtogroup STM32469I-otto_SD 
+/** @addtogroup STM32469I-otto_SD
   * @{
   */
 

@@ -1,11 +1,11 @@
 /**
   ******************************************************************************
-  * @file    stm32469i_otto_audio_inout.c
+  * @file    otto_audio_inout.c
   * @author  MCD Application Team
   * @version V1.0.0
   * @date    04-Oct-2016
   * @brief   This file includes the definitions for I2C codec handler
-  *          for STM32469I-otto board.
+  *          for otto board.
   ******************************************************************************
   * @attention
   *
@@ -79,7 +79,7 @@ How To use this driver:
 
 Driver architecture:
 --------------------
-   + This driver provide the High Audio Layer: consists of the function API exported in the stm32469i_otto_audio_inout.h file
+   + This driver provide the High Audio Layer: consists of the function API exported in the otto_audio_inout.h file
      (BSP_AUDIO_OUT_Init(), BSP_AUDIO_OUT_Play() ...)
    + This driver provide also the Media Access Layer (MAL): which consists of functions allowing to access the media containing/
      providing the audio file/stream. These functions are also included as local functions into
@@ -96,7 +96,7 @@ Known Limitations:
 ==============================================================================*/
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32469i_otto_audio_inout.h"
+#include "otto_audio_inout.h"
 #include "dma.h"
 
 /** @defgroup Private_Defines

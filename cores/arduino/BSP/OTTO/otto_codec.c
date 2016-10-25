@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    stm32469i_otto_codec.c
+  * @file    otto_codec.c
   * @author  MCD Application Team
   * @version V1.0.0
   * @date    04-Oct-2016
@@ -42,7 +42,7 @@
 ------------------------------------------------------------------------------*/
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32469i_otto_codec.h"
+#include "otto_codec.h"
 
 /** @defgroup STM32469I_EVAL_LOW_LEVEL_Private_Variables LOW_LEVEL Private Variables
   * @{

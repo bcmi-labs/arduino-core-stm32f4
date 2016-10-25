@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    stm32469i_otto_codec.h
+  * @file    otto_codec.h
   * @author  MCD Application Team
   * @version V1.0.0
   * @date    04-Oct-2016
@@ -37,8 +37,8 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32469I_OTTO_CODEC_H
-#define __STM32469I_OTTO_CODEC_H
+#ifndef __OTTO_CODEC_H
+#define __OTTO_CODEC_H
 
 #ifdef __cplusplus
  extern "C" {
@@ -131,6 +131,6 @@
 }
 #endif
 
-#endif /* __STM32469I_OTTO_CODEC_H */
+#endif /* __OTTO_CODEC_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

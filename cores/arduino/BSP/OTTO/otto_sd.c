@@ -1,10 +1,10 @@
   /**
   ******************************************************************************
-  * @file    stm32469i_otto_sd.c
+  * @file    otto_sd.c
   * @author  MCD Application Team
   * @version V1.0.0
   * @date    10-June-2016
-  * @brief   This file includes the uSD card driver mounted on STM32469I-otto
+  * @brief   This file includes the uSD card driver mounted on otto
   *          board.
   ******************************************************************************
   * @attention
@@ -80,7 +80,7 @@
 ------------------------------------------------------------------------------*/
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32469i_otto_sd.h"
+#include "otto_sd.h"
 
 /** @addtogroup BSP
   * @{
@@ -208,7 +208,7 @@ uint8_t BSP_SD_CSInit(void)
   {
     return MSD_ERROR_SD_NOT_PRESENT;
   }
-      
+
   /* Msp SD initialization */
   BSP_SD_MspInit(&uSdHandle, NULL);
 
