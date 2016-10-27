@@ -49,6 +49,7 @@
   level (e.g. open).
 
  */
+
 extern "C" {
   #include <stdlib.h>
   #include <string.h>
@@ -458,4 +459,3 @@ uint8_t File::isDirectory()
        return FALSE;
     }
 }
-

@@ -16,7 +16,7 @@
 #define __SD_H__
 
 #include <Arduino.h>
-/* DISCOVERY includes component */
+/* otto includes component */
 #include "BSP/OTTO/otto_sd.h"
 
 /* FatFs includes component */
@@ -31,40 +31,49 @@
 
 class File {
 public:
+
   virtual size_t write(uint8_t);
   virtual size_t write(const uint8_t *buf, size_t size);
-  virtual size_t print(const char* data);
-  virtual size_t println();
-  virtual size_t println(const char* data);
   virtual int read();
-  int read(void* buf, size_t len);
   virtual int peek();
   virtual int available();
   virtual void flush();
+  int read(void* buf, size_t len);
   uint8_t seek(uint32_t pos);
   uint32_t position();
   uint32_t size();
   void close();
+  // alfran ----- begin -----
+  operator bool();
+  // alfran ----- end -----
+  char *name;
   uint8_t isDirectory();
 
-FIL Fil;
-char *name;
+
+  virtual size_t print(const char* data);
+  virtual size_t println();
+  virtual size_t println(const char* data);
+
+  FIL Fil;
+
 };
 
 class SDClass {
+
 public:
 
   /* Initialize the SD peripheral */
   static uint8_t begin();
   static uint8_t begin(uint8_t cspin);
+  static File open(const char *filepath, uint8_t mode);
+  static File open(const char *filepath);
   static uint8_t exists(const char *filepath);
   static uint8_t mkdir(const char *filepath);
-  static uint8_t rmdir(const char *filepath);
-  static File open(const char *filepath);
-  static File open(const char *filepath, uint8_t mode);
   static uint8_t remove(const char *filepath);
+  static uint8_t rmdir(const char *filepath);
 
   friend class File;
+
 };
 
 extern SDClass SD;
