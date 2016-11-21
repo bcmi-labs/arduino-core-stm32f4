@@ -16,18 +16,9 @@
 #define __SD_H__
 
 #include <Arduino.h>
-/* otto includes component */
-#include "BSP/OTTO/otto_sd.h"
 
-/* FatFs includes component */
-#include "FatFs/src/ff_gen_drv.h"
-#include "FatFs/src/drivers/sd_diskio.h"
-
-#define   FALSE      ((uint8_t)0x00)
-#define   TRUE       ((uint8_t)0x01)
-
-#define   FILE_WRITE  FA_WRITE
-#define   FILE_READ   FA_READ
+#include "Sd2Card.h"
+#include "SdFatFs.h"
 
 class File {
 public:
@@ -63,8 +54,8 @@ class SDClass {
 public:
 
   /* Initialize the SD peripheral */
-  static uint8_t begin();
-  static uint8_t begin(uint8_t cspin);
+  uint8_t begin();
+  uint8_t begin(uint8_t cspin);
   static File open(const char *filepath, uint8_t mode);
   static File open(const char *filepath);
   static uint8_t exists(const char *filepath);
@@ -73,6 +64,10 @@ public:
   static uint8_t rmdir(const char *filepath);
 
   friend class File;
+
+private:
+  Sd2Card _card;
+  SdFatFs _fatFs;
 
 };
 

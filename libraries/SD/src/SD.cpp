@@ -54,14 +54,11 @@ extern "C" {
   #include <stdlib.h>
   #include <string.h>
   #include <inttypes.h>
-	#include "stm32f4xx_hal.h"
+  #include "stm32f4xx_hal.h"
 }
 
 #include "SD.h"
 SDClass SD;
-
-FATFS SDFatFs;  /* File system object for SD disk logical drive */
-char SDPath[4]; /* SD disk logical drive path */
 
 /**
   * @brief  Link SD, register the file system object to the FatFs mode and configure
@@ -71,32 +68,14 @@ char SDPath[4]; /* SD disk logical drive path */
   */
 uint8_t SDClass::begin()
 {
-  /*##-1- Link the SD disk I/O driver ########################################*/
-  if(FATFS_LinkDriver(&SD_Driver, SDPath) == 0)
-  {
-    /*##-2- Register the file system object to the FatFs module ##############*/
-    if(f_mount(&SDFatFs, (TCHAR const*)SDPath, 0) != FR_OK)
-    {
-      /* FatFs Initialization Error */
-      return FALSE;
+	/*##-1- Initializes SD IOs #############################################*/
+	if (_card.init()) {
+		return _fatFs.init();
     }
     else
     {
-      /*##-3- Initializes SD IOs #############################################*/
-      if(BSP_SD_Init() != MSD_OK)
-      {
-       return FALSE;
-      }
-      else
-      {
-          return TRUE;
-      }
+	  return FALSE;
     }
-  }
-  else
-  {
-    return FALSE;
-  }
 }
 
 /**
@@ -107,32 +86,14 @@ uint8_t SDClass::begin()
   */
 uint8_t SDClass::begin(uint8_t cspin)
 {
-  /*##-1- Link the SD disk I/O driver ########################################*/
-  if(FATFS_LinkDriver(&SD_Driver, SDPath) == 0)
-  {
-    /*##-2- Register the file system object to the FatFs module ##############*/
-    if(f_mount(&SDFatFs, (TCHAR const*)SDPath, 0) != FR_OK)
-    {
-      /* FatFs Initialization Error */
-      return FALSE;
+	/*##-1- Initializes SD IOs #############################################*/
+	if (_card.init(cspin)) {
+		return _fatFs.init();
     }
     else
     {
-      /*##-3- Initializes SD IOs #############################################*/
-      if(BSP_SD_CSInit() != MSD_OK)
-      {
-       return FALSE;
-      }
-      else
-      {
-          return TRUE;
-      }
+	  return FALSE;
     }
-  }
-  else
-  {
-    return FALSE;
-  }
 }
 
 /**
