@@ -56,7 +56,7 @@ extern "C" {
   #include <inttypes.h>
   #include "stm32f4xx_hal.h"
 }
-
+#include "assert.h"
 #include "SD.h"
 SDClass SD;
 
@@ -154,21 +154,15 @@ uint8_t SDClass::rmdir(const char *filepath)
   * @param  filename: File name
   * @retval File object referring to the opened file
   */
-File  SDClass::open(const char *filepath)
+File SDClass::open(const char *filepath)
 {
-    File file = File();
+    File file = File(filepath);
 
-     file.name = (char*)malloc(strlen(filepath) +1);
-     sprintf(file.name, "%s", filepath);
-
-    if(f_open(&file.Fil, filepath, FA_READ) == FR_OK)
+    if(f_open(&file._fil, filepath, FA_READ) != FR_OK)
     {
-         return file;
-    }
-    else
-    {
-     return File();
-    }
+		f_opendir(&file._dir, filepath);
+	}
+	return file;
 }
 
 /**
@@ -179,23 +173,18 @@ File  SDClass::open(const char *filepath)
   */
 File SDClass::open(const char *filepath, uint8_t mode)
 {
-    File file = File();
-     file.name = (char*)malloc(strlen(filepath) +1);
-     sprintf(file.name, "%s", filepath);
+	File file = File(filepath);
 
-     if((mode == FILE_WRITE) && (SD.exists(filepath) != TRUE))
-     {
+	if((mode == FILE_WRITE) && (SD.exists(filepath) != TRUE))
+    {
         mode = mode | FA_CREATE_ALWAYS;
-     }
+    }
 
-    if(f_open(&file.Fil, filepath, mode) == FR_OK)
+    if(f_open(&file._fil, filepath, mode) != FR_OK)
     {
-        return file;
-    }
-    else
-    {
-     return File();
-    }
+		f_opendir(&file._dir, filepath);
+	}
+    return file;
 }
 
 /**
@@ -215,6 +204,163 @@ uint8_t SDClass::remove(const char *filepath)
     }
 }
 
+File SDClass::openRoot(void)
+{
+    File file = File(_fatFs.getRoot());
+
+	if(f_opendir(&file._dir, _fatFs.getRoot()) != FR_OK)
+	{
+		file._dir.fs = 0;
+	}
+    return file;
+}
+
+File::File()
+{
+	_name = NULL;
+	 _fil.fs = 0;
+	 _dir.fs = 0;
+}
+
+File::File(const char* name)
+{
+	_name = (char*)malloc(strlen(name) +1);
+	assert(_name  != NULL );
+	sprintf(_name, "%s", name);
+	_fil.fs = 0;
+	_dir.fs = 0;
+}
+
+/** List directory contents to Serial.
+ *
+ * \param[in] flags The inclusive OR of
+ *
+ * LS_DATE - %Print file modification date
+ *
+ * LS_SIZE - %Print file size.
+ *
+ * LS_R - Recursive list of subdirectories.
+ *
+ * \param[in] indent Amount of space before file name. Used for recursive
+ * list to indicate subdirectory level.
+ */
+void File::ls(uint8_t flags, uint8_t indent) {
+  FRESULT res = FR_OK;
+  FILINFO fno;
+  char *fn;
+
+#if _USE_LFN
+  static char lfn[_MAX_LFN];
+  fno.lfname = lfn;
+  fno.lfsize = sizeof(lfn);
+#endif
+
+  while(1)
+  {
+    res = f_readdir(&_dir, &fno);
+    if(res != FR_OK || fno.fname[0] == 0)
+    {
+      break;
+    }
+    if(fno.fname[0] == '.')
+    {
+      continue;
+    }
+#if _USE_LFN
+    fn = *fno.lfname ? fno.lfname : fno.fname;
+#else
+    fn = fno.fname;
+#endif
+	//print any indent spaces
+	for (int8_t i = 0; i < indent; i++) Serial.print(' ');
+    Serial.print(fn);
+
+    if((fno.fattrib & AM_DIR) == 0)
+    {
+	  // print modify date/time if requested
+	  if (flags & LS_DATE) {
+		Serial.print(' ');
+		printFatDate(fno.fdate);
+		Serial.print(' ');
+		printFatTime(fno.ftime);
+	  }
+	  // print size if requested
+	  if (flags & LS_SIZE) {
+	    Serial.print(' ');
+	    Serial.print(fno.fsize);
+	  }
+	  Serial.println();
+    }
+	else
+	{
+	  // list subdirectory content if requested
+	  if (flags & LS_R)
+	  {
+		char *fullPath;
+		fullPath = (char*)malloc(strlen(_name) + 1 + strlen(fn) +1);
+		if (fullPath != NULL) {
+		  sprintf(fullPath, "%s/%s", _name, fn);
+		  File filtmp = SD.open(fullPath);
+
+		  if (filtmp._name != NULL) {
+			Serial.println();
+			filtmp.ls(flags, indent+2);
+			filtmp.close();
+		  } else {
+			Serial.println(fn);
+			Serial.print("Error to open dir: ");
+			Serial.println(fn);
+		  }
+		  free(fullPath);
+		} else {
+		  Serial.println();
+		  Serial.print("Error to allocate memory!");
+		}
+	  }
+	}
+  }
+}
+//------------------------------------------------------------------------------
+/** %Print a directory date field to Serial.
+ *
+ *  Format is yyyy-mm-dd.
+ *
+ * \param[in] fatDate The date field from a directory entry.
+ */
+void File::printFatDate(uint16_t fatDate) {
+  Serial.print(FAT_YEAR(fatDate));
+  Serial.print('-');
+  printTwoDigits(FAT_MONTH(fatDate));
+  Serial.print('-');
+  printTwoDigits(FAT_DAY(fatDate));
+}
+//------------------------------------------------------------------------------
+/** %Print a directory time field to Serial.
+ *
+ * Format is hh:mm:ss.
+ *
+ * \param[in] fatTime The time field from a directory entry.
+ */
+void File::printFatTime(uint16_t fatTime) {
+  printTwoDigits(FAT_HOUR(fatTime));
+  Serial.print(':');
+  printTwoDigits(FAT_MINUTE(fatTime));
+  Serial.print(':');
+  printTwoDigits(FAT_SECOND(fatTime));
+}
+//------------------------------------------------------------------------------
+/** %Print a value as two digits to Serial.
+ *
+ * \param[in] v Value to be printed, 0 <= \a v <= 99
+ */
+void File::printTwoDigits(uint8_t v) {
+  char str[3];
+  str[0] = '0' + v/10;
+  str[1] = '0' + v % 10;
+  str[2] = 0;
+  Serial.print(str);
+}
+
 /**
   * @brief  Read byte from the file
   * @retval Byte read
@@ -223,7 +369,7 @@ int File::read()
 {
     uint8_t byteread;
     int8_t data;
-    f_read(&Fil, (void *)&data, 1, (UINT *)&byteread);
+    f_read(&_fil, (void *)&data, 1, (UINT *)&byteread);
     return data;
 }
 
@@ -237,7 +383,7 @@ int File::read(void* buf, size_t len)
 {
     uint8_t bytesread;
 
-    f_read(&Fil, buf, len, (UINT *)&bytesread);
+    f_read(&_fil, buf, len, (UINT *)&bytesread);
     return bytesread;
 
 }
@@ -249,13 +395,22 @@ int File::read(void* buf, size_t len)
   */
 void File::close()
 {
-    /* Flush the file before close */
-    f_sync(&Fil);
+	if(_name)
+	{
+		if(_fil.fs != 0) {
+			/* Flush the file before close */
+			f_sync(&_fil);
 
-    /* Close the file */
-    f_close(&Fil);
-    if(name)
-        free(name);
+			/* Close the file */
+			f_close(&_fil);
+		}
+
+		if(_dir.fs != 0) {
+			f_closedir(&_dir);
+		}
+
+		free(_name);
+	}
 }
 
 
@@ -266,7 +421,7 @@ void File::close()
   */
 void File::flush()
 {
-    f_sync(&Fil);
+    f_sync(&_fil);
 }
 
 /**
@@ -290,7 +445,7 @@ int File::peek()
 uint32_t File::position()
 {
     uint32_t filepos = 0;
-    filepos = f_tell(&Fil);
+    filepos = f_tell(&_fil);
     return filepos;
 }
 
@@ -307,7 +462,7 @@ uint8_t File::seek(uint32_t pos)
   }
   else
   {
-    if(f_lseek(&Fil, pos) != FR_OK)
+    if(f_lseek(&_fil, pos) != FR_OK)
     {
       return FALSE;
     }
@@ -327,10 +482,13 @@ uint32_t File::size()
 {
     uint32_t file_size = 0;
 
-    file_size = f_size(&Fil);
+    file_size = f_size(&_fil);
     return(file_size);
 }
 
+File::operator bool() {
+  return  (_name == NULL)? FALSE : TRUE;
+}
 /**
   * @brief  Write data to the file
   * @param  data: Data to write to the file
@@ -338,9 +496,7 @@ uint32_t File::size()
   */
 size_t File::write(uint8_t data)
 {
-    size_t bytewritten;
-    f_write(&Fil, (const void *)&data, 1, (UINT *)&bytewritten);
-    return bytewritten;
+  return write(&data, 1);
 }
 
 /**
@@ -349,11 +505,16 @@ size_t File::write(uint8_t data)
   * @param  len: the number of elements in buf
   * @retval Number of data written
   */
-size_t File::write(const uint8_t *buf, size_t size)
+size_t File::write(const char *buf, size_t size)
 {
     size_t byteswritten;
-    f_write(&Fil, (const void *)buf, size, (UINT *)&byteswritten);
+    f_write(&_fil, (const void *)buf, size, (UINT *)&byteswritten);
     return byteswritten;
+}
+
+size_t File::write(const uint8_t *buf, size_t size)
+{
+    return write((const char *)buf, size);
 }
 
 /**
@@ -363,9 +524,16 @@ size_t File::write(const uint8_t *buf, size_t size)
   */
 size_t File::print(const char* data)
 {
-    size_t bytewritten;
-    f_write(&Fil, (const void *)data, strlen(data), (UINT *)&bytewritten);
-    return bytewritten;
+	return write(data, strlen(data));
+}
+
+/**
+  * @brief  Print data to the file
+  * @retval Number of data written (1)
+  */
+size_t File::println()
+{
+    return write("\r\n", 2);
 }
 
 /**
@@ -375,22 +543,19 @@ size_t File::print(const char* data)
   */
 size_t File::println(const char* data)
 {
-    size_t bytewritten;
-    size_t bytewritten1;
-    f_write(&Fil, (const void *)data, strlen(data), (UINT *)&bytewritten);
-    f_write(&Fil, "\r\n", 4, (UINT *)&bytewritten1);
-    return bytewritten + bytewritten1;
+	size_t bytewritten = write(data, strlen(data));
+	bytewritten += println();
+	return bytewritten;
 }
 
 /**
   * @brief  Print data to the file
+  * @param  data: Data of type String to write to the file
   * @retval Number of data written (1)
   */
-size_t File::println()
+size_t File::println(String& data)
 {
-    size_t bytewritten;
-    f_write(&Fil, "\r\n", 4, (UINT *)&bytewritten);
-    return bytewritten;
+   return println(data.c_str());
 }
 
 /**
@@ -403,6 +568,15 @@ int File::available()
     return n > 0x7FFF ? 0x7FFF : n;
 }
 
+
+char* File::name()
+{
+	char *name = strrchr(_name, '/');
+	if (name && name[0] == '/')
+		name++;
+	return name;
+}
+
 /**
   * @brief  Check if the file is directory or normal file
   * @retval TRUE if directory else FALSE
@@ -410,13 +584,81 @@ int File::available()
 uint8_t File::isDirectory()
 {
     FILINFO fno;
-    f_stat(name, &fno);
-    if(fno.fattrib & AM_DIR)
-    {
-        return TRUE;
-    }
-    else
-    {
-       return FALSE;
-    }
+	assert(_name  != NULL );
+	if (_dir.fs != 0)
+		return TRUE;
+	else if (_fil.fs != 0)
+		return FALSE;
+	// if not init get info
+	if (f_stat(_name, &fno) == FR_OK)
+	{
+		if(fno.fattrib & AM_DIR)
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
 }
+
+File File::openNextFile(uint8_t mode)
+{
+  FRESULT res = FR_OK;
+  FILINFO fno;
+  char *fn;
+  char *fullPath = NULL;
+  size_t name_len= strlen(_name);
+  size_t len = name_len;
+#if _USE_LFN
+  static char lfn[_MAX_LFN];
+  fno.lfname = lfn;
+  fno.lfsize = sizeof(lfn);
+#endif
+  while(1)
+  {
+    res = f_readdir(&_dir, &fno);
+    if(res != FR_OK || fno.fname[0] == 0)
+    {
+      return File();
+    }
+    if(fno.fname[0] == '.')
+    {
+      continue;
+    }
+#if _USE_LFN
+    fn = *fno.lfname ? fno.lfname : fno.fname;
+#else
+    fn = fno.fname;
+#endif
+	len += strlen(fn) +2;
+	fullPath = (char*)malloc(len);
+	if (fullPath != NULL) {
+	  // Avoid twice '/'
+	  if ((name_len > 0)  && (_name[name_len-1] == '/'))
+	  {
+		sprintf(fullPath, "%s%s", _name, fn);
+	  } else {
+	    sprintf(fullPath, "%s/%s", _name, fn);
+	  }
+	  File filtmp = SD.open(fullPath, mode);
+	  free(fullPath);
+	  return filtmp;
+	} else {
+		return File();
+	}
+  }
+}
+
+void File::rewindDirectory(void)
+{
+	if(isDirectory())
+	{
+		if(_dir.fs != 0) {
+			f_closedir(&_dir);
+		}
+		f_opendir(&_dir, _name);
+	}
+}
+

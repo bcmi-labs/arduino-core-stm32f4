@@ -20,11 +20,22 @@
 #include "Sd2Card.h"
 #include "SdFatFs.h"
 
+// flags for ls()
+/** ls() flag to print modify date */
+uint8_t const LS_DATE = 1;
+/** ls() flag to print file size */
+uint8_t const LS_SIZE = 2;
+/** ls() flag for recursive list of subdirectories */
+uint8_t const LS_R = 4;
+
 class File {
 public:
-
+  File(void);
+  File(const char* name);
   virtual size_t write(uint8_t);
   virtual size_t write(const uint8_t *buf, size_t size);
+  virtual size_t write(const char *buf, size_t size);
+
   virtual int read();
   virtual int peek();
   virtual int available();
@@ -34,18 +45,29 @@ public:
   uint32_t position();
   uint32_t size();
   void close();
-  // alfran ----- begin -----
   operator bool();
-  // alfran ----- end -----
-  char *name;
-  uint8_t isDirectory();
 
+  char* name(void);
+  char* fullname(void) {return _name;};
+  uint8_t isDirectory();
+  File openNextFile(uint8_t mode = FILE_READ);
+  void rewindDirectory(void);
 
   virtual size_t print(const char* data);
   virtual size_t println();
   virtual size_t println(const char* data);
+  virtual size_t println(String& data);
 
-  FIL Fil;
+  // Print to Serial line
+  void ls(uint8_t flags, uint8_t indent = 0);
+  static void printFatDate(uint16_t fatDate);
+  static void printFatTime(uint16_t fatTime);
+  static void printTwoDigits(uint8_t v);
+
+
+  char *_name = NULL; //file or dir name
+  FIL _fil;
+  DIR _dir;
 
 };
 
@@ -62,6 +84,8 @@ public:
   static uint8_t mkdir(const char *filepath);
   static uint8_t remove(const char *filepath);
   static uint8_t rmdir(const char *filepath);
+
+  File openRoot(void);
 
   friend class File;
 
