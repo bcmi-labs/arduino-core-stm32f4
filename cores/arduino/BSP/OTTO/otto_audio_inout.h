@@ -101,40 +101,6 @@
 #define AUDIO_SAIx_DMAx_MEM_DATA_SIZE        DMA_MDATAALIGN_HALFWORD
 #define DMA_MAX_SZE                          0xFFFF
 
-#define AUDIO_SAIx_DMAx_IRQHandler           DMA2_Stream5_IRQHandler
-
-///* SAI peripheral configuration defines */
-//#define AUDIO_SAIx                           HAL_SAI1_Block_A
-//#define AUDIO_SAIx_CLK_ENABLE()              __HAL_RCC_SAI1_CLK_ENABLE()
-//#define AUDIO_SAIx_CLK_DISABLE()             __HAL_RCC_SAI1_CLK_DISABLE()
-//#define AUDIO_SAIx_MCLK_SCK_SD_FS_AF         GPIO_AF6_SAI1
-//
-//#define AUDIO_SAIx_MCLK_ENABLE()             __HAL_RCC_GPIOG_CLK_ENABLE()
-//#define AUDIO_SAIx_MCLK_DISABLE()            __HAL_RCC_GPIOG_CLK_DISABLE()
-//
-//#define AUDIO_SAIx_MCK_PIN                   GPIO_PIN_7
-//#define AUDIO_SAIx_MCLK_GPIO_PORT            HAL_GPIOG
-//
-//#define AUDIO_SAIx_SCK_SD_FS_ENABLE()        __HAL_RCC_GPIOE_CLK_ENABLE()
-//#define AUDIO_SAIx_SCK_SD_FS_DISABLE()       __HAL_RCC_GPIOE_CLK_DISABLE()
-//#define AUDIO_SAIx_FS_PIN                    GPIO_PIN_4
-//#define AUDIO_SAIx_SCK_PIN                   GPIO_PIN_5
-//#define AUDIO_SAIx_SD_PIN                    GPIO_PIN_6
-//#define AUDIO_SAIx_SCK_SD_FS_GPIO_PORT       HAL_GPIOE
-//
-//
-///* SAI DMA Stream definitions */
-//#define AUDIO_SAIx_DMAx_CLK_ENABLE()         __HAL_RCC_DMA2_CLK_ENABLE()
-//#define AUDIO_SAIx_DMAx_CLK_DISABLE()        __HAL_RCC_DMA2_CLK_DISABLE()
-//#define AUDIO_SAIx_DMAx_STREAM               HAL_DMA2_Stream3
-//#define AUDIO_SAIx_DMAx_CHANNEL              DMA_CHANNEL_0
-//#define AUDIO_SAIx_DMAx_IRQ                  DMA2_Stream3_IRQn
-//#define AUDIO_SAIx_DMAx_PERIPH_DATA_SIZE     DMA_PDATAALIGN_HALFWORD
-//#define AUDIO_SAIx_DMAx_MEM_DATA_SIZE        DMA_MDATAALIGN_HALFWORD
-//#define DMA_MAX_SZE                          0xFFFF
-//
-//#define AUDIO_SAIx_DMAx_IRQHandler           DMA2_Stream3_IRQHandler
-
 /* Select the interrupt preemption priority for the DMA interrupt */
 #define AUDIO_OUT_IRQ_PREPRIO           5   /* Select the preemption priority level(0 is the highest) */
 
@@ -158,14 +124,12 @@
 
 /* SAI DMA Stream definitions */
 #define AUDIO_IN_SAIx_DMAx_CLK_ENABLE()          __HAL_RCC_DMA2_CLK_ENABLE()
-#define AUDIO_IN_SAIx_DMAx_STREAM                HAL_DMA2_Stream1
+#define AUDIO_IN_SAIx_DMAx_STREAM                HAL_DMA2_Stream3
 #define AUDIO_IN_SAIx_DMAx_CHANNEL               DMA_CHANNEL_0
-#define AUDIO_IN_SAIx_DMAx_IRQ                   DMA2_Stream1_IRQn
+#define AUDIO_IN_SAIx_DMAx_IRQ                   DMA2_Stream3_IRQn
 #define AUDIO_IN_SAIx_DMAx_PERIPH_DATA_SIZE      DMA_PDATAALIGN_HALFWORD
 #define AUDIO_IN_SAIx_DMAx_MEM_DATA_SIZE         DMA_MDATAALIGN_HALFWORD
 
-#define AUDIO_IN_SAIx_DMAx_IRQHandler            DMA2_Stream1_IRQHandler
-#define AUDIO_IN_INT_IRQHandler                  EXTI9_5_IRQHandler
 
 /* Select the interrupt preemption priority and subpriority for the IT/DMA interrupt */
 #define AUDIO_IN_IRQ_PREPRIO                ((uint32_t)6)   /* Select the preemption priority level(0 is the highest) */
@@ -298,13 +262,14 @@ void    BSP_AUDIO_IN_HalfTransfer_CallBack(void);
 
 /* This function is called when an Interrupt due to transfer error on or peripheral
    error occurs. */
-void    BSP_AUDIO_IN_Error_Callback(void);
+void    BSP_AUDIO_IN_Error_CallBack(void);
 
 /* These function can be modified in case the current settings (e.g. DMA stream)
    need to be changed for specific application needs */
 void BSP_AUDIO_IN_ClockConfig(SAI_HandleTypeDef *hsai, uint32_t AudioFreq, void *Params);
 void BSP_AUDIO_IN_MspInit(SAI_HandleTypeDef *hsai, void *Params);
 void BSP_AUDIO_IN_MspDeInit(SAI_HandleTypeDef *hsai, void *Params);
+
 
 /**
   * @}

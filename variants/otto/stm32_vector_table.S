@@ -88,7 +88,7 @@ __stm32_vector_table:
 	.long	__irq_dma2_channel1
 	.long	__irq_dma2_channel2
 	.long	__irq_dma2_channel3
-	.long	__irq_dma2_channel4
+	.long	__irq_dma2_channel4_5
 
   	.long	__irq_DMA2_Stream4_IRQHandler           /* DMA2 Stream 4                */                   
   	.long	__irq_ETH_IRQHandler                    /* Ethernet                     */                   

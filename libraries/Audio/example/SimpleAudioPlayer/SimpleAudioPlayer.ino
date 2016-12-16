@@ -1,12 +1,12 @@
 /*
-  Simple Audio Player With Debug
+  Simple Audio Player
 
  Demonstrates the use of the Audio library for the Arduino OTTO
 
  Hardware required :
  * SD card in the Arduino OTTO slot
  * A sound file named "test.wav" in the root directory of the SD card
- *    Only 22MHz and 48MHz supported for now
+ *    Only 22kHz and 48kHz supported for now
  * A speaker to connect to the audio amplifier
 
  Original by Massimo Banzi September 20, 2012
@@ -19,23 +19,6 @@
 
 #include <SD.h>
 #include <Audio.h>
-
-typedef struct {
-  uint32_t ChunkID;       /* 0 */
-  uint32_t FileSize;      /* 4 */
-  uint32_t FileFormat;    /* 8 */
-  uint32_t SubChunk1ID;   /* 12 */
-  uint32_t SubChunk1Size; /* 16*/
-  uint16_t AudioFormat;   /* 20 */
-  uint16_t NbrChannels;   /* 22 */
-  uint32_t SampleRate;    /* 24 */
-
-  uint32_t ByteRate;      /* 28 */
-  uint16_t BlockAlign;    /* 32 */
-  uint16_t BitPerSample;  /* 34 */
-  uint32_t SubChunk2ID;   /* 36 */
-  uint32_t SubChunk2Size; /* 40 */
-}WAVE_FormatTypeDef;
 
 void setup() {
   // initialize serial communication at 9600 bits per second:

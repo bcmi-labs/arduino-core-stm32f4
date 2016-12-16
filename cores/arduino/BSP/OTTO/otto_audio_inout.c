@@ -123,7 +123,7 @@ AUDIO_DrvTypeDef          *audio_drv;
 SAI_HandleTypeDef         haudio_out_sai;
 SAI_HandleTypeDef         haudio_in_sai;
 uint16_t __IO AudioInVolume = DEFAULT_AUDIO_IN_VOLUME;
-
+ 
 /**
   * @}
   */
@@ -170,7 +170,6 @@ uint8_t BSP_AUDIO_OUT_Init(uint16_t OutputDevice, uint8_t Volume, uint32_t Audio
 {
   uint8_t ret = AUDIO_ERROR;
   uint32_t deviceid = 0x00;
-  uint8_t buffer_fake[32] = {0x00};
 
   SAIx_DeInit();
 
@@ -207,11 +206,8 @@ uint8_t BSP_AUDIO_OUT_Init(uint16_t OutputDevice, uint8_t Volume, uint32_t Audio
     /* Resets the audio codec. */
     audio_drv->Reset(AUDIO_I2C_ADDRESS);
 
-    HAL_SAI_Transmit_DMA(&haudio_out_sai, buffer_fake, 32);
-
     /* Initialize the codec internal registers */
     audio_drv->Init(AUDIO_I2C_ADDRESS, OutputDevice, Volume, AudioFreq);
-  HAL_SAI_DMAStop(&haudio_out_sai);
   }
 
 
@@ -471,7 +467,22 @@ void HAL_SAI_TxHalfCpltCallback(SAI_HandleTypeDef *hsai)
   */
 void HAL_SAI_ErrorCallback(SAI_HandleTypeDef *hsai)
 {
-  BSP_AUDIO_OUT_Error_CallBack();
+  HAL_SAI_StateTypeDef audio_out_state;
+  HAL_SAI_StateTypeDef audio_in_state;
+
+  audio_out_state = HAL_SAI_GetState(&haudio_out_sai);
+  audio_in_state = HAL_SAI_GetState(&haudio_in_sai);
+
+  /* Determines if it is an audio out or audio in error */
+  if ((audio_out_state == HAL_SAI_STATE_BUSY) || (audio_out_state == HAL_SAI_STATE_BUSY_TX))
+  {
+    BSP_AUDIO_OUT_Error_CallBack();
+  }
+
+  if ((audio_in_state == HAL_SAI_STATE_BUSY) || (audio_in_state == HAL_SAI_STATE_BUSY_RX))
+  {
+    BSP_AUDIO_IN_Error_CallBack();
+  }
 }
 
 /**
@@ -749,8 +760,7 @@ uint8_t BSP_AUDIO_IN_Init(uint16_t InputDevice, uint8_t Volume, uint32_t AudioFr
   uint8_t ret = AUDIO_ERROR;
   uint32_t deviceid = 0x00;
   uint32_t slot_active;
-  uint8_t buffer_fake[32] = {0x00};
-  /* Only MICROPHONE_2 input supported */
+   /* Only MICROPHONE_2 input supported */
   if (InputDevice != INPUT_DEVICE_DIGITAL_MICROPHONE_2)
   {
     ret = AUDIO_ERROR;
@@ -805,7 +815,6 @@ uint8_t BSP_AUDIO_IN_Init(uint16_t InputDevice, uint8_t Volume, uint32_t AudioFr
       /* Reset the Codec Registers */
       wm8994_drv.Reset(AUDIO_I2C_ADDRESS);
 
-      HAL_SAI_Receive_DMA(&haudio_in_sai, buffer_fake, 32);
       /* Initialize the audio driver structure */
       audio_drv = &wm8994_drv;
       ret = AUDIO_OK;
@@ -973,7 +982,7 @@ __weak void BSP_AUDIO_IN_HalfTransfer_CallBack(void)
 /**
   * @brief  Audio IN Error callback function.
   */
-__weak void BSP_AUDIO_IN_Error_Callback(void)
+__weak void BSP_AUDIO_IN_Error_CallBack(void)
 {
   /* This function is called when an Interrupt due to transfer error on or peripheral
      error occurs. */
@@ -1015,6 +1024,9 @@ __weak void BSP_AUDIO_IN_MspInit(SAI_HandleTypeDef *hsai, void *Params)
   /* Enable the DMA clock */
   AUDIO_IN_SAIx_DMAx_CLK_ENABLE();
 
+  /*  arduino internal driver init - somehow redundant with above */
+  dma_init(DMA2);
+
   if(hsai->Instance == AUDIO_IN_SAIx)
   {
     /* Configure the hdma_sai_rx handle parameters */
@@ -1045,6 +1057,8 @@ __weak void BSP_AUDIO_IN_MspInit(SAI_HandleTypeDef *hsai, void *Params)
 
   /* SAI DMA IRQ Channel configuration */
   HAL_NVIC_SetPriority(AUDIO_IN_SAIx_DMAx_IRQ, AUDIO_IN_IRQ_PREPRIO, 0);
+  /* Register also the IRQ in arduino DMA driver so that correct handler is called */
+  dma_attach_interrupt(DMA2, DMA_STREAM3, BSP_AUDIO_IN_DMA2_Stream3_IRQHandler);
   HAL_NVIC_EnableIRQ(AUDIO_IN_SAIx_DMAx_IRQ);
 
   /* Audio INT IRQ Channel configuration */
@@ -1176,7 +1190,7 @@ static void SAIx_In_Init(uint32_t SaiOutMode, uint32_t SlotActive, uint32_t Audi
   /* Configure SAI_Block_x Frame
   Frame Length: 64
   Frame active Length: 32
-  FS Definition: Start frame  Channel Side identification
+  FS Definition: Start frame + Channel Side identification
   FS Polarity: FS active Low
   FS Offset: FS asserted one bit before the first bit of slot 0 */
   haudio_in_sai.FrameInit.FrameLength = 64;
