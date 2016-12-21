@@ -36,6 +36,8 @@
  *
  * Francesco Alessi (alfran) - francesco@arduino.org
  * 2016 Jun 9: Edited for Arduino STAR OTTO first release
+ * 2016 Jul 21: Renamed and reorganized Pin info structure
+ * 2016 Dec 20: Modified for HW rev 3
  */
 
 #ifdef BOARD_discovery_f4
@@ -52,7 +54,7 @@ void boardInit(void)
 {
 
     // PWM output setting
-
+    /*
     gpio_set_af_mode(GPIOA,  0, 2); // D00 - TIM5_CH1
     gpio_set_af_mode(GPIOA,  1, 2); // D01 - TIM5_CH2
     gpio_set_af_mode(GPIOH,  6, 9); // D02 - TIM12_CH1
@@ -86,7 +88,7 @@ void boardInit(void)
 
     gpio_set_af_mode(GPIOB,  8, 2); // D68 - TIM4_CH3
     gpio_set_af_mode(GPIOB,  9, 2); // D69 - TIM4_CH4
-
+    */
 	return;
 }
 
@@ -103,12 +105,12 @@ extern const stm32_pin_info PIN_MAP[GPIO_PINS] = {
     {GPIOC,  6, TIMER8,  1,    NULL, ADCx}, // PC6:  D05         -       - TIM3_CH1/TIM8_CH1               -               -
     {GPIOD, 13, TIMER4,  2,    NULL, ADCx}, // PD13: D06         -       - TIM4_CH2                        -               -
     {GPIOD, 12, TIMER4,  1,    NULL, ADCx}, // PD12: D07         -       - TIM4_CH1                        -               -
-    {GPIOB,  5, TIMER3,  2,    NULL, ADCx}, // PB5:  D08         -       - TIM3_CH2                        -               -
-    {GPIOB,  4, TIMER3,  1,    NULL, ADCx}, // PB4:  D09         -       - TIM3_CH1                        -               -
+    {GPIOA,  8, NULL,  0,    NULL,    ADCx}, // PB5:  D08*         -       - TIM3_CH2                        -               -
+    {GPIOA,  9, NULL,  0,    NULL,    ADCx}, // PB4:  D09*         -       - TIM3_CH1                        -               -
     {GPIOB,  3, TIMER2,  2,    NULL, ADCx}, // PB3:  D10         -       - TIM2_CH2                        -               -
     {GPIOA, 15, TIMER2,  1,    NULL, ADCx}, // PA15: D11         -       - TIM2_CH1                        -               -
-    {GPIOA,  9, TIMER1,  2,    NULL, ADCx}, // PA9:  D12         -       - TIM1_CH2                        -               -
-    {GPIOA,  8, TIMER1,  1,    NULL, ADCx}, // PA8:  D13         -       - TIM1_CH1                        -               -
+    {GPIOB,  5, NULL,  0,    NULL,    ADCx}, // PA9:  D12*         -       - TIM1_CH2                        -               -
+    {GPIOB,  3, NULL,  0,    NULL,    ADCx}, // PA8:  D13*         -       - TIM1_CH1                        -               -
 // D14...D21
     {GPIOG, 14, NULL,    0,    NULL, ADCx}, // PG14: D14         -       -                                 -               - USART6_TX (Serial3)   -
     {GPIOG,  9, NULL,    0,    NULL, ADCx}, // PG9:  D15         -       -                                 -               - USART6_RX (Serial3)   -
@@ -155,22 +157,22 @@ extern const stm32_pin_info PIN_MAP[GPIO_PINS] = {
     {GPIOB,  0, TIMER3,  3,    ADC1,    8}, // PB0:  D54 / A0    - INT   - TIM1_CH2N/TIM3_CH3/TIM8_CH2N  - ADC12_IN8     -
     {GPIOB,  1, TIMER3,  4,    ADC1,    9}, // PB1:  D55 / A1    - LCD   - TIM1_CH3N/TIM3_CH4/TIM8_CH3N  - ADC12_IN9     -
     {GPIOF,  6, TIMER10, 1,    ADC3,    4}, // PF6:  D56 / A2    - INT   - TIM10_CH1                     - ADC3_IN4      -
-    {GPIOF,  7, TIMER11, 1,    ADC3,    5}, // PF7:  D57 / A3    - INT   - TIM11_CH1                     - ADC3_IN5      -
+    {GPIOC,  5, NULL,  0,    NULL,    ADCx}, // PF7:  D57* / A3    - INT   - TIM11_CH1                     - ADC3_IN5      -
     {GPIOA,  3, TIMER5,  4,    ADC3,    3}, // PA3:  D58 / A4    -       - TIM2_CH4/TIM5_CH4/TIM9_CH2    - ADC123_IN3    -
     {GPIOA,  2, TIMER5,  3,    ADC2,    2}, // PA2:  D59 / A5    - INT   - TIM2_CH3/TIM5_CH3/TIM9_CH1    - ADC123_IN1    -
     {GPIOF, 10, NULL,    0,    ADC3,    8}, // PF10: D60 / A6    - INT   -                               - ADC3_IN8      -
-    {GPIOC,  1, NULL,    0,    ADC2,   11}, // PC1:  D61 / A7    - INT   -                               - ADC123_IN11   -
+    {GPIOA,  7, NULL,  0,    NULL,    ADCx}, // PC1:  D61* / A7    - INT   -                               - ADC123_IN11   -
     {GPIOC,  2, NULL,    0,    ADC2,   12}, // PC2:  D62 / A8    - INT   -                               - ADC123_IN12   -
     {GPIOC,  4, NULL,    0,    ADC1,   14}, // PC4:  D63 / A9    -       -                               - ADC12_IN14    -
-    {GPIOC,  5, NULL,    0,    ADC1,   15}, // PC5:  D64 / A10   -       -                               - ADC12_IN15    -
-    {GPIOA,  7, TIMER8,  5,    ADC2,    7}, // PA7:  D65 / A11   -       - TIM1_CH1N/TIM3_CH2/TIM8_CH1N  - ADC12_IN7     -
+    {GPIOF,  7, NULL,  0,    NULL,    ADCx}, // PC5:  D64* / A10   -       -                               - ADC12_IN15    -
+    {GPIOC,  1, NULL,  0,    NULL,    ADCx}, // PA7:  D65* / A11   -       - TIM1_CH1N/TIM3_CH2/TIM8_CH1N  - ADC12_IN7     -
 // DAC0 - DAC1 (D66 - D67)
     {GPIOA,  4, NULL,    0,    ADC2,    4}, // PA4:  D66 / A12   - INT   -                               - ADC12_IN4     - DAC_OUT1
     {GPIOA,  5, NULL,    0,    ADC2,    5}, // PA5:  D67 / A13   - INT   - TIM2_CH1/TIM8_CH1N            - ADC12_IN5     - DAC_OUT2
 // CANRX - CANTX (D68 - D69)
     {GPIOB,  8, TIMER4,  3,    NULL, ADCx}, // PB8:  D68         - INT   - TIM4_CH3/TIM10_CH1            -               -
     {GPIOB,  9, TIMER4,  4,    NULL, ADCx}, // PB9:  D69         - INT   - TIM4_CH4/TIM11_CH1            -               -
-// SPI - (D70 - D72)
+// SPI - (D70 - D72) -------------------------------------------------------------------------------------------------------------- FOLLOWING PIN WILL BE FIXED
     {GPIOB, 14, NULL,    0,    NULL, ADCx}, // PB14: D70 / MISO  -       - TIM1_CH2N/TIM8_CH2N           -               -
     {GPIOD, 10, NULL,    0,    NULL, ADCx}, // PB10: D71 / SCK   -       - TIM2_CH3                      -               -
     {GPIOC, 15, NULL,    0,    NULL, ADCx}, // PB15: D72 / MOSI  -       - TIM1_CH3N/TIM8_CH3N           -               -
