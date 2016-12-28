@@ -113,7 +113,7 @@ void init(void);
  *
  * @see init()
  */
-extern void boardInit(void);
+//extern void boardInit(void);  // alfran: commented to new pin management
 
 /**
  * @brief Test if a pin is used for a special purpose on your board.

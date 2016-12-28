@@ -78,7 +78,7 @@ void init(void) {
 	systick_init(SYSTICK_RELOAD_VAL);
 	gpio_init_all();
 	rcc_clk_enable(RCC_SYSCFG);
-  boardInit();
+  //boardInit();
   startADC();
   setupTimers();
   HAL_Init();
@@ -178,6 +178,6 @@ static void timerDefaultConfig(timer_dev *dev) {
     	case TIMER_BASIC:
         break;
     }
-		
+
     timer_resume(dev);
 }

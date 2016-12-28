@@ -69,7 +69,10 @@ void analogWrite(uint8 pin, uint16 passed_val)
     	{
         	return;
     	}
-
+		  if (PIN_MAP[pin].alternate_function != AFx)
+			{
+				gpio_set_af_mode(PIN_MAP[pin].gpio_device, PIN_MAP[pin].gpio_bit, PIN_MAP[pin].alternate_function);
+			}
 		timer_set_compare(dev, PIN_MAP[pin].timer_channel, duty_cycle);
 		timer_cc_enable(dev, PIN_MAP[pin].timer_channel);
 		gpio_set_mode(PIN_MAP[pin].gpio_device, PIN_MAP[pin].gpio_bit, GPIO_AF_OUTPUT_PP);

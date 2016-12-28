@@ -47,6 +47,7 @@
  * @see stm32_pin_info
  */
 #define ADCx 0xFF
+#define AFx 0xFF  // alfran: added to improove the pwm management
 
 /**
  * @brief Stores STM32-specific information related to a given pin.
@@ -57,6 +58,7 @@ typedef struct stm32_pin_info {
     uint8 gpio_bit;             /**< GPIO port bit. */
     timer_dev *timer_device;    /**< Pin's timer device, if any. */
     uint8 timer_channel;        /**< Timer channel, or 0 if none. */
+    uint8 alternate_function;    /**< Alernate function for PWM. */  // alfran: added to improove the pwm management
     const adc_dev *adc_device;  /**< ADC device, if any. */
     uint8 adc_channel;          /**< Pin ADC channel, or ADCx if none. */
     uint8 filler;
