@@ -182,8 +182,13 @@
 // USB POWER PIN
 #define USB_PWR		D76
 
+// MIC SEL
+#define MIC_SEL  	D77
+#define CODEC     0
+#define MCU       1
+
 // LCD CONTROL
-#define LCD_BL   	D77
+#define LCD_BL   	D78
 
 
 enum {
