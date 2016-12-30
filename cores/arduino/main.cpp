@@ -58,6 +58,11 @@ int main(void) {
 	 * Note: this should have already been done in SystemInit() in HAL/src/system_stm32f4xx.c */
 	SCB->CPACR |= ((3UL << 10*2)|(3UL << 11*2));  /* set CP10 and CP11 Full Access */
 	analogReadResolution(10);
+  
+  // Set MIC Connected to CODEC
+  pinMode(MIC_SEL, OUTPUT);
+  digitalWrite(MIC_SEL, CODEC);
+
 	setup();
 
 	while (1) {
