@@ -308,6 +308,12 @@ void SetupClock() // to be setted properly
 
   HAL_RCC_EnableCSS();
 
+  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_LTDC;
+  PeriphClkInitStruct.PLLSAI.PLLSAIN = 192;
+  PeriphClkInitStruct.PLLSAI.PLLSAIR = 7;
+  PeriphClkInitStruct.PLLSAIDivR = RCC_PLLSAIDIVR_2;
+  HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct);
+
   InitMCO1();
 
   // save bus clock values
