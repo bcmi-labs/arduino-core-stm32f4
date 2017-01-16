@@ -165,8 +165,8 @@ extern const stm32_pin_info PIN_MAP[GPIO_PINS] = {
     {GPIOG,  9, NULL,    0, AFx,   NULL, ADCx}, // PG9:  D15            -       -                                 -               - USART6_RX (Serial3)   -
     {GPIOD,  5, NULL,    0, AFx,   NULL, ADCx}, // PD5:  D16            -       -                                 -               - USART2_TX (Serial2)   -
     {GPIOD,  6, NULL,    0, AFx,   NULL, ADCx}, // PD6:  D17            -       -                                 -               - USART2_RX (Serial2)   -
-    {GPIOB, 10, TIMER2,  3,   1,   NULL, ADCx}, // PB10: D18            -       - TIM2_CH3                        -               - USART3_TX (Serial3)   -
-    {GPIOB, 11, TIMER2,  4,   1,   NULL, ADCx}, // PB11: D19            -       - TIM2_CH4                        -               - USART3_RX (Serial3)   -
+    {GPIOB, 10, TIMER2,  3,   1,   NULL, ADCx}, // PB10: D18            -       - TIM2_CH3                        -               - USART3_TX (Serial1)   -
+    {GPIOB, 11, TIMER2,  4,   1,   NULL, ADCx}, // PB11: D19            -       - TIM2_CH4                        -               - USART3_RX (Serial1)   -
     {GPIOH,  5, NULL,    0, AFx,   NULL, ADCx}, // PH5:  D20            -       -                                 -               - I2C2_SDA              -
     {GPIOH,  4, NULL,    0, AFx,   NULL, ADCx}, // PH4:  D21            -       -                                 -               - I2C2_SCL              -
 // D22...D53

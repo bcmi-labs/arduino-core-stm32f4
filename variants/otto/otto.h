@@ -173,8 +173,8 @@
 #define TX1_PIN 	D18
 #define RX2_PIN 	D17
 #define TX2_PIN 	D16
-#define RX3_PIN 	D14
-#define TX3_PIN 	D15
+#define RX3_PIN 	D15
+#define TX3_PIN 	D14
 
 // WIFI POWER PIN
 #define WIFI_PWR	D75
@@ -182,13 +182,15 @@
 // USB POWER PIN
 #define USB_PWR		D76
 
+// LCD CONTROL
+#define LCD_BL   	D77
+
 // MIC SEL
-#define MIC_SEL  	D77
+#define MIC_SEL  	D78
 #define CODEC     0
 #define MCU       1
 
-// LCD CONTROL
-#define LCD_BL   	D78
+
 
 
 enum {
