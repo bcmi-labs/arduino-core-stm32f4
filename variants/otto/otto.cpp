@@ -206,15 +206,15 @@ extern const stm32_pin_info PIN_MAP[GPIO_PINS] = {
     {GPIOB,  0, TIMER3,  3,   2,   ADC1,    8}, // PB0:  D54 / A0       - INT   - TIM1_CH2N/TIM3_CH3/TIM8_CH2N    - ADC12_IN8     -
     {GPIOB,  1, TIMER3,  4,   2,   ADC1,    9}, // PB1:  D55 / A1       - INT   - TIM1_CH3N/TIM3_CH4/TIM8_CH3N    - ADC12_IN9     -
     {GPIOF,  6, TIMER10, 1,   3,   ADC3,    4}, // PF6:  D56 / A2       - INT   - TIM10_CH1                       - ADC3_IN4      -
-    {GPIOC,  5, NULL,    0, AFx,   NULL, ADCx}, // PC5:  D57 / A3       - INT   -                                 -               -
+    {GPIOC,  5, NULL,    0, AFx,   ADC1,   15}, // PC5:  D57 / A3       - INT   -                                 - ADC12_IN15    -
     {GPIOA,  3, TIMER5,  4,   2,   ADC3,    3}, // PA3:  D58 / A4       -       - TIM2_CH4/TIM5_CH4/TIM9_CH2      - ADC123_IN3    -
     {GPIOA,  2, TIMER5,  3,   2,   ADC2,    2}, // PA2:  D59 / A5       - INT   - TIM2_CH3/TIM5_CH3/TIM9_CH1      - ADC123_IN1    -
     {GPIOF, 10, NULL,    0, AFx,   ADC3,    8}, // PF10: D60 / A6       - INT   -                                 - ADC3_IN8      -
-    {GPIOA,  7, NULL,    0, AFx,   NULL, ADCx}, // PA7:  D61 / A7       - INT   - TIM1_CH1N/TIM3_CH1/TIM8_CH1N    -               -
+    {GPIOA,  7, NULL,    0, AFx,   ADC1,    7}, // PA7:  D61 / A7       - INT   - TIM1_CH1N/TIM3_CH1/TIM8_CH1N    - ADC12_IN      -
     {GPIOC,  2, NULL,    0, AFx,   ADC2,   12}, // PC2:  D62 / A8       - INT   -                                 - ADC123_IN12   -
     {GPIOC,  4, NULL,    0, AFx,   ADC1,   14}, // PC4:  D63 / A9       -       -                                 - ADC12_IN14    -
-    {GPIOF,  7, TIMER11, 1,   3,   NULL, ADCx}, // PF7:  D64 / A10      -       - TIM11_CH1                       -               -
-    {GPIOC,  1, NULL,    0, AFx,   NULL, ADCx}, // PC1:  D65 / A11      -       -                                 -               -
+    {GPIOF,  7, TIMER11, 1,   3,   ADC3,    5}, // PF7:  D64 / A10      -       - TIM11_CH1                       - ADC3_IN5      -
+    {GPIOC,  1, NULL,    0, AFx,   ADC3,   11}, // PC1:  D65 / A11      -       -                                 - ADC123_IN11   -
 // DAC0 - DAC1 (D66 - D67)
     {GPIOA,  4, NULL,    0, AFx,   ADC2,    4}, // PA4:  D66 / A12      - INT   -                                 - ADC12_IN4     - DAC_OUT1
     {GPIOA,  5, TIMER8,  5,   3,   ADC2,    5}, // PA5:  D67 / A13      - INT   - TIM2_CH1/TIM8_CH1N              - ADC12_IN5     - DAC_OUT2
