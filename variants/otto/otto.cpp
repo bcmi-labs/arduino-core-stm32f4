@@ -156,10 +156,10 @@ extern const stm32_pin_info PIN_MAP[GPIO_PINS] = {
     {GPIOD, 12, TIMER4,  1,   2,   NULL, ADCx}, // PD12: D07            -       - TIM4_CH1                        -               -
     {GPIOA,  8, TIMER1,  1,   1,   NULL, ADCx}, // PA8:  D08            -       - TIM1_CH1                        -               -
     {GPIOA,  9, TIMER1,  2,   1,   NULL, ADCx}, // PA9:  D09            -       - TIM1_CH2                        -               -
-    {GPIOA, 15, TIMER2,  1,   1,   NULL, ADCx}, // PA15: D10            -       - TIM2_CH1                        -               - UART1_TX
-    {GPIOB,  5, TIMER3,  2,   2,   NULL, ADCx}, // PB5:  D11            -       - TIM3_CH2                        -               -
-    {GPIOB,  4, TIMER3,  1,   2,   NULL, ADCx}, // PB4:  D12            -       - TIM3_CH1                        -               -
-    {GPIOB,  3, TIMER2,  2,   1,   NULL, ADCx}, // PB3:  D13            -       - TIM2_CH2                        -               -
+    {GPIOA, 15, TIMER2,  1,   1,   NULL, ADCx}, // PA15: D10            -       - TIM2_CH1                        -               - SPI1_NSS
+    {GPIOB,  5, TIMER3,  2,   2,   NULL, ADCx}, // PB5:  D11            -       - TIM3_CH2                        -               - SPI1_MOSI
+    {GPIOB,  4, TIMER3,  1,   2,   NULL, ADCx}, // PB4:  D12            -       - TIM3_CH1                        -               - SPI1_MISO
+    {GPIOB,  3, TIMER2,  2,   1,   NULL, ADCx}, // PB3:  D13            -       - TIM2_CH2                        -               - SPI1_SCK
 // D14...D21
     {GPIOG, 14, NULL,    0, AFx,   NULL, ADCx}, // PG14: D14            -       -                                 -               - USART6_TX (Serial3)   -
     {GPIOG,  9, NULL,    0, AFx,   NULL, ADCx}, // PG9:  D15            -       -                                 -               - USART6_RX (Serial3)   -
@@ -222,18 +222,20 @@ extern const stm32_pin_info PIN_MAP[GPIO_PINS] = {
     {GPIOB,  9, TIMER4,  4,   2,   NULL, ADCx}, // PB9:  D68            - INT   - TIM4_CH4/TIM11_CH1              -               -
     {GPIOB,  8, TIMER4,  3,   2,   NULL, ADCx}, // PB8:  D69            - INT   - TIM4_CH3/TIM10_CH1              -               -
 // I2CB - (D70 - D71)
-    {GPIOB,  7, TIMER4,  2,   2,   NULL, ADCx}, // PB7:  D70            -       - TIM4_CH2                        - I2C1_SDA      -
-    {GPIOB,  6, TIMER4,  1,   2,   NULL, ADCx}, // PB6:  D71            -       - TIM4_CH1                        - I2C1_SCL      -
-// SPI - (D75 - D77)
-    {GPIOB, 14, NULL,    0, AFx,   NULL, ADCx}, // PB14: D72 / MISO     -       -                                 -               -
-    {GPIOD,  3, NULL,    0, AFx,   NULL, ADCx}, // PD3:  D73 / SCK      -       -                                 -               -
-    {GPIOC,  3, NULL,    0, AFx,   NULL, ADCx}, // PC3:  D74 / MOSI     -       -                                 -               -
-// ESP8266 POWER - (D72)
-    {GPIOH, 13, NULL,    0, AFx,  NULL,  ADCx}, // PH13: D75 / WIFI_PWR - INT   -                                 -               -
-// USB POWER ENABLE - (D73)
-    {GPIOK,  4, NULL,    0, AFx,  NULL,  ADCx}, // PK4:  D76 / USB_PWR
-// LCD BACK LIGHT CONTROL (D74)
-    {GPIOE,  5, TIMER9,  1,   3,  NULL,  ADCx}, // PE5:  D77 / LCD_BL
+    {GPIOB,  7, TIMER4,  2,   2,   NULL, ADCx}, // PB7:  D70            -       - TIM4_CH2                        -               - I2C1_SDA
+    {GPIOB,  6, TIMER4,  1,   2,   NULL, ADCx}, // PB6:  D71            -       - TIM4_CH1                        -               - I2C1_SCL
+// SPI - (D72 - D74)
+    {GPIOB, 14, NULL,    0, AFx,   NULL, ADCx}, // PB14: D72 / MISO     -       -                                 -               - SPI2_MISO
+    {GPIOD,  3, NULL,    0, AFx,   NULL, ADCx}, // PD3:  D73 / SCK      -       -                                 -               - SPI2_SCK
+    {GPIOC,  3, NULL,    0, AFx,   NULL, ADCx}, // PC3:  D74 / MOSI     -       -                                 -               - SPI2_MOSI
+// ESP8266 POWER (D75)
+    {GPIOH, 13, NULL,    0, AFx,  NULL,  ADCx}, // PH13: D75 / WIFI_PWR -       -                                 -               -
+// USB POWER ENABLE (D76)
+    {GPIOK,  4, NULL,    0, AFx,  NULL,  ADCx}, // PK4:  D76 / USB_PWR  -       -                                 -               -
+// LCD BACK LIGHT CONTROL (D77)
+    {GPIOJ,  3, NULL,    0, AFx,   NULL, ADCx}, // PJ3:  D77 / LCD_BL   -       -                                 -               -
+// AUDIO SELECTION PIN (D78)
+    {GPIOD,  7, NULL,    0, AFx,  NULL,  ADCx}, // PD7:  D78 / AUDIO_SEL-       -                                 -               -
 };
 
 extern const uint8 boardPWMPins[BOARD_NR_PWM_PINS] __FLASH__ = {
