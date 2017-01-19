@@ -93,23 +93,23 @@ void TwoWire::begin(void)
   else if(twi == HAL_I2C2)
   {
     /* Enable GPIO TX/RX clock */
-    __HAL_RCC_GPIOB_CLK_ENABLE();
+    __HAL_RCC_GPIOH_CLK_ENABLE();
 
   /* Enable I2Cx clock */
-    __HAL_RCC_I2C1_CLK_ENABLE();
+    __HAL_RCC_I2C2_CLK_ENABLE();
 
     /* I2C SCL GPIO pin configuration  */
-    GPIO_InitStruct.Pin       = GPIO_PIN_6;
+    GPIO_InitStruct.Pin       = GPIO_PIN_4;
     GPIO_InitStruct.Mode      = GPIO_MODE_AF_OD;
     GPIO_InitStruct.Pull      = GPIO_PULLUP;
     GPIO_InitStruct.Speed     = GPIO_SPEED_HIGH;
-    GPIO_InitStruct.Alternate = GPIO_AF4_I2C1;
-    HAL_GPIO_Init(HAL_GPIOB, &GPIO_InitStruct);
+    GPIO_InitStruct.Alternate = GPIO_AF4_I2C2;
+    HAL_GPIO_Init(HAL_GPIOH, &GPIO_InitStruct);
 
     /* I2C SDA GPIO pin configuration  */
-    GPIO_InitStruct.Pin       = GPIO_PIN_7;
-    GPIO_InitStruct.Alternate = GPIO_AF4_I2C1;
-    HAL_GPIO_Init(HAL_GPIOB, &GPIO_InitStruct);
+    GPIO_InitStruct.Pin       = GPIO_PIN_5;
+    GPIO_InitStruct.Alternate = GPIO_AF4_I2C2;
+    HAL_GPIO_Init(HAL_GPIOH, &GPIO_InitStruct);
 
     HAL_NVIC_SetPriority(I2C2_ER_IRQn, 0, 1);
     HAL_NVIC_EnableIRQ(I2C2_ER_IRQn);
