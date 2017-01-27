@@ -159,6 +159,11 @@
 #define MISO_PIN 	D72
 #define SCK_PIN 	D73
 #define MOSI_PIN 	D74
+#define SS_PIN    D23
+#define MISO1_PIN D12
+#define SCK1_PIN  D13
+#define MOSI1_PIN D11
+#define SS1_PIN   D10
 
 // I2C PIN
 #define SCL_PIN 	D70
