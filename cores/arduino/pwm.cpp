@@ -63,7 +63,7 @@ void analogWrite(uint8 pin, uint16 passed_val)
 	}
 	else
 	{
-    	uint16 duty_cycle = map(passed_val, 0, MaxRes_val, 0, 65535);
+    	uint16 duty_cycle = map(passed_val, 0, MaxRes_val, 65535, 0);
         timer_dev *dev = PIN_MAP[pin].timer_device;
     	if (pin >= GPIO_PINS || dev == NULL || dev->type == TIMER_BASIC)
     	{

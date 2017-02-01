@@ -230,7 +230,7 @@ extern const stm32_pin_info PIN_MAP[GPIO_PINS] = {
     {GPIOC,  3,   NULL,     0,    AFx,   NULL, ADCx}, // PC3:  D74 / MOSI     -       -                                 -               - SPI2_MOSI
 // ESP8266 POWER (D75)
     {GPIOH, 13,   NULL,     0,    AFx,   NULL,  ADCx}, // PH13: D75 / WIFI_PWR -       -                                 -               -
-// USB POWER ENABLE (D76 )
+// USB POWER ENABLE (D76)
     {GPIOK,  4,   NULL,     0,    AFx,   NULL,  ADCx}, // PK4:  D76 / USB_PWR  -       -                                 -               -
 // LCD BACK LIGHT CONTROL (D77)
     {GPIOJ,  3,   NULL,     0,    AFx,   NULL, ADCx}, // PJ3:  D77 / LCD_BL   -       -                                 -               -
