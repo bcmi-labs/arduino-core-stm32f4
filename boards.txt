@@ -25,7 +25,7 @@ star_otto.build.core=arduino
 star_otto.build.extra_flags=-DMCU_STM32F469NI -mthumb -DSTM32_HIGH_DENSITY -DSTM32F2 -DSTM32F4 -DBOARD_discovery_f4
 star_otto.build.ldscript=link-tools/jtag.ld
 star_otto.build.variant=otto
-star_otto.build.variant_system_lib=lib_f469.a
+star_otto.build.variant_system_lib=libstm32f4_otto_gcc_rel.a
 star_otto.build.vect=VECT_TAB_BASE
 star_otto.build.density=STM32_HIGH_DENSITY
 ##############################################################
