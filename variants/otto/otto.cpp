@@ -40,8 +40,6 @@
  * 2016 Dec 20: Modified for HW rev 3
  */
 
-#ifdef BOARD_discovery_f4
-
 #include "otto.h"
 
 #include "gpio.h"
@@ -246,4 +244,3 @@ extern const uint8 boardADCPins[BOARD_NR_ADC_PINS] __FLASH__ = {
     54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67
 };
 
-#endif

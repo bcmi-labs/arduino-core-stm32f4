@@ -24,8 +24,6 @@
  * SOFTWARE.
  *****************************************************************************/
 
- #ifdef STM32F2
-
 /**
  * @file gpio.c
  * @brief GPIO initialization routine
@@ -246,4 +244,3 @@ void afio_remap(afio_remap_peripheral remapping) {
 }
 #endif
 
-#endif

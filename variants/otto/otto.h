@@ -42,8 +42,10 @@
  */
 
 
-#ifndef _BOARD_DISCOVERY_F4_H_
-#define _BOARD_DISCOVERY_F4_H_
+#ifndef _OTTO_H_
+#define _OTTO_H_
+
+#include "stm32f4xx_hal.h"
 
 #define Port2Pin(port, bit) ((port-'A')*16+bit)
 
