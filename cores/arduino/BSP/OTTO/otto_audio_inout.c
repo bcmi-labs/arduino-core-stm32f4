@@ -541,7 +541,7 @@ __HAL_RCC_GPIOE_CLK_ENABLE();
   HAL_GPIO_Init(AUDIO_SAIx_SCK_SD_FS_GPIO_PORT, &gpio_init_structure);
 
   gpio_init_structure.Pin = AUDIO_SAIx_SD_PIN;
-  HAL_GPIO_Init(HAL_GPIOE, &gpio_init_structure);
+  HAL_GPIO_Init(GPIOE, &gpio_init_structure);
 
   /* Enable the DMA clock */
   AUDIO_SAIx_DMAx_CLK_ENABLE();

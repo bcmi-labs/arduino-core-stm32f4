@@ -37,7 +37,7 @@ SPIClass::SPIClass(SPI_TypeDef *spiInstance)
   */
 void SPIClass::begin()
 {
-  if(hSPIx.Instance == HAL_SPI2)
+  if(hSPIx.Instance == SPI2)
   {
     GPIO_InitTypeDef  GPIO_InitStruct;
 
@@ -67,7 +67,7 @@ void SPIClass::begin()
     GPIO_InitStruct.Alternate = SPI2_MOSI_AF;
     HAL_GPIO_Init(SPI2_MOSI_GPIO_PORT, &GPIO_InitStruct);
   }
-  else if (hSPIx.Instance == HAL_SPI1)
+  else if (hSPIx.Instance == SPI1)
   {
     GPIO_InitTypeDef  GPIO_InitStruct;
 
@@ -301,7 +301,7 @@ void SPIClass::setClockDivider(uint8_t clockDiv)
   */
 void SPIClass::end()
 {
-  if(hSPIx.Instance == HAL_SPI2)
+  if(hSPIx.Instance == SPI2)
   {
     /*##-1- Reset peripherals ##################################################*/
     SPI2_FORCE_RESET();
@@ -315,7 +315,7 @@ void SPIClass::end()
     /* Configure SPI2 MOSI as alternate function  */
     HAL_GPIO_DeInit(SPI2_MOSI_GPIO_PORT, SPI2_MOSI_PIN);
   }
-  else if (hSPIx.Instance == HAL_SPI1)
+  else if (hSPIx.Instance == SPI1)
   {
     /*##-1- Reset peripherals ##################################################*/
     SPI1_FORCE_RESET();
@@ -344,5 +344,5 @@ void SPIClass::end(uint8_t slaveSelectPin)
   end();
 }
 
-SPIClass SPI = SPIClass(HAL_SPI2);
-SPIClass SPI1 = SPIClass(HAL_SPI1);
+SPIClass SPI = SPIClass(SPI2);
+SPIClass SPI_1 = SPIClass(SPI1);

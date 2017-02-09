@@ -71,7 +71,7 @@
   * resources.
   * Definition for I2Cx clock resources
   */
-#define EVAL_I2Cx                             HAL_I2C2
+#define EVAL_I2Cx                             I2C2
 #define EVAL_I2Cx_CLK_ENABLE()                __HAL_RCC_I2C2_CLK_ENABLE()
 #define EVAL_DMAx_CLK_ENABLE()                __HAL_RCC_DMA1_CLK_ENABLE()
 #define EVAL_I2Cx_SCL_SDA_GPIO_CLK_ENABLE()   __HAL_RCC_GPIOH_CLK_ENABLE()
@@ -82,7 +82,7 @@
 /** @brief Definition for I2Cx Pins
   */
 #define EVAL_I2Cx_SCL_PIN                     GPIO_PIN_4 /*!< PH4 */
-#define EVAL_I2Cx_SCL_SDA_GPIO_PORT           HAL_GPIOH
+#define EVAL_I2Cx_SCL_SDA_GPIO_PORT           GPIOH
 #define EVAL_I2Cx_SCL_SDA_AF                  GPIO_AF4_I2C2
 #define EVAL_I2Cx_SDA_PIN                     GPIO_PIN_5 /*!< PH5 */
 

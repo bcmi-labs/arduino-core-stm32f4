@@ -31,12 +31,12 @@ otto:
 	@echo ------------------------------------------------------------------------
 	@echo --- Making $@
 	@echo ---
-	@$(MAKE) CHIP=STM32F469xx CHIP_STARTUP_FILE=startup_stm32f469xx.s LIBNAME=libstm32f4 CHIP_NAME=stm32F469bi VARIANTS_PATH=../../../variants/otto $(SUBMAKE_OPTIONS) -f stm32f4.mk
+	@$(MAKE) CHIP=STM32F469xx LIBNAME=libstm32f4 CHIP_NAME=stm32F469bi VARIANTS_PATH=../../../variants/otto $(SUBMAKE_OPTIONS) -f stm32f4.mk
 	@echo ------------------------------------------------------------------------
 
 .PHONY: clean
 clean:
 	@echo ------------------------------------------------------------------------
 	@echo --- Cleaning lib release and debug
-	@$(MAKE) CHIP=STM32F469xx CHIP_STARTUP_FILE=startup_stm32f469xx.s LIBNAME=libstm32f4 CHIP_NAME=stm32F469bi VARIANTS_PATH=../../../variants/otto $(SUBMAKE_OPTIONS) -f stm32f4.mk $@
+	@$(MAKE) CHIP=STM32F469xx LIBNAME=libstm32f4 CHIP_NAME=stm32F469bi VARIANTS_PATH=../../../variants/otto $(SUBMAKE_OPTIONS) -f stm32f4.mk $@
 	@echo ------------------------------------------------------------------------

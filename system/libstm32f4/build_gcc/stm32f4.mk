@@ -52,7 +52,8 @@ HAL_ROOT_PATH = $(PROJECT_BASE_PATH)/../Drivers/STM32F4xx_HAL_Driver
 CMSIS_ARM_PATH=$(CMSIS_ROOT_PATH)/Include
 CMSIS_ST_PATH=$(CMSIS_ROOT_PATH)/Device/ST/
 CMSIS_CHIP_PATH=$(CMSIS_ROOT_PATH)/Device/ST/$(CHIP_SERIE)
-STARTUP_FILE_PATH=$(CMSIS_CHIP_PATH)/Source/Templates/gcc
+#STARTUP_FILE_PATH=$(CMSIS_CHIP_PATH)/Source/Templates/gcc
+STARTUP_FILE_PATH=$(VARIANTS_PATH)
 
 #-------------------------------------------------------------------------------
 # Files
@@ -146,7 +147,7 @@ C_OBJ=$(filter-out $(C_OBJ_FILTER), $(C_OBJ_TEMP))
 # Assembler source files and objects
 #-------------------------------------------------------------------------------
 A_SRC=$(wildcard $(PROJECT_BASE_PATH)/source/*.s)
-A_SRC+=$(wildcard $(STARTUP_FILE_PATH)/$(CHIP_STARTUP_FILE))
+#A_SRC+=$(wildcard $(STARTUP_FILE_PATH)/$(CHIP_STARTUP_FILE))
 
 
 A_OBJ_TEMP=$(patsubst %.s, %.o, $(notdir $(A_SRC)))

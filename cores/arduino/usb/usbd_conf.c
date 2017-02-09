@@ -37,9 +37,6 @@
 #include "usbd_def.h"
 #include "usbd_core.h"
 
-/* DS: fixme. This is for commatibility among this HAL version (V2.4.1) and USB libs (2.4.2) */
-#define GPIOA HAL_GPIOA
-
 PCD_HandleTypeDef hpcd;
 __IO  uint32_t device_connection_status;
 
@@ -284,7 +281,7 @@ void HAL_PCD_ConnectCallback(PCD_HandleTypeDef *hpcd)
     gpio_init_structure.Pull  = GPIO_PULLUP;
     gpio_init_structure.Speed = GPIO_SPEED_HIGH;
 	
-    HAL_GPIO_Init(HAL_GPIOK, &gpio_init_structure);
+    HAL_GPIO_Init(GPIOK, &gpio_init_structure);
 	
     
 	  device_connection_status = 1;

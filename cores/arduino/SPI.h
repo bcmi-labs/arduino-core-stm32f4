@@ -26,13 +26,13 @@
 
 /* Definition for SPI2 Pins */
 #define SPI2_SCK_PIN                     GPIO_PIN_3
-#define SPI2_SCK_GPIO_PORT               HAL_GPIOD
+#define SPI2_SCK_GPIO_PORT               GPIOD
 #define SPI2_SCK_AF                      GPIO_AF5_SPI2
 #define SPI2_MISO_PIN                    GPIO_PIN_14
-#define SPI2_MISO_GPIO_PORT              HAL_GPIOB
+#define SPI2_MISO_GPIO_PORT              GPIOB
 #define SPI2_MISO_AF                     GPIO_AF5_SPI2
 #define SPI2_MOSI_PIN                    GPIO_PIN_3
-#define SPI2_MOSI_GPIO_PORT              HAL_GPIOC
+#define SPI2_MOSI_GPIO_PORT              GPIOC
 #define SPI2_MOSI_AF                     GPIO_AF5_SPI2
 
 #define SPI1_CLK_ENABLE()                __HAL_RCC_SPI1_CLK_ENABLE()
@@ -46,17 +46,17 @@
 
 /* Definition for SPI2 Pins */
 #define SPI1_SCK_PIN                     GPIO_PIN_3
-#define SPI1_SCK_GPIO_PORT               HAL_GPIOB
+#define SPI1_SCK_GPIO_PORT               GPIOB
 #define SPI1_SCK_AF                      GPIO_AF5_SPI1
 #define SPI1_MISO_PIN                    GPIO_PIN_4
-#define SPI1_MISO_GPIO_PORT              HAL_GPIOB
+#define SPI1_MISO_GPIO_PORT              GPIOB
 #define SPI1_MISO_AF                     GPIO_AF5_SPI1
 #define SPI1_MOSI_PIN                    GPIO_PIN_5
-#define SPI1_MOSI_GPIO_PORT              HAL_GPIOB
+#define SPI1_MOSI_GPIO_PORT              GPIOB
 #define SPI1_MOSI_AF                     GPIO_AF5_SPI1
 
 #define SPI1_NSS_PIN                     GPIO_PIN_15
-#define SPI1_NSS_GPIO_PORT               HAL_GPIOA
+#define SPI1_NSS_GPIO_PORT               GPIOA
 #define SPI1_NSS_AF                      GPIO_AF5_SPI1
 
 #ifndef LSBFIRST
@@ -193,6 +193,6 @@ private:
 };
 
 extern SPIClass SPI;
-extern SPIClass SPI1;
+extern SPIClass SPI_1;
 
 #endif

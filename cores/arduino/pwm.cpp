@@ -57,9 +57,9 @@ void analogWrite(uint8 pin, uint16 passed_val)
 
 
 
-		if (pin == DAC0) dac_write_channel(DAC,1,duty_cycle);
+		if (pin == DAC0) dac_write_channel(DAC_dev,1,duty_cycle);
 
-		if (pin == DAC1) dac_write_channel(DAC,2,duty_cycle);
+		if (pin == DAC1) dac_write_channel(DAC_dev,2,duty_cycle);
 	}
 	else
 	{
@@ -89,13 +89,13 @@ void setDac (uint8 pin)
                 {
                     // Enablin all channel
                     ADC0_Status = true;
-                    dac_init(DAC, DAC_CH1 | DAC_CH2);
+                    dac_init(DAC_dev, DAC_CH1 | DAC_CH2);
                 }
                 else
                 {
                     // Enabling DAC0 (port A4)
                     ADC0_Status = true;
-                    dac_init(DAC, DAC_CH1);
+                    dac_init(DAC_dev, DAC_CH1);
                 }
             }
             if (pin == DAC1)
@@ -104,13 +104,13 @@ void setDac (uint8 pin)
                 {
                     // Enabling all channel
                     ADC1_Status = true;
-                    dac_init(DAC, DAC_CH1 | DAC_CH2);
+                    dac_init(DAC_dev, DAC_CH1 | DAC_CH2);
                 }
                 else
                 {
                     // Enablink DAC1 (port A5)
                     ADC1_Status = true;
-                    dac_init(DAC, DAC_CH2);
+                    dac_init(DAC_dev, DAC_CH2);
                 }
             }
 }

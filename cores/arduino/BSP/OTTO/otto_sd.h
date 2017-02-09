@@ -89,7 +89,7 @@
   * @brief SD-detect signal
   */
 #define SD_DETECT_PIN                        GPIO_PIN_10
-#define SD_DETECT_GPIO_PORT                  HAL_GPIOG
+#define SD_DETECT_GPIO_PORT                  GPIOG
 #define SD_DETECT_GPIO_CLK_ENABLE()          __HAL_RCC_GPIOG_CLK_ENABLE()
 #define SD_DETECT_GPIO_CLK_DISABLE()         __HAL_RCC_GPIOG_CLK_DISABLE()
 #define SD_DETECT_EXTI_IRQn                  EXTI2_IRQn

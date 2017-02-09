@@ -71,7 +71,7 @@
   * @}
   */
 /* SAI peripheral configuration defines */
-#define AUDIO_SAIx                           HAL_SAI1_Block_B
+#define AUDIO_SAIx                           SAI1_Block_B
 #define AUDIO_SAIx_CLK_ENABLE()              __HAL_RCC_SAI1_CLK_ENABLE()
 #define AUDIO_SAIx_CLK_DISABLE()             __HAL_RCC_SAI1_CLK_DISABLE()
 #define AUDIO_SAIx_MCLK_SCK_SD_FS_AF         GPIO_AF6_SAI1
@@ -80,21 +80,21 @@
 #define AUDIO_SAIx_MCLK_DISABLE()            __HAL_RCC_GPIOD_CLK_DISABLE()
 
 #define AUDIO_SAIx_MCK_PIN                   GPIO_PIN_1
-#define AUDIO_SAIx_MCLK_GPIO_PORT            HAL_GPIOD
+#define AUDIO_SAIx_MCLK_GPIO_PORT            GPIOD
 
 #define AUDIO_SAIx_SCK_SD_FS_ENABLE()        __HAL_RCC_GPIOF_CLK_ENABLE()
 #define AUDIO_SAIx_SCK_SD_FS_DISABLE()       __HAL_RCC_GPIOF_CLK_DISABLE()
 #define AUDIO_SAIx_FS_PIN                    GPIO_PIN_9
 #define AUDIO_SAIx_SCK_PIN                   GPIO_PIN_8
 #define AUDIO_SAIx_SD_PIN                    GPIO_PIN_3
-#define AUDIO_SAIx_SCK_SD_FS_GPIO_PORT       HAL_GPIOF
-#define AUDIO_SAIx_SD_GPIO_PORT              HAL_GPIOE
+#define AUDIO_SAIx_SCK_SD_FS_GPIO_PORT       GPIOF
+#define AUDIO_SAIx_SD_GPIO_PORT              GPIOE
 
 
 /* SAI DMA Stream definitions */
 #define AUDIO_SAIx_DMAx_CLK_ENABLE()         __HAL_RCC_DMA2_CLK_ENABLE()
 #define AUDIO_SAIx_DMAx_CLK_DISABLE()        __HAL_RCC_DMA2_CLK_DISABLE()
-#define AUDIO_SAIx_DMAx_STREAM               HAL_DMA2_Stream5
+#define AUDIO_SAIx_DMAx_STREAM               DMA2_Stream5
 #define AUDIO_SAIx_DMAx_CHANNEL              DMA_CHANNEL_0
 #define AUDIO_SAIx_DMAx_IRQ                  DMA2_Stream5_IRQn
 #define AUDIO_SAIx_DMAx_PERIPH_DATA_SIZE     DMA_PDATAALIGN_HALFWORD
@@ -108,23 +108,23 @@
                         AUDIO IN CONFIGURATION
 ------------------------------------------------------------------------------*/
 /* SAI IN peripheral configuration defines */
-#define AUDIO_IN_SAIx                            HAL_SAI1_Block_A
+#define AUDIO_IN_SAIx                            SAI1_Block_A
 #define AUDIO_IN_SAIx_CLK_ENABLE()               __HAL_RCC_SAI1_CLK_ENABLE()
 #define AUDIO_IN_SAIx_CLK_DISABLE()              __HAL_RCC_SAI1_CLK_DISABLE()
 #define AUDIO_IN_SAIx_SD_AF                      GPIO_AF6_SAI1
 
 #define AUDIO_IN_SAIx_SD_ENABLE()                __HAL_RCC_GPIOC_CLK_ENABLE()
-#define AUDIO_IN_SAIx_SD_GPIO_PORT               HAL_GPIOC
+#define AUDIO_IN_SAIx_SD_GPIO_PORT               GPIOC
 #define AUDIO_IN_SAIx_SD_PIN                     GPIO_PIN_1
 
 #define AUDIO_IN_INT_GPIO_ENABLE()               __HAL_RCC_GPIOI_CLK_ENABLE()
-#define AUDIO_IN_INT_GPIO_PORT                   HAL_GPIOI
+#define AUDIO_IN_INT_GPIO_PORT                   GPIOI
 #define AUDIO_IN_INT_GPIO_PIN                    GPIO_PIN_9
 #define AUDIO_IN_INT_IRQ                         EXTI9_5_IRQn
 
 /* SAI DMA Stream definitions */
 #define AUDIO_IN_SAIx_DMAx_CLK_ENABLE()          __HAL_RCC_DMA2_CLK_ENABLE()
-#define AUDIO_IN_SAIx_DMAx_STREAM                HAL_DMA2_Stream3
+#define AUDIO_IN_SAIx_DMAx_STREAM                DMA2_Stream3
 #define AUDIO_IN_SAIx_DMAx_CHANNEL               DMA_CHANNEL_0
 #define AUDIO_IN_SAIx_DMAx_IRQ                   DMA2_Stream3_IRQn
 #define AUDIO_IN_SAIx_DMAx_PERIPH_DATA_SIZE      DMA_PDATAALIGN_HALFWORD

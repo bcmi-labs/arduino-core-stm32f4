@@ -41,20 +41,11 @@
 #include "memory.h"
 #include "bitband.h"
 #include "rcc.h"
+#include "stm32f4xx_hal.h"
 
 #ifdef __cplusplus
 extern "C"{
 #endif
-
-  typedef struct {
-    __io uint32 CSR;    /*!< ADC Common status register,
-                             Address offset: ADC1 base address + 0x300 */
-    __io uint32 CCR;    /*!< ADC common control register,
-                             Address offset: ADC1 base address + 0x304 */
-    __io uint32 CDR;    /*!< ADC common regular data register for dual
-                             AND triple modes,
-                             Address offset: ADC1 base address + 0x308 */
-  } ADC_Common_TypeDef;
 
 #define ADC_COMMON  ((ADC_Common_TypeDef *) 0x40012300)
 
@@ -88,9 +79,9 @@ typedef struct adc_dev {
     rcc_clk_id clk_id; /**< RCC clock information */
 } adc_dev;
 
-extern const adc_dev *ADC1;
-extern const adc_dev *ADC2;
-extern const adc_dev *ADC3;
+extern const adc_dev *ADC1_dev;
+extern const adc_dev *ADC2_dev;
+extern const adc_dev *ADC3_dev;
 
 /*
  * Register map base pointers

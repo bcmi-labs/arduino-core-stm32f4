@@ -433,7 +433,7 @@ void CDC_enable_TIM_Interrupt(void)
 static void TIM_Config(void)
 {  
   /* Set TIMx instance */
-  TimHandle.Instance = HAL_TIM6;
+  TimHandle.Instance = TIM6;
   
   /* Initialize TIM6 peripheral as follow:
        + Period = 10000 - 1

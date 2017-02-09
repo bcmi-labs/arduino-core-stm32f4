@@ -347,14 +347,14 @@ typedef struct usart_dev {
     nvic_irq_num irq_num;            /**< USART NVIC interrupt */
 } usart_dev;
 
-extern usart_dev *USART1;
-extern usart_dev *USART2;
-extern usart_dev *USART3;
-extern usart_dev *UART4;
-extern usart_dev *UART5;
-extern usart_dev *USART6;
-extern usart_dev *UART7;
-extern usart_dev *UART8;
+extern usart_dev *USART1_dev;
+extern usart_dev *USART2_dev;
+extern usart_dev *USART3_dev;
+extern usart_dev *UART4_dev;
+extern usart_dev *UART5_dev;
+extern usart_dev *USART6_dev;
+extern usart_dev *UART7_dev;
+extern usart_dev *UART8_dev;
 
 void usart_init(usart_dev *dev);
 void usart_set_baud_rate(usart_dev *dev, uint32 baud);

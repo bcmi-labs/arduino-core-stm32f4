@@ -148,7 +148,7 @@ uint8_t BSP_SD_Init(void)
   /* PLLSAI is dedicated to LCD periph. Do not use it to get 48MHz*/
 
   /* uSD device interface configuration */
-  uSdHandle.Instance = HAL_SDIO;
+  uSdHandle.Instance = SDIO;
 
   uSdHandle.Init.ClockEdge           = SDIO_CLOCK_EDGE_RISING;
   uSdHandle.Init.ClockBypass         = SDIO_CLOCK_BYPASS_DISABLE;
@@ -193,7 +193,7 @@ uint8_t BSP_SD_CSInit(void)
   /* PLLSAI is dedicated to LCD periph. Do not use it to get 48MHz*/
 
   /* uSD device interface configuration */
-  uSdHandle.Instance = HAL_SDIO;
+  uSdHandle.Instance = SDIO;
 
   uSdHandle.Init.ClockEdge           = SDIO_CLOCK_EDGE_RISING;
   uSdHandle.Init.ClockBypass         = SDIO_CLOCK_BYPASS_DISABLE;
@@ -242,7 +242,7 @@ uint8_t BSP_SD_DeInit(void)
 {
   uint8_t sd_state = MSD_OK;
 
-  uSdHandle.Instance = HAL_SDIO;
+  uSdHandle.Instance = SDIO;
 
   /* HAL SD deinitialization */
   if(HAL_SD_DeInit(&uSdHandle) != HAL_OK)
@@ -251,7 +251,7 @@ uint8_t BSP_SD_DeInit(void)
   }
 
   /* Msp SD deinitialization */
-  uSdHandle.Instance = HAL_SDIO;
+  uSdHandle.Instance = SDIO;
   BSP_SD_MspDeInit(&uSdHandle, NULL);
 
   return  sd_state;
@@ -379,11 +379,11 @@ __weak void BSP_SD_MspInit(SD_HandleTypeDef *hsd, void *Params)
   /* GPIOC configuration */
   gpio_init_structure.Pin = GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_11 | GPIO_PIN_12;
 
-  HAL_GPIO_Init(HAL_GPIOC, &gpio_init_structure);
+  HAL_GPIO_Init(GPIOC, &gpio_init_structure);
 
   /* GPIOD configuration */
   gpio_init_structure.Pin = GPIO_PIN_2;
-  HAL_GPIO_Init(HAL_GPIOD, &gpio_init_structure);
+  HAL_GPIO_Init(GPIOD, &gpio_init_structure);
 
 }
 
