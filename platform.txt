@@ -115,11 +115,11 @@ tools.stlink.upload.pattern="{path}/{cmd}" {serial.port.file} {upload.altID} {up
 tools.dfu-util.cmd=dfu-util
 tools.dfu-util.cmd.windows=StAr_Write.bat
 
-tools.dfu-util.path={runtime.ide.path}/hardware/tools/dfu-util/bin
+tools.dfu-util.path={runtime.ide.path}/hardware/tools/dfu-util/
 
 tools.dfu-util.upload.params.verbose=-v
 tools.dfu-util.upload.params.quiet=
-tools.dfu-util.upload.pattern="{path}/{cmd}" "{path}" {upload.usbID} {upload.altID} {upload.mem_start} "{build.path}/{build.project_name}.bin"
+tools.dfu-util.upload.pattern="{path}/{cmd}" "{path}" -l -d  {upload.usbID} -a {upload.altID} -s {upload.mem_start} -O "{build.path}/{build.project_name}.bin" -f 0x08000000
 
 # USB Flags
 # ---------
