@@ -461,7 +461,15 @@ uint32_t wm8994_Init(uint16_t DeviceAddr, uint16_t OutputInputDevice, uint8_t Vo
   counter += CODEC_IO_Write(DeviceAddr, 0x208, 0x000A);
   
   /* Enable AIF1 Clock, AIF1 Clock Source = MCLK1 pin */
-  counter += CODEC_IO_Write(DeviceAddr, 0x200, 0x0001);
+//  counter += CODEC_IO_Write(DeviceAddr, 0x200, 0x0001);
+
+  /*  select internal clock instead of MCLK1 */
+  counter += CODEC_IO_Write(DeviceAddr, 0x224, 0x0003);
+  counter += CODEC_IO_Write(DeviceAddr, 0x220, 0x0001);
+  counter += CODEC_IO_Write(DeviceAddr, 0x221, 0x0F00);
+  counter += CODEC_IO_Write(DeviceAddr, 0x222, 0x0000);
+  counter += CODEC_IO_Write(DeviceAddr, 0x223, 0x0400);
+  counter += CODEC_IO_Write(DeviceAddr, 0x200, 0x0011);
 
   if (output_device > 0)  /* Audio output selected */
   {
