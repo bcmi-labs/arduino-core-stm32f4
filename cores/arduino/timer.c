@@ -352,7 +352,7 @@ void timer_foreach(void (*fn)(timer_dev*)) {
 void timer_attach_interrupt(timer_dev *dev,
                             uint8 interrupt,
                             voidFuncPtr handler) {
-    dev->handlers[interrupt] = handler;
+    dev->handlers[interrupt-1] = handler;
     timer_enable_irq(dev, interrupt);
     enable_irq(dev, interrupt);
 }
@@ -368,7 +368,7 @@ void timer_attach_interrupt(timer_dev *dev,
  */
 void timer_detach_interrupt(timer_dev *dev, uint8 interrupt) {
     timer_disable_irq(dev, interrupt);
-    dev->handlers[interrupt] = NULL;
+    dev->handlers[interrupt-1] = NULL;
 }
 
 /*
