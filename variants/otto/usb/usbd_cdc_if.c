@@ -45,14 +45,14 @@
   * @{
   */
 
-/** @defgroup USBD_CDC 
+/** @defgroup USBD_CDC
   * @brief usbd core module
   * @{
-  */ 
+  */
 
 /** @defgroup USBD_CDC_Private_TypesDefinitions
   * @{
-  */ 
+  */
 /* USER CODE BEGIN PRIVATE TYPES  */
 //uint8_t buffer[32];
 //<<<<<<< HEAD
@@ -60,32 +60,32 @@
 int enterDFU = 0;
 //extern uint8_t *Rbuffer;
 //>>>>>>> USB-CDC
-/* USER CODE END PRIVATE TYPES */ 
+/* USER CODE END PRIVATE TYPES */
 /**
   * @}
-  */ 
+  */
 
 /** @defgroup USBD_CDC_Private_Defines
   * @{
-  */ 
+  */
 /* USER CODE BEGIN PRIVATE DEFINES  */
 /* Define size for the receive and transmit buffer over CDC */
 /* It's up to user to redefine and/or remove those define */
 /* USER CODE END PRIVATE DEFINES */
 /**
   * @}
-  */ 
+  */
 
 /** @defgroup USBD_CDC_Private_Macros
   * @{
-  */ 
+  */
 /* USER CODE BEGIN PRIVATE_MACRO  */
 /* USER CODE END PRIVATE_MACRO */
 
 /**
   * @}
-  */ 
-  
+  */
+
 /** @defgroup USBD_CDC_Private_Variables
   * @{
   */
@@ -103,7 +103,7 @@ __IO uint32_t UserTxBufPtrIn = 0; /* Increment this pointer or roll it back to
                                start address when data are received over write call */
 __IO uint32_t UserTxBufPtrOut = 0; /* Increment this pointer or roll it back to
                                  start address when data are sent over USB */
-                 
+
 __IO uint32_t UserRxBufPtrIn = 0; /* Increment this pointer or roll it back to
                                start address when data are received over USB */
 __IO uint32_t UserRxBufPtrOut = 0; /* Increment this pointer or roll it back to
@@ -122,7 +122,7 @@ uint8_t lineSetup[] = {0x00, 0x00, 0x20, 0x1c, 0x00, 0x00, 0x08};
 TIM_HandleTypeDef  TimHandle;
 
 static void TIM_Config(void);
-  
+
 /* USB handler declaration */
 /* Handle for USB Full Speed IP */
 //  USBD_HandleTypeDef  *hUsbDevice_0;
@@ -131,19 +131,19 @@ static void TIM_Config(void);
 
 /**
   * @}
-  */ 
-  
+  */
+
 /** @defgroup USBD_CDC_IF_Exported_Variables
   * @{
-  */ 
+  */
 extern USBD_HandleTypeDef hUsbDeviceFS;
 /* USER CODE BEGIN EXPORTED_VARIABLES  */
 /* USER CODE END  EXPORTED_VARIABLES */
 
 /**
   * @}
-  */ 
-  
+  */
+
 /** @defgroup USBD_CDC_Private_FunctionPrototypes
   * @{
   */
@@ -157,13 +157,13 @@ static int8_t CDC_Receive_FS  (uint8_t* pbuf, uint32_t *Len);
 
 /**
   * @}
-  */ 
-  
-USBD_CDC_ItfTypeDef USBD_Interface_fops_FS = 
+  */
+
+USBD_CDC_ItfTypeDef USBD_Interface_fops_FS =
 {
   CDC_Init_FS,
   CDC_DeInit_FS,
-  CDC_Control_FS,  
+  CDC_Control_FS,
   CDC_Receive_FS
 };
 
@@ -178,35 +178,35 @@ static int8_t CDC_Init_FS(void)
 {
   /*##-3- Configure the TIM Base generation  #################################*/
   TIM_Config();
-  
+
   /*##-4- Start the TIM Base generation in interrupt mode ####################*/
   /* Start Channel1 */
   HAL_TIM_Base_Start_IT(&TimHandle);
-  
-//  GPIO_InitTypeDef  gpio_init_structure;  
+
+//  GPIO_InitTypeDef  gpio_init_structure;
 //  //hUsbDevice_0 = &hUsbDeviceFS;
-//  /* USER CODE BEGIN 3 */ 
+//  /* USER CODE BEGIN 3 */
 //  /* Set Application Buffers */
   USBD_CDC_SetTxBuffer(&hUsbDeviceFS, UserTxBufferFS, 1);
   USBD_CDC_SetRxBuffer(&hUsbDeviceFS, StackRxBufferFS);
-//  
+//
 
-//  
+//
 //  __HAL_RCC_GPIOK_CLK_ENABLE();
-//  
+//
 //    gpio_init_structure.Pin   = GPIO_PIN_3;
 //    gpio_init_structure.Mode  = GPIO_MODE_OUTPUT_PP;
 //    gpio_init_structure.Pull  = GPIO_PULLUP;
 //    gpio_init_structure.Speed = GPIO_SPEED_HIGH;
-//  
-//    HAL_GPIO_Init(HAL_GPIOK, &gpio_init_structure);
-//  
+//
+//    HAL_GPIO_Init(GPIOK, &gpio_init_structure);
+//
 
 //    /* By default, turn off LED by setting a high level on corresponding GPIO */
-//    HAL_GPIO_WritePin(HAL_GPIOK, GPIO_PIN_3, GPIO_PIN_SET);
-  
+//    HAL_GPIO_WritePin(GPIOK, GPIO_PIN_3, GPIO_PIN_SET);
+
   return (USBD_OK);
-  /* USER CODE END 3 */ 
+  /* USER CODE END 3 */
 }
 
 /**
@@ -217,34 +217,34 @@ static int8_t CDC_Init_FS(void)
   */
 static int8_t CDC_DeInit_FS(void)
 {
-  /* USER CODE BEGIN 4 */ 
+  /* USER CODE BEGIN 4 */
   return (USBD_OK);
-  /* USER CODE END 4 */ 
+  /* USER CODE END 4 */
 }
 
 /**
   * @brief  CDC_Control_FS
   *         Manage the CDC class requests
-  * @param  cmd: Command code            
+  * @param  cmd: Command code
   * @param  pbuf: Buffer containing command data (request parameters)
   * @param  length: Number of data to be sent (in bytes)
   * @retval Result of the operation: USBD_OK if all operations are OK else USBD_FAIL
   */
 static int8_t CDC_Control_FS  (uint8_t cmd, uint8_t* pbuf, uint16_t length)
-{ 
+{
   /* USER CODE BEGIN 5 */
   switch (cmd)
   {
   case CDC_SEND_ENCAPSULATED_COMMAND:
- 
+
     break;
 
   case CDC_GET_ENCAPSULATED_RESPONSE:
- 
+
     break;
 
   case CDC_SET_COMM_FEATURE:
- 
+
     break;
 
   case CDC_GET_COMM_FEATURE:
@@ -266,7 +266,7 @@ static int8_t CDC_Control_FS  (uint8_t cmd, uint8_t* pbuf, uint16_t length)
   /*                                        2 - 2 Stop bits                      */
   /* 5      | bParityType |  1   | Number | Parity                               */
   /*                                        0 - None                             */
-  /*                                        1 - Odd                              */ 
+  /*                                        1 - Odd                              */
   /*                                        2 - Even                             */
   /*                                        3 - Mark                             */
   /*                                        4 - Space                            */
@@ -290,13 +290,13 @@ static int8_t CDC_Control_FS  (uint8_t cmd, uint8_t* pbuf, uint16_t length)
   case CDC_SET_CONTROL_LINE_STATE:
     cptlineState++;
     if(cptlineState == 2)
-    lineState = 1; 
+    lineState = 1;
     break;
 
   case CDC_SEND_BREAK:
- 
-    break;    
-    
+
+    break;
+
   default:
     break;
   }
@@ -307,15 +307,15 @@ static int8_t CDC_Control_FS  (uint8_t cmd, uint8_t* pbuf, uint16_t length)
 
 /**
   * @brief  CDC_Receive_FS
-  *         Data received over USB OUT endpoint are sent over CDC interface 
+  *         Data received over USB OUT endpoint are sent over CDC interface
   *         through this function.
-  *           
+  *
   *         @note
-  *         This function will block any OUT packet reception on USB endpoint 
+  *         This function will block any OUT packet reception on USB endpoint
   *         untill exiting this function. If you exit this function before transfer
-  *         is complete on CDC interface (ie. using DMA controller) it will result 
+  *         is complete on CDC interface (ie. using DMA controller) it will result
   *         in receiving more data while previous ones are still not sent.
-  *                 
+  *
   * @param  Buf: Buffer of data to be received
   * @param  Len: Number of data received (in bytes)
   * @retval Result of the operation: USBD_OK if all operations are OK else USBD_FAIL
@@ -324,24 +324,24 @@ static int8_t CDC_Control_FS  (uint8_t cmd, uint8_t* pbuf, uint16_t length)
 static int8_t CDC_Receive_FS (uint8_t* Buf, uint32_t *Len)
 {
 
-  //USBD_CDC_SetTxBuffer(&hUsbDeviceFS, UserTxBufferFS, 1); 
-  
-  
+  //USBD_CDC_SetTxBuffer(&hUsbDeviceFS, UserTxBufferFS, 1);
+
+
 //    USBD_CDC_SetTxBuffer(&hUsbDeviceFS, Buf, *Len);
 //    USBD_CDC_TransmitPacket(&hUsbDeviceFS);
-  
+
 //  /* Transmit after reception data */
 //  if(USBD_CDC_TransmitPacket(&hUsbDeviceFS) == USBD_FAIL)
 //  {
-//    HAL_GPIOK->ODR ^= GPIO_PIN_3;
+//    GPIOK->ODR ^= GPIO_PIN_3;
 //  }
-  
-//  HAL_GPIOK->ODR ^= GPIO_PIN_3;
-  //while(1); 
+
+//  GPIOK->ODR ^= GPIO_PIN_3;
+  //while(1);
   //USBD_CDC_TransmitPacket(&hUsbDevice_0);
   /* USER CODE BEGIN 6 */
   /* Initiate next USB packet transfer once a packet is received */
-  
+
   if(UserRxBufPtrIn + (*Len) > APP_RX_DATA_SIZE)
   {
     memcpy(&UserRxBufferFS[UserRxBufPtrIn], &Buf[0], (APP_RX_DATA_SIZE - UserRxBufPtrIn));
@@ -354,18 +354,18 @@ static int8_t CDC_Receive_FS (uint8_t* Buf, uint32_t *Len)
   }
 
   //USBD_CDC_SetRxBuffer(&hUsbDeviceFS, Rbuffer);
-  USBD_CDC_ReceivePacket(&hUsbDeviceFS);  
+  USBD_CDC_ReceivePacket(&hUsbDeviceFS);
   return (USBD_OK);
-  /* USER CODE END 6 */ 
+  /* USER CODE END 6 */
 }
 
 /**
   * @brief  CDC_Transmit_FS
-  *         Data send over USB IN endpoint are sent over CDC interface 
-  *         through this function.           
+  *         Data send over USB IN endpoint are sent over CDC interface
+  *         through this function.
   *         @note
-  *         
-  *                 
+  *
+  *
   * @param  Buf: Buffer of data to be send
   * @param  Len: Number of data to be send (in bytes)
   * @retval Result of the operation: USBD_OK if all operations are OK else USBD_FAIL or USBD_BUSY
@@ -373,30 +373,30 @@ static int8_t CDC_Receive_FS (uint8_t* Buf, uint32_t *Len)
 uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len)
 {
   uint8_t result = USBD_OK;
-  /* USER CODE BEGIN 7 */ 
+  /* USER CODE BEGIN 7 */
   //USBD_CDC_SetTxBuffer(hUsbDevice_0, Buf, Len);
-  USBD_CDC_SetTxBuffer(&hUsbDeviceFS, UserTxBufferFS, 1); 
+  USBD_CDC_SetTxBuffer(&hUsbDeviceFS, UserTxBufferFS, 1);
   result = USBD_CDC_TransmitPacket(&hUsbDeviceFS);
-  /* USER CODE END 7 */ 
+  /* USER CODE END 7 */
   return result;
 }
 
 void CDC_flush(void)
 {
   uint8_t status;
-  
+
   HAL_TIM_Base_Stop_IT(&TimHandle);
-  
+
   if(UserTxBufPtrOut != UserTxBufPtrIn)
   {
     if(UserTxBufPtrOut > UserTxBufPtrIn) /* Roll-back */
     {
       memcpy((uint8_t*)&StackTxBufferFS[0], (uint8_t*)&UserTxBufferFS[UserTxBufPtrOut], (APP_TX_DATA_SIZE - UserTxBufPtrOut));
-    
+
       memcpy((uint8_t*)&StackTxBufferFS[APP_TX_DATA_SIZE - UserTxBufPtrOut], (uint8_t*)&UserTxBufferFS[0], UserTxBufPtrIn);
-    
+
       USBD_CDC_SetTxBuffer(&hUsbDeviceFS, (uint8_t*)&StackTxBufferFS[0], (APP_TX_DATA_SIZE - UserTxBufPtrOut + UserTxBufPtrIn));
-    
+
       status = USBD_CDC_TransmitPacket(&hUsbDeviceFS);
 
       if(status == USBD_OK)
@@ -404,19 +404,19 @@ void CDC_flush(void)
         UserTxBufPtrOut = UserTxBufPtrIn;
       }
     }
-    else 
+    else
     {
       USBD_CDC_SetTxBuffer(&hUsbDeviceFS, (uint8_t*)&UserTxBufferFS[UserTxBufPtrOut], (UserTxBufPtrIn - UserTxBufPtrOut));
-    
+
       status = USBD_CDC_TransmitPacket(&hUsbDeviceFS);
-    
+
       if(status == USBD_OK)
       {
         UserTxBufPtrOut = UserTxBufPtrIn;
       }
     }
   }
-  
+
   HAL_TIM_Base_Start_IT(&TimHandle);
 }
 
@@ -431,10 +431,10 @@ void CDC_enable_TIM_Interrupt(void)
 }
 
 static void TIM_Config(void)
-{  
+{
   /* Set TIMx instance */
   TimHandle.Instance = TIM6;
-  
+
   /* Initialize TIM6 peripheral as follow:
        + Period = 10000 - 1
        + Prescaler = ((SystemCoreClock/2)/10000) - 1
@@ -445,17 +445,17 @@ static void TIM_Config(void)
   TimHandle.Init.Prescaler = 84-1;
   TimHandle.Init.ClockDivision = 0;
   TimHandle.Init.CounterMode = TIM_COUNTERMODE_UP;
-  
+
   /*##-6- Enable TIM peripherals Clock #######################################*/
   __HAL_RCC_TIM6_CLK_ENABLE();
-  
+
   /*##-7- Configure the NVIC for TIMx ########################################*/
-  /* Set Interrupt Group Priority */ 
+  /* Set Interrupt Group Priority */
   HAL_NVIC_SetPriority(TIM6_DAC_IRQn, 6, 0);
-  
+
   /* Enable the TIMx global Interrupt */
   HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
-  
+
   HAL_TIM_Base_Init(&TimHandle);
 }
 
@@ -467,17 +467,17 @@ void __irq_tim6(void)
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   uint8_t status;
-  
+
   if(UserTxBufPtrOut != UserTxBufPtrIn)
   {
     if(UserTxBufPtrOut > UserTxBufPtrIn) /* Roll-back */
     {
       memcpy((uint8_t*)&StackTxBufferFS[0], (uint8_t*)&UserTxBufferFS[UserTxBufPtrOut], (APP_TX_DATA_SIZE - UserTxBufPtrOut));
-    
+
       memcpy((uint8_t*)&StackTxBufferFS[APP_TX_DATA_SIZE - UserTxBufPtrOut], (uint8_t*)&UserTxBufferFS[0], UserTxBufPtrIn);
-    
+
       USBD_CDC_SetTxBuffer(&hUsbDeviceFS, (uint8_t*)&StackTxBufferFS[0], (APP_TX_DATA_SIZE - UserTxBufPtrOut + UserTxBufPtrIn));
-    
+
       status = USBD_CDC_TransmitPacket(&hUsbDeviceFS);
 
       if(status == USBD_OK)
@@ -485,12 +485,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         UserTxBufPtrOut = UserTxBufPtrIn;
       }
     }
-    else 
+    else
     {
       USBD_CDC_SetTxBuffer(&hUsbDeviceFS, (uint8_t*)&UserTxBufferFS[UserTxBufPtrOut], (UserTxBufPtrIn - UserTxBufPtrOut));
-    
+
       status = USBD_CDC_TransmitPacket(&hUsbDeviceFS);
-    
+
       if(status == USBD_OK)
       {
         UserTxBufPtrOut = UserTxBufPtrIn;
@@ -504,7 +504,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
@@ -512,6 +512,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 #ifdef __cplusplus
 }
-#endif  
+#endif
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

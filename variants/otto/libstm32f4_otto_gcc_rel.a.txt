@@ -389,7 +389,7 @@ stm32f4xx_hal_dma.o:
 00000000 T HAL_DMA_UnRegisterCallback
          U HAL_GetTick
          U SystemCoreClock
-00000000 r flagBitshiftOffset.9605
+00000000 r flagBitshiftOffset.9686
 
 stm32f4xx_hal_hash_ex.o:
 
@@ -548,7 +548,7 @@ stm32f4xx_ll_usb.o:
 00000000 T USB_StopDevice
 00000000 T USB_StopHost
 00000000 T USB_WritePacket
-00000000 b debug.9541
+00000000 b debug.9622
 
 stm32f4xx_hal_cortex.o:
 00000000 T HAL_MPU_ConfigRegion
@@ -574,6 +574,45 @@ stm32f4xx_hal_dma_ex.o:
 00000000 T HAL_DMAEx_MultiBufferStart_IT
 
 stm32f4xx_hal_hcd.o:
+00000000 W HAL_HCD_Connect_Callback
+00000000 T HAL_HCD_DeInit
+00000000 W HAL_HCD_Disconnect_Callback
+00000000 T HAL_HCD_GetCurrentFrame
+00000000 T HAL_HCD_GetCurrentSpeed
+00000000 T HAL_HCD_GetState
+00000000 T HAL_HCD_HC_GetState
+00000000 T HAL_HCD_HC_GetURBState
+00000000 T HAL_HCD_HC_GetXferCount
+00000000 T HAL_HCD_HC_Halt
+00000000 T HAL_HCD_HC_Init
+00000000 W HAL_HCD_HC_NotifyURBChange_Callback
+00000000 T HAL_HCD_HC_SubmitRequest
+00000000 T HAL_HCD_IRQHandler
+00000000 T HAL_HCD_Init
+00000000 W HAL_HCD_MspDeInit
+00000000 W HAL_HCD_MspInit
+00000000 T HAL_HCD_ResetPort
+00000000 W HAL_HCD_SOF_Callback
+00000000 T HAL_HCD_Start
+00000000 T HAL_HCD_Stop
+         U USB_CoreInit
+         U USB_DisableGlobalInt
+         U USB_DriveVbus
+         U USB_EnableGlobalInt
+         U USB_GetCurrentFrame
+         U USB_GetHostSpeed
+         U USB_GetMode
+         U USB_HC_Halt
+         U USB_HC_Init
+         U USB_HC_ReadInterrupt
+         U USB_HC_StartXfer
+         U USB_HostInit
+         U USB_InitFSLSPClkSel
+         U USB_ReadInterrupts
+         U USB_ReadPacket
+         U USB_ResetPort
+         U USB_SetCurrentMode
+         U USB_StopHost
 
 stm32f4xx_hal_nand.o:
 
@@ -1098,3 +1137,101 @@ stm32f4xx_hal_pwr.o:
 stm32f4xx_hal_sdram.o:
 
 stm32f4xx_hal_usart.o:
+
+usbd_core.o:
+00000000 T USBD_ClrClassConfig
+         U USBD_CtlContinueRx
+         U USBD_CtlContinueSendData
+         U USBD_CtlReceiveStatus
+         U USBD_CtlSendStatus
+00000000 T USBD_DeInit
+00000000 T USBD_Init
+00000000 T USBD_LL_DataInStage
+00000000 T USBD_LL_DataOutStage
+         U USBD_LL_DeInit
+00000000 T USBD_LL_DevConnected
+00000000 T USBD_LL_DevDisconnected
+         U USBD_LL_Init
+00000000 T USBD_LL_IsoINIncomplete
+00000000 T USBD_LL_IsoOUTIncomplete
+         U USBD_LL_OpenEP
+         U USBD_LL_PrepareReceive
+00000000 T USBD_LL_Reset
+00000000 T USBD_LL_Resume
+00000000 T USBD_LL_SOF
+00000000 T USBD_LL_SetSpeed
+00000000 T USBD_LL_SetupStage
+         U USBD_LL_StallEP
+         U USBD_LL_Start
+         U USBD_LL_Stop
+00000000 T USBD_LL_Suspend
+         U USBD_ParseSetupRequest
+00000000 T USBD_RegisterClass
+00000000 T USBD_RunTestMode
+00000000 T USBD_SetClassConfig
+00000000 T USBD_Start
+         U USBD_StdDevReq
+         U USBD_StdEPReq
+         U USBD_StdItfReq
+00000000 T USBD_Stop
+
+usbd_ctlreq.o:
+         U USBD_ClrClassConfig
+00000000 T USBD_CtlError
+         U USBD_CtlSendData
+         U USBD_CtlSendStatus
+00000000 T USBD_GetString
+         U USBD_LL_ClearStallEP
+         U USBD_LL_IsStallEP
+         U USBD_LL_SetUSBAddress
+         U USBD_LL_StallEP
+00000000 T USBD_ParseSetupRequest
+         U USBD_SetClassConfig
+00000000 T USBD_StdDevReq
+00000000 T USBD_StdEPReq
+00000000 T USBD_StdItfReq
+00000000 b cfgidx.10192
+
+usbd_ioreq.o:
+00000000 T USBD_CtlContinueRx
+00000000 T USBD_CtlContinueSendData
+00000000 T USBD_CtlPrepareRx
+00000000 T USBD_CtlReceiveStatus
+00000000 T USBD_CtlSendData
+00000000 T USBD_CtlSendStatus
+00000000 T USBD_GetRxCount
+         U USBD_LL_GetRxDataSize
+         U USBD_LL_PrepareReceive
+         U USBD_LL_Transmit
+
+usbd_cdc.o:
+00000000 D USBD_CDC
+00000000 D USBD_CDC_CfgFSDesc
+00000000 D USBD_CDC_CfgHSDesc
+00000000 t USBD_CDC_DataIn
+00000000 t USBD_CDC_DataOut
+00000000 t USBD_CDC_DeInit
+00000000 d USBD_CDC_DeviceQualifierDesc
+00000000 t USBD_CDC_EP0_RxReady
+00000000 T USBD_CDC_GetDeviceQualifierDescriptor
+00000000 t USBD_CDC_GetFSCfgDesc
+00000000 t USBD_CDC_GetHSCfgDesc
+00000000 t USBD_CDC_GetOtherSpeedCfgDesc
+00000000 t USBD_CDC_Init
+00000000 D USBD_CDC_OtherSpeedCfgDesc
+00000000 T USBD_CDC_ReceivePacket
+00000000 T USBD_CDC_RegisterInterface
+00000000 T USBD_CDC_SetRxBuffer
+00000000 T USBD_CDC_SetTxBuffer
+00000000 t USBD_CDC_Setup
+00000000 T USBD_CDC_TransmitPacket
+         U USBD_CtlPrepareRx
+         U USBD_CtlSendData
+         U USBD_LL_CloseEP
+         U USBD_LL_GetRxDataSize
+         U USBD_LL_OpenEP
+         U USBD_LL_PrepareReceive
+         U USBD_LL_Transmit
+         U free
+00000000 b ifalt.10186
+         U malloc

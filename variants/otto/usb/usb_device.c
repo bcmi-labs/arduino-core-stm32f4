@@ -1,8 +1,8 @@
 /**
   ******************************************************************************
-  * @file           : USB_DEVICE  
+  * @file           : USB_DEVICE
   * @version        : v1.0_Cube
-  * @brief          : This file implements the USB Device 
+  * @brief          : This file implements the USB Device
   ******************************************************************************
   *
   * COPYRIGHT(c) 2016 STMicroelectronics
@@ -43,19 +43,19 @@
 /* USB Device Core handle declaration */
 //USBD_HandleTypeDef hUsbDeviceFS;
 
-/* init function */				        
+/* init function */
 void MX_USB_DEVICE_Init(void)
 {
 
   /* Init Device Library */
   USBD_Init(&hUsbDeviceFS, &FS_Desc, DEVICE_FS);
-  
+
   /* Add Supported Class */
   USBD_RegisterClass(&hUsbDeviceFS, &USBD_CDC);
 
   /* Add CDC Interface Class */
   USBD_CDC_RegisterInterface(&hUsbDeviceFS, &USBD_Interface_fops_FS);
-  
+
   /* Start Device Process */
   USBD_Start(&hUsbDeviceFS);
 

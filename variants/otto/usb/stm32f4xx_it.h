@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
-  * @file    stm32f4xx_it.c
-  * @brief   Interrupt Service Routines.
+  * @file    stm32f4xx_it.h
+  * @brief   This file contains the headers of the interrupt handlers.
   ******************************************************************************
   *
   * COPYRIGHT(c) 2016 STMicroelectronics
@@ -30,50 +30,28 @@
   *
   ******************************************************************************
   */
+
+/* Define to prevent recursive inclusion -------------------------------------*/
+#ifndef __STM32F4xx_IT_H
+#define __STM32F4xx_IT_H
+
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f4xx_hal.h"
-#include "stm32f4xx.h"
-#include "stm32f4xx_it.h"
+/* Exported types ------------------------------------------------------------*/
+/* Exported constants --------------------------------------------------------*/
+/* Exported macro ------------------------------------------------------------*/
+/* Exported functions ------------------------------------------------------- */
 
-/* USER CODE BEGIN 0 */
+void SysTick_Handler(void);
+void OTG_FS_IRQHandler(void);
 
-/* USER CODE END 0 */
-
-/* External variables --------------------------------------------------------*/
-extern PCD_HandleTypeDef hpcd;
-
-/******************************************************************************/
-/*            Cortex-M4 Processor Interruption and Exception Handlers         */ 
-/******************************************************************************/
-
-/******************************************************************************/
-/* STM32F4xx Peripheral Interrupt Handlers                                    */
-/* Add here the Interrupt Handlers for the used peripherals.                  */
-/* For the available peripheral interrupt handler names,                      */
-/* please refer to the startup file (startup_stm32f4xx.s).                    */
-/******************************************************************************/
-
-/**
-* @brief This function handles USB On The Go FS global interrupt.
-*/
-void OTG_FS_IRQHandler(void)
-{
-  /* USER CODE BEGIN OTG_FS_IRQn 0 */
-//while(1);
-  /* USER CODE END OTG_FS_IRQn 0 */
-  //HAL_PCD_IRQHandler(&hpcd);
-  /* USER CODE BEGIN OTG_FS_IRQn 1 */
-
-  /* USER CODE END OTG_FS_IRQn 1 */
+#ifdef __cplusplus
 }
+#endif
 
-/* USER CODE BEGIN 1 */
-/* USB ISR as per vector table */
-void __irq_OTG_FS_IRQHandler(void)
-{
-	//OTG_FS_IRQHandler();
-	HAL_PCD_IRQHandler(&hpcd);
-}
+#endif /* __STM32F4xx_IT_H */
 
-/* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

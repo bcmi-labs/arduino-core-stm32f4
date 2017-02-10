@@ -49,7 +49,7 @@ compiler.S.extra_flags=
 compiler.ar.extra_flags=
 compiler.elf2hex.extra_flags=
 
-compiler.libs.c.flags="-I{build.system.path}/libstm32f4" "-I{build.system.path}/libstm32f4/include" "-I{build.system.path}/Drivers/STM32F4xx_HAL_Driver/Inc/" "-I{build.system.path}/Drivers/CMSIS/Include/" "-I{build.system.path}/Drivers/CMSIS/Device/ST/STM32F4xx/Include" "-I{build.system.path}/Middlewares/ST/STM32_USB_Device_Library/Core/Inc" "-I{build.core.path}/usb" "-I{build.system.path}/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc/"
+compiler.libs.c.flags="-I{build.system.path}/libstm32f4" "-I{build.system.path}/libstm32f4/include" "-I{build.system.path}/Drivers/STM32F4xx_HAL_Driver/Inc/" "-I{build.system.path}/Drivers/CMSIS/Include/" "-I{build.system.path}/Drivers/CMSIS/Device/ST/STM32F4xx/Include" "-I{build.system.path}/Middlewares/ST/STM32_USB_Device_Library/Core/Inc" "-I{build.variant.path}/usb" "-I{build.system.path}/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc/"
 
 compiler.warning_flags=-w
 compiler.warning_flags.none=-w
@@ -73,7 +73,7 @@ recipe.S.o.pattern="{compiler.path}{compiler.c.cmd}" {compiler.S.flags} -mcpu={b
 recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} {compiler.ar.extra_flags} "{build.path}/{archive_file}" "{object_file}"
 
 ## Combine gc-sections, archives, and objects
-recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" {compiler.c.elf.flags} -mcpu={build.mcu} "-T{build.variant.path}/{build.ldscript}" "-Wl,-Map,{build.path}/{build.project_name}.map" {compiler.c.elf.extra_flags} -o "{build.path}/{build.project_name}.elf" "-L{build.path}" -lm -lgcc -mthumb -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl,--warn-section-align -Wl,--warn-unresolved-symbols -Wl,--start-group {object_files} -Wl,--whole-archive  "{build.variant.path}/{build.variant_system_lib}" -Wl,--no-whole-archive "{build.path}/{archive_file}" -Wl,--end-group
+recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" {compiler.c.elf.flags} -mcpu={build.mcu} "-T{build.variant.path}/{build.ldscript}" "-Wl,-Map,{build.path}/{build.project_name}.map" {compiler.c.elf.extra_flags} -o "{build.path}/{build.project_name}.elf" "-L{build.path}" -lm -lgcc -mthumb -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl,--warn-section-align -Wl,--warn-unresolved-symbols -Wl,--start-group "{build.path}/syscalls.c.o" {object_files} -Wl,--whole-archive  "{build.variant.path}/{build.variant_system_lib}" -Wl,--no-whole-archive "{build.path}/{archive_file}" -Wl,--end-group
 
 ## Create eeprom
 recipe.objcopy.eep.pattern=

@@ -1,8 +1,7 @@
 /**
   ******************************************************************************
-  * File Name          : stm32f4xx_hal_msp.c
-  * Description        : This file provides code for the MSP Initialization 
-  *                      and de-Initialization codes.
+  * @file    stm32f4xx_it.c
+  * @brief   Interrupt Service Routines.
   ******************************************************************************
   *
   * COPYRIGHT(c) 2016 STMicroelectronics
@@ -33,41 +32,48 @@
   */
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
+#include "stm32f4xx.h"
+#include "stm32f4xx_it.h"
 
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
 
+/* External variables --------------------------------------------------------*/
+extern PCD_HandleTypeDef hpcd;
+
+/******************************************************************************/
+/*            Cortex-M4 Processor Interruption and Exception Handlers         */
+/******************************************************************************/
+
+/******************************************************************************/
+/* STM32F4xx Peripheral Interrupt Handlers                                    */
+/* Add here the Interrupt Handlers for the used peripherals.                  */
+/* For the available peripheral interrupt handler names,                      */
+/* please refer to the startup file (startup_stm32f4xx.s).                    */
+/******************************************************************************/
+
 /**
-  * Initializes the Global MSP.
-  */
-void HAL_MspInit(void)
+* @brief This function handles USB On The Go FS global interrupt.
+*/
+void OTG_FS_IRQHandler(void)
 {
-  /* USER CODE BEGIN MspInit 0 */
+  /* USER CODE BEGIN OTG_FS_IRQn 0 */
+//while(1);
+  /* USER CODE END OTG_FS_IRQn 0 */
+  //HAL_PCD_IRQHandler(&hpcd);
+  /* USER CODE BEGIN OTG_FS_IRQn 1 */
 
-  /* USER CODE END MspInit 0 */
-
-  HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
-
-  /* System interrupt init*/
-  /* SysTick_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
-
-  /* USER CODE BEGIN MspInit 1 */
-
-  /* USER CODE END MspInit 1 */
+  /* USER CODE END OTG_FS_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */
+/* USB ISR as per vector table */
+void __irq_OTG_FS_IRQHandler(void)
+{
+	//OTG_FS_IRQHandler();
+	HAL_PCD_IRQHandler(&hpcd);
+}
 
 /* USER CODE END 1 */
-
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
-
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
