@@ -48,10 +48,14 @@ CFLAGS += -D$(CHIP) -DHSE_VALUE=8000000
 PROJECT_BASE_PATH = ..
 CMSIS_ROOT_PATH = $(PROJECT_BASE_PATH)/../Drivers/CMSIS
 HAL_ROOT_PATH = $(PROJECT_BASE_PATH)/../Drivers/STM32F4xx_HAL_Driver
-MIDDLEWARES_ROOT_PATH = $(PROJECT_BASE_PATH)/../Middlewares/ST
-MIDDLEWARES_USBD_ROOT_PATH = $(MIDDLEWARES_ROOT_PATH)/STM32_USB_Device_Library
+BSP_ROOT_PATH = $(PROJECT_BASE_PATH)/../Drivers/BSP
+MIDDLEWARES_ROOT_PATH = $(PROJECT_BASE_PATH)/../Middlewares
+MIDDLEWARES_USBD_ROOT_PATH = $(MIDDLEWARES_ROOT_PATH)/ST/STM32_USB_Device_Library
 MIDDLEWARES_USBD_CORE_PATH = $(MIDDLEWARES_USBD_ROOT_PATH)/Core
 MIDDLEWARES_USBD_CDC_CLASS_PATH = $(MIDDLEWARES_USBD_ROOT_PATH)/Class/CDC
+MIDDLEWARES_FATFS_ROOT_PATH = $(MIDDLEWARES_ROOT_PATH)/Third_Party/FatFs
+BSP_COMPONENTS_PATH = $(BSP_ROOT_PATH)/Components
+
 
 CMSIS_ARM_PATH=$(CMSIS_ROOT_PATH)/Include
 CMSIS_ST_PATH=$(CMSIS_ROOT_PATH)/Device/ST/
@@ -75,6 +79,11 @@ VPATH+=$(MIDDLEWARES_USBD_CDC_CLASS_PATH)/Inc
 VPATH+=$(MIDDLEWARES_USBD_CORE_PATH)/Src
 VPATH+=$(MIDDLEWARES_USBD_CORE_PATH)/Inc
 
+VPATH+=$(MIDDLEWARES_FATFS_ROOT_PATH)/src
+VPATH+=$(MIDDLEWARES_FATFS_ROOT_PATH)/src/drivers
+VPATH+=$(MIDDLEWARES_FATFS_ROOT_PATH)/src/option
+VPATH+=$(BSP_COMPONENTS_PATH)/wm8994
+
 INCLUDES = -I$(PROJECT_BASE_PATH)
 INCLUDES += -I$(HAL_ROOT_PATH)/Inc
 INCLUDES += -I$(CMSIS_ARM_PATH)
@@ -82,8 +91,12 @@ INCLUDES += -I$(CMSIS_ST_PATH)
 INCLUDES += -I$(CMSIS_CHIP_PATH)/Include
 INCLUDES += -I$(MIDDLEWARES_USBD_CDC_CLASS_PATH)/Inc
 INCLUDES += -I$(MIDDLEWARES_USBD_CORE_PATH)/Inc
+INCLUDES += -I$(MIDDLEWARES_FATFS_ROOT_PATH)/src
+INCLUDES += -I$(MIDDLEWARES_FATFS_ROOT_PATH)/src/drivers
+INCLUDES += -I$(BSP_COMPONENTS_PATH)/wm8994
 INCLUDES += -I$(VARIANTS_PATH)
 INCLUDES += -I$(VARIANTS_PATH)/usb
+
 
 #-------------------------------------------------------------------------------
 ifdef DEBUG
@@ -139,10 +152,8 @@ C_SRC+=$(wildcard $(PROJECT_BASE_PATH)/source/*.c)
 C_SRC+=$(wildcard $(CMSIS_CHIP_PATH)/source/*.c)
 C_SRC+=$(wildcard $(CMSIS_CHIP_PATH)/source/gcc/*.c)
 C_SRC+= usbd_core.c  usbd_ctlreq.c  usbd_ioreq.c usbd_cdc.c
-#C_SRC+=$(wildcard $(MIDDLEWARES_USBD_CDC_CLASS_PATH)/Src/usbd_hid.c)
-
-
-
+C_SRC+= diskio.c ff.c ff_gen_drv.c sd_diskio.c ccsbcs.c
+C_SRC+= wm8994.c
 C_OBJ_TEMP=$(patsubst %.c, %.o, $(notdir $(C_SRC)))
 
 # during development, remove some files
@@ -154,7 +165,6 @@ C_OBJ=$(filter-out $(C_OBJ_FILTER), $(C_OBJ_TEMP))
 # Assembler source files and objects
 #-------------------------------------------------------------------------------
 A_SRC=$(wildcard $(PROJECT_BASE_PATH)/source/*.s)
-#A_SRC+=$(wildcard $(STARTUP_FILE_PATH)/$(CHIP_STARTUP_FILE))
 
 
 A_OBJ_TEMP=$(patsubst %.s, %.o, $(notdir $(A_SRC)))

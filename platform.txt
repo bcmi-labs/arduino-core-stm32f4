@@ -21,7 +21,6 @@ compiler.c.elf.flags=-Os -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,-
 compiler.S.cmd=arm-none-eabi-gcc
 compiler.S.flags=-c -x assembler-with-cpp {compiler.libs.c.flags}
 compiler.cpp.cmd=arm-none-eabi-g++
-#compiler.cpp.flags=-c -g -gdwarf-3 -Os -w -MMD -ffunction-sections -fdata-sections -nostdlib --param max-inline-insns-single=500 -fno-rtti -fno-exceptions -DBOARD_{build.variant} -D{build.vect} -mcpu=cortex-m4 -mthumb -mlittle-endian -mfpu=fpv4-sp-d16 -mthumb-interwork  -lm -lc {compiler.libs.c.flags}
 compiler.cpp.flags=-c -Os {compiler.warning_flags} -std=gnu++11 -ffunction-sections -fdata-sections -nostdlib -fno-threadsafe-statics --param max-inline-insns-single=500 -fno-rtti -fno-exceptions -D{build.vect} -Dprintf=iprintf -MMD {compiler.libs.c.flags}
 
 compiler.ar.cmd=arm-none-eabi-ar
@@ -49,7 +48,7 @@ compiler.S.extra_flags=
 compiler.ar.extra_flags=
 compiler.elf2hex.extra_flags=
 
-compiler.libs.c.flags="-I{build.system.path}/libstm32f4" "-I{build.system.path}/libstm32f4/include" "-I{build.system.path}/Drivers/STM32F4xx_HAL_Driver/Inc/" "-I{build.system.path}/Drivers/CMSIS/Include/" "-I{build.system.path}/Drivers/CMSIS/Device/ST/STM32F4xx/Include" "-I{build.system.path}/Middlewares/ST/STM32_USB_Device_Library/Core/Inc" "-I{build.variant.path}/usb" "-I{build.system.path}/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc/"
+compiler.libs.c.flags="-I{build.system.path}/libstm32f4" "-I{build.system.path}/libstm32f4/include" "-I{build.system.path}/Drivers/STM32F4xx_HAL_Driver/Inc/" "-I{build.system.path}/Drivers/CMSIS/Include/" "-I{build.system.path}/Drivers/CMSIS/Device/ST/STM32F4xx/Include" "-I{build.system.path}/Middlewares/ST/STM32_USB_Device_Library/Core/Inc" "-I{build.variant.path}/usb" "-I{build.system.path}/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc/" "-I{build.system.path}/Drivers/BSP/Components" "-I{build.system.path}/Middlewares/Third_Party/FatFs/src"
 
 compiler.warning_flags=-w
 compiler.warning_flags.none=-w

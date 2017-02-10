@@ -1235,3 +1235,132 @@ usbd_cdc.o:
          U free
 00000000 b ifalt.10186
          U malloc
+
+diskio.o:
+         U disk
+00000000 T disk_initialize
+00000000 T disk_ioctl
+00000000 T disk_read
+00000000 T disk_status
+00000000 T disk_write
+00000000 W get_fattime
+
+ff.o:
+00000000 r .LC0
+00000009 r .LC1
+00000000 r ExCvt
+00000000 b FatFs
+00000000 b Fsid
+00000000 b LfnBuf
+00000000 r LfnOfs
+00000000 t check_fs
+00000000 t clmt_clust
+00000000 T clust2sect
+00000000 t create_chain
+00000000 r cst.10413
+00000000 t dir_find.part.6
+00000000 t dir_next
+00000000 t dir_read.constprop.9
+00000000 t dir_register
+00000000 t dir_remove
+00000000 t dir_sdi
+         U disk_initialize
+         U disk_ioctl
+         U disk_read
+         U disk_status
+         U disk_write
+00000000 T f_chmod
+00000000 T f_close
+00000000 T f_closedir
+00000000 T f_getfree
+00000000 T f_gets
+00000000 T f_lseek
+00000000 T f_mkdir
+00000000 T f_mkfs
+00000000 T f_mount
+00000000 T f_open
+00000000 T f_opendir
+00000000 T f_printf
+00000000 T f_putc
+00000000 T f_puts
+00000000 T f_read
+00000000 T f_readdir
+00000000 T f_rename
+00000000 T f_stat
+00000000 T f_sync
+00000000 T f_truncate
+00000000 T f_unlink
+00000000 T f_utime
+00000000 T f_write
+         U ff_convert
+         U ff_wtoupper
+00000000 t find_volume
+00000000 t follow_path
+00000000 T get_fat
+         U get_fattime
+00000000 t get_fileinfo
+00000000 t get_ldnumber
+00000000 t ld_clust.isra.0
+00000000 t mem_cpy
+00000000 t mem_set
+00000000 t move_window
+00000000 T put_fat
+00000000 t putc_bfd
+00000000 t remove_chain
+00000000 t sum_sfn
+00000000 t sync_fs
+00000000 t sync_window
+00000000 t sync_window.part.1
+00000000 t validate
+00000000 r vst.10412
+
+ff_gen_drv.o:
+00000000 T FATFS_GetAttachedDriversNbr
+00000000 T FATFS_LinkDriver
+00000000 T FATFS_LinkDriverEx
+00000000 T FATFS_UnLinkDriver
+00000000 T FATFS_UnLinkDriverEx
+00000000 B disk
+
+sd_diskio.o:
+         U BSP_SD_GetCardInfo
+         U BSP_SD_GetStatus
+         U BSP_SD_Init
+         U BSP_SD_ReadBlocks
+         U BSP_SD_WriteBlocks
+00000000 R SD_Driver
+00000000 T SD_initialize
+00000000 T SD_ioctl
+00000000 T SD_read
+00000000 T SD_status
+00000000 T SD_write
+00000000 d Stat
+
+ccsbcs.o:
+00000000 r Tbl
+00000000 T ff_convert
+00000000 T ff_wtoupper
+00000000 r tbl_lower.9823
+00000000 r tbl_upper.9824
+
+wm8994.o:
+         U AUDIO_IO_DeInit
+         U AUDIO_IO_Delay
+         U AUDIO_IO_Init
+         U AUDIO_IO_Read
+         U AUDIO_IO_Write
+00000000 b inputEnabled
+00000000 b outputEnabled
+00000000 T wm8994_DeInit
+00000000 T wm8994_Init
+00000000 T wm8994_Pause
+00000000 T wm8994_Play
+00000000 T wm8994_ReadID
+00000000 T wm8994_Reset
+00000000 T wm8994_Resume
+00000000 T wm8994_SetFrequency
+00000000 T wm8994_SetMute
+00000000 T wm8994_SetOutputMode
+00000000 T wm8994_SetVolume
+00000000 T wm8994_Stop
+00000000 D wm8994_drv

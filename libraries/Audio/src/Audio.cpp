@@ -9,7 +9,7 @@
  */
 
 #include "Audio.h"
-#include "BSP/OTTO/otto_audio_inout.h"
+#include "otto_audio_inout.h"
 
 
 

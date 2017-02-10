@@ -15,7 +15,7 @@
 #include <Print.h>
 #include "Wave.h"
 /* otto includes component */
-#include "BSP/OTTO/otto_audio_inout.h"
+#include "otto_audio_inout.h"
 
 #define AUDIO_IN_BUFFER_SIZE 4*2304
 
