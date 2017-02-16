@@ -119,7 +119,7 @@ tools.stlink.upload.pattern="{path}/{cmd}" {serial.port.file} {upload.altID} {up
 tools.dfu-util.cmd=dfu-util
 tools.dfu-util.cmd.windows=StAr_Write.bat
 
-tools.dfu-util.path={runtime.ide.path}/hardware/tools/dfu-util/bin
+tools.dfu-util.path={runtime.ide.path}/hardware/tools/dfu-util/
 
 tools.dfu-util.upload.params.verbose=-v
 tools.dfu-util.upload.params.quiet=
@@ -131,4 +131,4 @@ tools.dfu-util.upload.pattern="{path}/{cmd}" "{path}" {upload.usbID} {upload.alt
 # Default usb manufacturer will be replaced at compile time using
 # numeric vendor ID if available or by board's specific value.
 build.usb_manufacturer="Unknown"
-build.usb_flags=-DUSB_VID={build.vid} -DUSB_PID={build.pid} -DUSBCON '-DUSB_MANUFACTURER={build.usb_manufacturer}' '-DUSB_PRODUCT={build.usb_product}'
+tools.dfu-util.upload.pattern="{path}/{cmd}" "{path}" -l -d {upload.usbID} -a {upload.altID} -s {upload.mem_start} -O "{build.path}/{build.project_name}.bin" -f 0x08000000
