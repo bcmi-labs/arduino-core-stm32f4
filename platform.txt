@@ -27,6 +27,7 @@ compiler.ar.flags=rcs
 compiler.objcopy.cmd=arm-none-eabi-objcopy
 compiler.objcopy.eep.flags=-O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma .eeprom=0
 compiler.elf2hex.flags=-O binary
+compiler.elf2hex.flags2=-O ihex
 compiler.elf2hex.cmd=arm-none-eabi-objcopy
 compiler.ldflags= -mcpu=cortex-m4 -mthumb -mlittle-endian -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb-interwork  -lm -lc
 compiler.size.cmd=arm-none-eabi-size
@@ -70,8 +71,11 @@ recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" {compiler.c.elf.f
 ## Create eeprom
 recipe.objcopy.eep.pattern=
 
+## Create bin
+recipe.objcopy.bin.pattern="{compiler.path}{compiler.elf2hex.cmd}" {compiler.elf2hex.flags} {compiler.elf2hex.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.bin"
+
 ## Create hex
-recipe.objcopy.hex.pattern="{compiler.path}{compiler.elf2hex.cmd}" {compiler.elf2hex.flags} {compiler.elf2hex.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.bin"
+recipe.objcopy.hex.pattern="{compiler.path}{compiler.elf2hex.cmd}" {compiler.elf2hex.flags2} {compiler.elf2hex.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.hex"
 
 ## Compute size
 recipe.size.pattern="{compiler.path}{compiler.size.cmd}" -A "{build.path}/{build.project_name}.elf"
@@ -115,11 +119,11 @@ tools.stlink.upload.pattern="{path}/{cmd}" {serial.port.file} {upload.altID} {up
 tools.dfu-util.cmd=dfu-util
 tools.dfu-util.cmd.windows=StAr_Write.bat
 
-tools.dfu-util.path={runtime.ide.path}/hardware/tools/dfu-util/
+tools.dfu-util.path={runtime.ide.path}/hardware/tools/dfu-util/bin
 
 tools.dfu-util.upload.params.verbose=-v
 tools.dfu-util.upload.params.quiet=
-tools.dfu-util.upload.pattern="{path}/{cmd}" "{path}" -l -d  {upload.usbID} -a {upload.altID} -s {upload.mem_start} -O "{build.path}/{build.project_name}.bin" -f 0x08000000
+tools.dfu-util.upload.pattern="{path}/{cmd}" "{path}" {upload.usbID} {upload.altID} {upload.mem_start} "{build.path}/{build.project_name}.bin"
 
 # USB Flags
 # ---------
