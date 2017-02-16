@@ -55,7 +55,6 @@ void tone(uint8_t pin, unsigned int frequency, unsigned long duration)
   timer.setOverflow(1000000/frequency/4);
 	timer.setMode(TIMER_CH1, TIMER_OUTPUT_COMPARE);
   timer.setCompare(TIMER_CH1, 1);  // Interrupt 1 count after each update
-	//timer.attachInterrupt(TIMER_CH1, handler_tone);
 	timer.toneAttachInterrupt(TIMER_CH1, handler_tone);
   timer.refresh(); // start it up
   timer.resume();
@@ -73,6 +72,7 @@ void noTone(uint8_t pin)
 		timer.refresh();
 	  timer.resume();
 		gpio_write_bit(PIN_MAP[pin].gpio_device, PIN_MAP[pin].gpio_bit, 0);
+		pinMode(pin,INPUT); //to fix dfu issue
 
 		return;
 }
