@@ -16,32 +16,48 @@
 
 #include <Arduino.h>
 
-#define SPIx                             HAL_SPI2
-#define SPIx_CLK_ENABLE()                __HAL_RCC_SPI2_CLK_ENABLE()
-#define SPIx_SCK_CLK_ENABLE()            __HAL_RCC_GPIOD_CLK_ENABLE()
-#define SPIx_MISO_CLK_ENABLE()           __HAL_RCC_GPIOB_CLK_ENABLE()
-#define SPIx_MOSI_CLK_ENABLE()           __HAL_RCC_GPIOC_CLK_ENABLE()
-#define SPIx_NSS_CLK_ENABLE()            __HAL_RCC_GPIOA_CLK_ENABLE()
+#define SPI2_CLK_ENABLE()                __HAL_RCC_SPI2_CLK_ENABLE()
+#define SPI2_SCK_CLK_ENABLE()            __HAL_RCC_GPIOD_CLK_ENABLE()
+#define SPI2_MISO_CLK_ENABLE()           __HAL_RCC_GPIOB_CLK_ENABLE()
+#define SPI2_MOSI_CLK_ENABLE()           __HAL_RCC_GPIOC_CLK_ENABLE()
 
-#define SPIx_FORCE_RESET()               __HAL_RCC_SPI2_FORCE_RESET()
-#define SPIx_RELEASE_RESET()             __HAL_RCC_SPI2_RELEASE_RESET()
-#define SPIx_NSS_CLK_DISABLE             __HAL_RCC_GPIOA_CLK_DISABLE
+#define SPI2_FORCE_RESET()               __HAL_RCC_SPI2_FORCE_RESET()
+#define SPI2_RELEASE_RESET()             __HAL_RCC_SPI2_RELEASE_RESET()
 
-/* Definition for SPIx Pins */
-#define SPIx_SCK_PIN                     GPIO_PIN_3
-#define SPIx_SCK_GPIO_PORT               HAL_GPIOD
-#define SPIx_SCK_AF                      GPIO_AF5_SPI2
-#define SPIx_MISO_PIN                    GPIO_PIN_14
-#define SPIx_MISO_GPIO_PORT              HAL_GPIOB
-#define SPIx_MISO_AF                     GPIO_AF5_SPI2
-#define SPIx_MOSI_PIN                    GPIO_PIN_3
-#define SPIx_MOSI_GPIO_PORT              HAL_GPIOC
-#define SPIx_MOSI_AF                     GPIO_AF5_SPI2
+/* Definition for SPI2 Pins */
+#define SPI2_SCK_PIN                     GPIO_PIN_3
+#define SPI2_SCK_GPIO_PORT               HAL_GPIOD
+#define SPI2_SCK_AF                      GPIO_AF5_SPI2
+#define SPI2_MISO_PIN                    GPIO_PIN_14
+#define SPI2_MISO_GPIO_PORT              HAL_GPIOB
+#define SPI2_MISO_AF                     GPIO_AF5_SPI2
+#define SPI2_MOSI_PIN                    GPIO_PIN_3
+#define SPI2_MOSI_GPIO_PORT              HAL_GPIOC
+#define SPI2_MOSI_AF                     GPIO_AF5_SPI2
 
-#define SPIx_NSS_PIN                     GPIO_PIN_15
-#define SPIx_NSS_GPIO_PORT               HAL_GPIOA
-#define SPIx_NSS_AF                      GPIO_AF5_SPI2
+#define SPI1_CLK_ENABLE()                __HAL_RCC_SPI1_CLK_ENABLE()
+#define SPI1_SCK_CLK_ENABLE()            __HAL_RCC_GPIOB_CLK_ENABLE()
+#define SPI1_MISO_CLK_ENABLE()           __HAL_RCC_GPIOB_CLK_ENABLE()
+#define SPI1_MOSI_CLK_ENABLE()           __HAL_RCC_GPIOB_CLK_ENABLE()
+#define SPI1_NSS_CLK_ENABLE()            __HAL_RCC_GPIOA_CLK_ENABLE()
 
+#define SPI1_FORCE_RESET()               __HAL_RCC_SPI1_FORCE_RESET()
+#define SPI1_RELEASE_RESET()             __HAL_RCC_SPI1_RELEASE_RESET()
+
+/* Definition for SPI2 Pins */
+#define SPI1_SCK_PIN                     GPIO_PIN_3
+#define SPI1_SCK_GPIO_PORT               HAL_GPIOB
+#define SPI1_SCK_AF                      GPIO_AF5_SPI1
+#define SPI1_MISO_PIN                    GPIO_PIN_4
+#define SPI1_MISO_GPIO_PORT              HAL_GPIOB
+#define SPI1_MISO_AF                     GPIO_AF5_SPI1
+#define SPI1_MOSI_PIN                    GPIO_PIN_5
+#define SPI1_MOSI_GPIO_PORT              HAL_GPIOB
+#define SPI1_MOSI_AF                     GPIO_AF5_SPI1
+
+#define SPI1_NSS_PIN                     GPIO_PIN_15
+#define SPI1_NSS_GPIO_PORT               HAL_GPIOA
+#define SPI1_NSS_AF                      GPIO_AF5_SPI1
 
 #ifndef LSBFIRST
 #define LSBFIRST 0
@@ -49,9 +65,6 @@
 #ifndef MSBFIRST
 #define MSBFIRST 1
 #endif
-
-
-
 
 #define SPI_CLOCK_DIV2   SPI_BAUDRATEPRESCALER_2
 #define SPI_CLOCK_DIV4   SPI_BAUDRATEPRESCALER_4
@@ -71,7 +84,6 @@ enum SPITransferMode {
 	SPI_CONTINUE,
 	SPI_LAST
 };
-
 
 class SPISettings {
 public:
@@ -138,7 +150,6 @@ private:
   friend class SPIClass;
 };
 
-
 class SPIClass {
 public:
   /* Constructor */
@@ -182,5 +193,6 @@ private:
 };
 
 extern SPIClass SPI;
-//extern SPISettings SPISettings(SPI_CLOCK_DIV4, MSBFIRST, SPI_MODE0);
+extern SPIClass SPI1;
+
 #endif
