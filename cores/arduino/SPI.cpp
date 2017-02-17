@@ -24,7 +24,7 @@ extern "C" {
 
 }
 
-#include "HardwareSPI.h"
+#include "SPI.h"
 SPIClass SPI;
 
 SPI_HandleTypeDef hSPIx;
