@@ -43,9 +43,9 @@
  * [5] = COM;
  * [6] = TRG;
  * [7] = BRK. */
-#define NR_ADV_HANDLERS                 2
+#define NR_ADV_HANDLERS                 8//2
 /* Update, capture/compare 1,2,3,4; <junk>; trigger. */
-#define NR_GEN_HANDLERS                 10
+#define NR_GEN_HANDLERS                 4//10
 /* Update only. */
 #define NR_BAS_HANDLERS                 2
 
@@ -306,8 +306,8 @@ void timer_foreach(void (*fn)(timer_dev*)) {
     //*bb_perip(&(TIMER6->regs).gen->EGR, TIMER_EGR_UG_BIT) = 1;
 
     // --- Timer 7 Preset
-    //(TIMER7->regs).gen->PSC = 0;
-    //*bb_perip(&(TIMER7->regs).gen->EGR, TIMER_EGR_UG_BIT) = 1;
+    (TIMER7->regs).gen->PSC = 0;
+    *bb_perip(&(TIMER7->regs).gen->EGR, TIMER_EGR_UG_BIT) = 1;
 
     // --- Timer 8 Preset
     (TIMER8->regs).gen->PSC = 2;
@@ -330,12 +330,12 @@ void timer_foreach(void (*fn)(timer_dev*)) {
     *bb_perip(&(TIMER12->regs).gen->EGR, TIMER_EGR_UG_BIT) = 1;
 
     // --- Timer 13 Preset
-    //(TIMER13->regs).gen->PSC = 0;
-    //*bb_perip(&(TIMER13->regs).gen->EGR, TIMER_EGR_UG_BIT) = 1;
+    (TIMER13->regs).gen->PSC = 0;
+    *bb_perip(&(TIMER13->regs).gen->EGR, TIMER_EGR_UG_BIT) = 1;
 
     // --- Timer 14 Preset
-    //(TIMER14->regs).gen->PSC = 0;
-    //*bb_perip(&(TIMER14->regs).gen->EGR, TIMER_EGR_UG_BIT) = 1;
+    (TIMER14->regs).gen->PSC = 0;
+    *bb_perip(&(TIMER14->regs).gen->EGR, TIMER_EGR_UG_BIT) = 1;
 
 }
 
@@ -352,6 +352,14 @@ void timer_foreach(void (*fn)(timer_dev*)) {
 void timer_attach_interrupt(timer_dev *dev,
                             uint8 interrupt,
                             voidFuncPtr handler) {
+    dev->handlers[interrupt-1] = handler;
+    timer_enable_irq(dev, interrupt);
+    enable_irq(dev, interrupt);
+}
+
+void tone_attach_interrupt(timer_dev *dev,
+                           uint8 interrupt,
+                           voidFuncPtr handler) {
     dev->handlers[interrupt] = handler;
     timer_enable_irq(dev, interrupt);
     enable_irq(dev, interrupt);
@@ -368,7 +376,12 @@ void timer_attach_interrupt(timer_dev *dev,
  */
 void timer_detach_interrupt(timer_dev *dev, uint8 interrupt) {
     timer_disable_irq(dev, interrupt);
-    dev->handlers[interrupt] = NULL;
+    dev->handlers[interrupt-1] = NULL;
+}
+
+void tone_detach_interrupt(timer_dev *dev, uint8 interrupt) {
+    timer_disable_irq(dev, interrupt);
+    dev->handlers[interrupt-1] = NULL;
 }
 
 /*

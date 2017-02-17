@@ -51,7 +51,7 @@
 #include "wiring_math.h"
 #include "wiring_time.h"
 #include <wiring_constants.h>
-#include "HardwareSPI.h"
+#include "SPI.h"
 #include "HardwareSerial.h"
 #include "HardwareTimer.h"
 #include "usb_serial.h"
