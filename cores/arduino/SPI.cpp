@@ -49,7 +49,7 @@ void SPIClass::begin()
     /* Enable SPI2 clock */
     SPI2_CLK_ENABLE();
 
-    /* Configure SPI2 SCK pin(PD3) as alternate function  */
+    /* Configure SPI2 SCK PIN defined in SPI.h */
     GPIO_InitStruct.Pin = SPI2_SCK_PIN;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_PULLDOWN;
@@ -57,16 +57,17 @@ void SPIClass::begin()
     GPIO_InitStruct.Alternate = SPI2_SCK_AF;
     HAL_GPIO_Init(SPI2_SCK_GPIO_PORT, &GPIO_InitStruct);
 
-    /* Configure SPI2 MISO pin(PB14) as alternate function  */
+    /* Configure SPI2 MISO PIN defined in SPI.h */
     GPIO_InitStruct.Pin = SPI2_MISO_PIN;
     GPIO_InitStruct.Alternate = SPI2_MISO_AF;
     HAL_GPIO_Init(SPI2_MISO_GPIO_PORT, &GPIO_InitStruct);
 
-    /* Configure SPI2 MOSI pin(PC3) as alternate function  */
+    /* Configure SPI2 MOSI PIN defined in SPI.h */
     GPIO_InitStruct.Pin = SPI2_MOSI_PIN;
     GPIO_InitStruct.Alternate = SPI2_MOSI_AF;
     HAL_GPIO_Init(SPI2_MOSI_GPIO_PORT, &GPIO_InitStruct);
-  } else if (hSPIx.Instance == HAL_SPI1)
+  }
+  else if (hSPIx.Instance == HAL_SPI1)
   {
     GPIO_InitTypeDef  GPIO_InitStruct;
 
@@ -79,7 +80,7 @@ void SPIClass::begin()
     /* Enable SPI1 clock */
     SPI1_CLK_ENABLE();
 
-    /* Configure SPI1 SCK pin(PB3) as alternate function  */
+    /* Configure SPI1 SCK PIN defined in SPI.h */
     GPIO_InitStruct.Pin = SPI1_SCK_PIN;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_PULLDOWN;
@@ -87,24 +88,24 @@ void SPIClass::begin()
     GPIO_InitStruct.Alternate = SPI1_SCK_AF;
     HAL_GPIO_Init(SPI1_SCK_GPIO_PORT, &GPIO_InitStruct);
 
-    /* Configure SPI1 MISO pin(PB4) as alternate function  */
+    /* Configure SPI1 MISO PIN defined in SPI.h */
     GPIO_InitStruct.Pin = SPI1_MISO_PIN;
     GPIO_InitStruct.Alternate = SPI1_MISO_AF;
     HAL_GPIO_Init(SPI1_MISO_GPIO_PORT, &GPIO_InitStruct);
 
-    /* Configure SPI1 MOSI pin(PB5) as alternate function  */
+    /* Configure SPI1 MOSI PIN defined in SPI.h */
     GPIO_InitStruct.Pin = SPI1_MOSI_PIN;
     GPIO_InitStruct.Alternate = SPI1_MOSI_AF;
     HAL_GPIO_Init(SPI1_MOSI_GPIO_PORT, &GPIO_InitStruct);
 
 	/* Put SPI1 NSS pin as Output pin in order to be used as normal GPIO in Master mode */
     GPIO_InitStruct.Pin = SPI1_NSS_PIN;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	  GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(SPI1_NSS_GPIO_PORT, &GPIO_InitStruct);
   }
 
-  /* SPI general configuration ----------------------------------------------------*/
+  /* SPI general configuration */
   hSPIx.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8;
   hSPIx.Init.Direction         = SPI_DIRECTION_2LINES;
   hSPIx.Init.CLKPhase          = SPI_PHASE_1EDGE;
@@ -127,29 +128,9 @@ void SPIClass::begin()
   */
 void SPIClass::begin(uint8_t slaveSelectPin)
 {
-  /* SPIx configuration        */
+  /* SPIx configuration */
   begin();
-
-  /* TOBEFIXED: The correct way to proceed here it is to map the Arduino slaveSelectPin provided as parameter */
-  /* with the Cube GPIO port and pin number and then call the HAL_GPIO_Init with the correct values */
-  /* At the moment only pin 10 is supported */
-  switch(slaveSelectPin)
-  {
-    case 10: /* Pin(PA15) */
-    default:
-    {
-      GPIO_InitTypeDef  GPIO_InitStruct;
-
-      __HAL_RCC_GPIOA_CLK_ENABLE();
-      GPIO_InitStruct.Pin = GPIO_PIN_15;
-      GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-      GPIO_InitStruct.Pull = GPIO_PULLDOWN;
-      GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
-
-	  HAL_GPIO_Init(HAL_GPIOA, &GPIO_InitStruct);
-	  break;
-    }
-  }
+  pinMode(slaveSelectPin, OUTPUT);
 }
 
 /**
@@ -234,34 +215,14 @@ void SPIClass::transfer(void *buf, size_t count)
 uint8_t  SPIClass::transfer(uint8_t slaveSelectPin, uint8_t val, SPITransferMode transferMode)
 {
   uint8_t rxdata;
-
-  /* TOBEFIXED: The correct way to proceed here it is to map the Arduino pin provided as parameter */
-  /* with the Cube GPIO port and pin number and then call the HAL_GPIO_WritePin */
-  switch(slaveSelectPin)
-  {
-    case 10: /* Pin(PA15) */
-    default:
-    {
-      HAL_GPIO_WritePin(HAL_GPIOA, GPIO_PIN_15, GPIO_PIN_RESET);
-      break;
-    }
-  }
-
+  digitalWrite(slaveSelectPin,LOW);
   HAL_SPI_TransmitReceive(&hSPIx, (uint8_t *)&val, (uint8_t*)&rxdata, 1,5000);
 
   /* If transferMode is SPI_CONTINUE we need to hold CS GPIO pin low */
   /* If transferMode is SPI_LAST we need to put CS GPIO pin high */
   if(transferMode == SPI_LAST)
   {
-    switch(slaveSelectPin)
-    {
-      case 10: /* Pin(PA15) */
-      default:
-      {
-        HAL_GPIO_WritePin(HAL_GPIOA, GPIO_PIN_15, GPIO_PIN_SET);
-        break;
-      }
-    }
+    digitalWrite(slaveSelectPin, HIGH);
   }
 
   return rxdata;
@@ -353,7 +314,8 @@ void SPIClass::end()
     HAL_GPIO_DeInit(SPI2_MISO_GPIO_PORT, SPI2_MISO_PIN);
     /* Configure SPI2 MOSI as alternate function  */
     HAL_GPIO_DeInit(SPI2_MOSI_GPIO_PORT, SPI2_MOSI_PIN);
-  } else if (hSPIx.Instance == HAL_SPI1)
+  }
+  else if (hSPIx.Instance == HAL_SPI1)
   {
     /*##-1- Reset peripherals ##################################################*/
     SPI1_FORCE_RESET();
@@ -378,18 +340,7 @@ void SPIClass::end()
   */
 void SPIClass::end(uint8_t slaveSelectPin)
 {
-  /* TOBEFIXED: The correct way to proceed here it is to map the Arduino slaveSelectPin provided as parameter */
-  /* with the Cube GPIO port and pin number and then call the HAL_GPIO_DeInit with the correct values */
-  switch(slaveSelectPin)
-  {
-    case 10: /* Pin(PA15) */
-    default:
-    {
-      HAL_GPIO_DeInit(HAL_GPIOA, GPIO_PIN_15);
-	  break;
-    }
-  }
-
+  pinMode(slaveSelectPin, INPUT);
   end();
 }
 
