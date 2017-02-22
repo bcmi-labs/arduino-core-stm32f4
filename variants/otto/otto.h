@@ -42,8 +42,10 @@
  */
 
 
-#ifndef _BOARD_DISCOVERY_F4_H_
-#define _BOARD_DISCOVERY_F4_H_
+#ifndef _OTTO_H_
+#define _OTTO_H_
+
+#include "stm32f4xx_hal.h"
 
 #define Port2Pin(port, bit) ((port-'A')*16+bit)
 
@@ -59,66 +61,66 @@
 // PINs definition
 
 // USART1 - NOT USED
-#define USART1_TX_GPIO_DEV	GPIOB
+#define USART1_TX_GPIO_DEV	GPIOB_dev
 #define USART1_TX_GPIO_PIN 	6
 #define USART1_TX_AF		7
-#define USART1_RX_GPIO_DEV 	GPIOB
+#define USART1_RX_GPIO_DEV 	GPIOB_dev
 #define USART1_RX_GPIO_PIN 	7
 #define USART1_RX_AF		7
 
 // USART2 - Serial2
-#define USART2_TX_GPIO_DEV	GPIOD
+#define USART2_TX_GPIO_DEV	GPIOD_dev
 #define USART2_TX_GPIO_PIN 	5
 #define USART2_TX_AF		7
-#define USART2_RX_GPIO_DEV 	GPIOD
+#define USART2_RX_GPIO_DEV 	GPIOD_dev
 #define USART2_RX_GPIO_PIN 	6
 #define USART2_RX_AF		7
 
 // USART3 - Serial1 / SerialESP
-#define USART3_TX_GPIO_DEV	GPIOB
+#define USART3_TX_GPIO_DEV	GPIOB_dev
 #define USART3_TX_GPIO_PIN 	10
 #define USART3_TX_AF		7
-#define USART3_RX_GPIO_DEV 	GPIOB
+#define USART3_RX_GPIO_DEV 	GPIOB_dev
 #define USART3_RX_GPIO_PIN 	11
 #define USART3_RX_AF		7
 
 // UART4 - Serial0
-#define UART4_TX_GPIO_DEV	GPIOA
+#define UART4_TX_GPIO_DEV	GPIOA_dev
 #define UART4_TX_GPIO_PIN 	0
 #define UART4_TX_AF			8
-#define UART4_RX_GPIO_DEV 	GPIOA
+#define UART4_RX_GPIO_DEV 	GPIOA_dev
 #define UART4_RX_GPIO_PIN 	1
 #define UART4_RX_AF			8
 
 // UART5 - NOT USED
-#define UART5_TX_GPIO_DEV	GPIOD
+#define UART5_TX_GPIO_DEV	GPIOD_dev
 #define UART5_TX_GPIO_PIN 	2
 #define UART5_TX_AF			8
-#define UART5_RX_GPIO_DEV 	GPIOC
+#define UART5_RX_GPIO_DEV 	GPIOC_dev
 #define UART5_RX_GPIO_PIN 	12
 #define UART5_RX_AF			8
 
 // USART6 - Serial3
-#define USART6_TX_GPIO_DEV	GPIOG
+#define USART6_TX_GPIO_DEV	GPIOG_dev
 #define USART6_TX_GPIO_PIN 	14
 #define USART6_TX_AF		8
-#define USART6_RX_GPIO_DEV 	GPIOG
+#define USART6_RX_GPIO_DEV 	GPIOG_dev
 #define USART6_RX_GPIO_PIN 	9
 #define USART6_RX_AF		8
 
 // UART7 - NOT USED
-#define UART7_TX_GPIO_DEV	GPIOF
+#define UART7_TX_GPIO_DEV	GPIOF_dev
 #define UART7_TX_GPIO_PIN 	7
 #define UART7_TX_AF			8
-#define UART7_RX_GPIO_DEV 	GPIOF
+#define UART7_RX_GPIO_DEV 	GPIOF_dev
 #define UART7_RX_GPIO_PIN 	6
 #define UART7_RX_AF			8
 
 // UART8 - NOT USED
-#define UART8_TX_GPIO_DEV	GPIOE
+#define UART8_TX_GPIO_DEV	GPIOE_dev
 #define UART8_TX_GPIO_PIN 	0
 #define UART8_TX_AF			8
-#define UART8_RX_GPIO_DEV 	GPIOE
+#define UART8_RX_GPIO_DEV 	GPIOE_dev
 #define UART8_RX_GPIO_PIN 	1
 #define UART8_RX_AF			8
 

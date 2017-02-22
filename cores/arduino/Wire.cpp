@@ -64,7 +64,7 @@ void TwoWire::begin(void)
   txBufferLength = 0;
 
   //twi_init();
-  if(twi == HAL_I2C3)
+  if(twi == I2C3)
   {
     /* Enable GPIO TX/RX clock */
     __HAL_RCC_GPIOH_CLK_ENABLE();
@@ -78,19 +78,19 @@ void TwoWire::begin(void)
     GPIO_InitStruct.Pull      = GPIO_PULLUP;
     GPIO_InitStruct.Speed     = GPIO_SPEED_HIGH;
     GPIO_InitStruct.Alternate = GPIO_AF4_I2C3;
-    HAL_GPIO_Init(HAL_GPIOH, &GPIO_InitStruct);
+    HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
 
     /* I2C SDA GPIO pin configuration  */
     GPIO_InitStruct.Pin       = GPIO_PIN_8;
     GPIO_InitStruct.Alternate = GPIO_AF4_I2C3;
-    HAL_GPIO_Init(HAL_GPIOH, &GPIO_InitStruct);
+    HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
 
     HAL_NVIC_SetPriority(I2C3_ER_IRQn, 0, 1);
     HAL_NVIC_EnableIRQ(I2C3_ER_IRQn);
     HAL_NVIC_SetPriority(I2C3_EV_IRQn, 0, 2);
     HAL_NVIC_EnableIRQ(I2C3_EV_IRQn);
   }
-  else if(twi == HAL_I2C2)
+  else if(twi == I2C2)
   {
     /* Enable GPIO TX/RX clock */
     __HAL_RCC_GPIOH_CLK_ENABLE();
@@ -104,19 +104,19 @@ void TwoWire::begin(void)
     GPIO_InitStruct.Pull      = GPIO_PULLUP;
     GPIO_InitStruct.Speed     = GPIO_SPEED_HIGH;
     GPIO_InitStruct.Alternate = GPIO_AF4_I2C2;
-    HAL_GPIO_Init(HAL_GPIOH, &GPIO_InitStruct);
+    HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
 
     /* I2C SDA GPIO pin configuration  */
     GPIO_InitStruct.Pin       = GPIO_PIN_5;
     GPIO_InitStruct.Alternate = GPIO_AF4_I2C2;
-    HAL_GPIO_Init(HAL_GPIOH, &GPIO_InitStruct);
+    HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
 
     HAL_NVIC_SetPriority(I2C2_ER_IRQn, 0, 1);
     HAL_NVIC_EnableIRQ(I2C2_ER_IRQn);
     HAL_NVIC_SetPriority(I2C2_EV_IRQn, 0, 2);
     HAL_NVIC_EnableIRQ(I2C2_EV_IRQn);
   }
-  else if(twi == HAL_I2C1)
+  else if(twi == I2C1)
   {
     /* Enable GPIO TX/RX clock */
     __HAL_RCC_GPIOB_CLK_ENABLE();
@@ -130,12 +130,12 @@ void TwoWire::begin(void)
     GPIO_InitStruct.Pull      = GPIO_PULLUP;
     GPIO_InitStruct.Speed     = GPIO_SPEED_HIGH;
     GPIO_InitStruct.Alternate = GPIO_AF4_I2C1;
-    HAL_GPIO_Init(HAL_GPIOB, &GPIO_InitStruct);
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
     /* I2C SDA GPIO pin configuration  */
     GPIO_InitStruct.Pin       = GPIO_PIN_7;
     GPIO_InitStruct.Alternate = GPIO_AF4_I2C1;
-    HAL_GPIO_Init(HAL_GPIOB, &GPIO_InitStruct);
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
     HAL_NVIC_SetPriority(I2C1_ER_IRQn, 0, 1);
     HAL_NVIC_EnableIRQ(I2C1_ER_IRQn);
@@ -680,17 +680,17 @@ void TwoWire::handleInterrupt(uint8_t TransferDirection, uint16_t AddrMatchCode)
 
 void TwoWire::enableInterrupt(void)
 {
-    if(I2cHandle.Instance == HAL_I2C3)
+    if(I2cHandle.Instance == I2C3)
     {
       HAL_NVIC_EnableIRQ(I2C3_ER_IRQn);
       HAL_NVIC_EnableIRQ(I2C3_EV_IRQn);
     }
-    else if(I2cHandle.Instance == HAL_I2C2)
+    else if(I2cHandle.Instance == I2C2)
     {
       HAL_NVIC_EnableIRQ(I2C2_ER_IRQn);
       HAL_NVIC_EnableIRQ(I2C2_EV_IRQn);
     }
-    else if (I2cHandle.Instance == HAL_I2C1)
+    else if (I2cHandle.Instance == I2C1)
     {
       HAL_NVIC_EnableIRQ(I2C1_ER_IRQn);
       HAL_NVIC_EnableIRQ(I2C1_EV_IRQn);
@@ -702,17 +702,17 @@ void TwoWire::enableInterrupt(void)
 
 void TwoWire::disableInterrupt(void)
 {
-    if(I2cHandle.Instance == HAL_I2C3)
+    if(I2cHandle.Instance == I2C3)
     {
       HAL_NVIC_DisableIRQ(I2C3_ER_IRQn);
       HAL_NVIC_DisableIRQ(I2C3_EV_IRQn);
     }
-    else if(I2cHandle.Instance == HAL_I2C2)
+    else if(I2cHandle.Instance == I2C2)
     {
       HAL_NVIC_DisableIRQ(I2C2_ER_IRQn);
       HAL_NVIC_DisableIRQ(I2C2_EV_IRQn);
     }
-    else if (I2cHandle.Instance == HAL_I2C1)
+    else if (I2cHandle.Instance == I2C1)
     {
       HAL_NVIC_DisableIRQ(I2C1_ER_IRQn);
       HAL_NVIC_DisableIRQ(I2C1_EV_IRQn);
@@ -761,13 +761,13 @@ void __irq_I2C3_ER_IRQHandler(void)
 
 void HAL_I2C_AddrCallback(I2C_HandleTypeDef *hi2c, uint8_t TransferDirection, uint16_t AddrMatchCode)
 {
-  if(hi2c->Instance == HAL_I2C1)
+  if(hi2c->Instance == I2C1)
   {
     Wire.handleInterrupt(TransferDirection, AddrMatchCode);
-  } else if (hi2c->Instance == HAL_I2C2)
+  } else if (hi2c->Instance == I2C2)
   {
     Wire1.handleInterrupt(TransferDirection, AddrMatchCode);
-  } else if (hi2c->Instance == HAL_I2C3)
+  } else if (hi2c->Instance == I2C3)
   {
     Wire2.handleInterrupt(TransferDirection, AddrMatchCode);
   } else
@@ -779,17 +779,17 @@ void HAL_I2C_AddrCallback(I2C_HandleTypeDef *hi2c, uint8_t TransferDirection, ui
 
 void HAL_I2C_SlaveRxCpltCallback(I2C_HandleTypeDef *hi2c)
 {
-  if(hi2c->Instance == HAL_I2C3)
+  if(hi2c->Instance == I2C3)
   {
     Wire2.rxBufferLength++;
     HAL_I2C_Slave_Sequential_Receive_IT(&(Wire2.I2cHandle), &(Wire2.rxBuffer[Wire2.rxBufferLength]), 1, I2C_FIRST_FRAME);
   }
-  else if(hi2c->Instance == HAL_I2C2)
+  else if(hi2c->Instance == I2C2)
   {
     Wire1.rxBufferLength++;
     HAL_I2C_Slave_Sequential_Receive_IT(&(Wire1.I2cHandle), &(Wire1.rxBuffer[Wire1.rxBufferLength]), 1, I2C_FIRST_FRAME);
   }
-  else if (hi2c->Instance == HAL_I2C1)
+  else if (hi2c->Instance == I2C1)
   {
     Wire.rxBufferLength++;
     HAL_I2C_Slave_Sequential_Receive_IT(&(Wire.I2cHandle), &(Wire.rxBuffer[Wire.rxBufferLength]), 1, I2C_FIRST_FRAME);
@@ -801,7 +801,7 @@ void HAL_I2C_SlaveRxCpltCallback(I2C_HandleTypeDef *hi2c)
 
 void HAL_I2C_ListenCpltCallback(I2C_HandleTypeDef *hi2c)
 {
-  if(hi2c->Instance == HAL_I2C3)
+  if(hi2c->Instance == I2C3)
   {
     Wire2.rxBufferIndex = 0;
     Wire2.user_onReceive(Wire2.rxBufferLength);
@@ -809,7 +809,7 @@ void HAL_I2C_ListenCpltCallback(I2C_HandleTypeDef *hi2c)
     Wire2.rxBufferLength = 0;
     HAL_I2C_EnableListen_IT(&(Wire2.I2cHandle));
   }
-  else if(hi2c->Instance == HAL_I2C2)
+  else if(hi2c->Instance == I2C2)
   {
     Wire1.rxBufferIndex = 0;
     Wire1.user_onReceive(Wire1.rxBufferLength);
@@ -817,7 +817,7 @@ void HAL_I2C_ListenCpltCallback(I2C_HandleTypeDef *hi2c)
     Wire1.rxBufferLength = 0;
   HAL_I2C_EnableListen_IT(&(Wire1.I2cHandle));
   }
-  else if (hi2c->Instance == HAL_I2C1)
+  else if (hi2c->Instance == I2C1)
   {
     Wire.rxBufferIndex = 0;
     Wire.user_onReceive(Wire.rxBufferLength);
@@ -837,6 +837,6 @@ void HAL_I2C_ListenCpltCallback(I2C_HandleTypeDef *hi2c)
 
 // Preinstantiate Objects //////////////////////////////////////////////////////
 
-TwoWire Wire  = TwoWire(HAL_I2C1);
-TwoWire Wire1 = TwoWire(HAL_I2C2);
-TwoWire Wire2 = TwoWire(HAL_I2C3);
+TwoWire Wire  = TwoWire(I2C1);
+TwoWire Wire1 = TwoWire(I2C2);
+TwoWire Wire2 = TwoWire(I2C3);

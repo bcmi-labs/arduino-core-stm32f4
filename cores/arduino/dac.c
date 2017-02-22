@@ -49,7 +49,7 @@
 dac_dev dac = {
     .regs = DAC_BASE,
 };
-const dac_dev *DAC = &dac;
+const dac_dev *DAC_dev = &dac;
 
 /**
  * @brief Initialize the digital to analog converter
@@ -133,11 +133,11 @@ void dac_enable_channel(const dac_dev *dev, uint8 channel) {
      */
     switch (channel) {
       case 1:
-          gpio_set_mode(GPIOB, 7, GPIO_INPUT_ANALOG);
+          gpio_set_mode(GPIOB_dev, 7, GPIO_INPUT_ANALOG);
           dev->regs->CR |= DAC_CR_EN1;
           break;
       case 2:
-          gpio_set_mode(GPIOB, 6, GPIO_INPUT_ANALOG);
+          gpio_set_mode(GPIOB_dev, 6, GPIO_INPUT_ANALOG);
           dev->regs->CR |= DAC_CR_EN2;
           break;
     }

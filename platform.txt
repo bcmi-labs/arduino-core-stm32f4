@@ -15,13 +15,14 @@ version=1.7.0
 
 compiler.path={runtime.ide.path}/hardware/tools/gcc-arm-none-eabi-4.8.3-2014q1/bin/
 compiler.c.cmd=arm-none-eabi-gcc
-compiler.c.flags=-c -g -Os -w -MMD -ffunction-sections -fdata-sections -nostdlib --param max-inline-insns-single=500 -DBOARD_{build.variant} -D{build.vect}  -gdwarf-3 -mcpu=cortex-m4 -mthumb -mlittle-endian -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb-interwork -lm -lc
-compiler.c.elf.cmd=arm-none-eabi-g++
-compiler.c.elf.flags=-Os -Wl,--gc-sections -gdwarf-3 -mcpu=cortex-m4 -mthumb -mlittle-endian -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb-interwork  -lm -lc
+compiler.c.flags=-c -Os {compiler.warning_flags} -std=gnu11 -ffunction-sections -fdata-sections -nostdlib --param max-inline-insns-single=500 -D{build.vect} -Dprintf=iprintf -MMD {compiler.libs.c.flags}
+compiler.c.elf.cmd=arm-none-eabi-gcc
+compiler.c.elf.flags=-Os -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl,--warn-section-align
 compiler.S.cmd=arm-none-eabi-gcc
-compiler.S.flags=-c -g -gdwarf-3 -x assembler-with-cpp -MMD  -mcpu=cortex-m4 -mthumb -mlittle-endian -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb-interwork  -lm -lc
+compiler.S.flags=-c -x assembler-with-cpp {compiler.libs.c.flags}
 compiler.cpp.cmd=arm-none-eabi-g++
-compiler.cpp.flags=-c -g -gdwarf-3 -Os -w -MMD -ffunction-sections -fdata-sections -nostdlib --param max-inline-insns-single=500 -fno-rtti -fno-exceptions -DBOARD_{build.variant} -D{build.vect} -mcpu=cortex-m4 -mthumb -mlittle-endian -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb-interwork  -lm -lc
+compiler.cpp.flags=-c -Os {compiler.warning_flags} -std=gnu++11 -ffunction-sections -fdata-sections -nostdlib -fno-threadsafe-statics --param max-inline-insns-single=500 -fno-rtti -fno-exceptions -D{build.vect} -Dprintf=iprintf -MMD {compiler.libs.c.flags}
+
 compiler.ar.cmd=arm-none-eabi-ar
 compiler.ar.flags=rcs
 compiler.objcopy.cmd=arm-none-eabi-objcopy
@@ -29,7 +30,7 @@ compiler.objcopy.eep.flags=-O ihex -j .eeprom --set-section-flags=.eeprom=alloc,
 compiler.elf2hex.flags=-O binary
 compiler.elf2hex.flags2=-O ihex
 compiler.elf2hex.cmd=arm-none-eabi-objcopy
-compiler.ldflags= -mcpu=cortex-m4 -mthumb -mlittle-endian -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb-interwork  -lm -lc
+compiler.ldflags=
 compiler.size.cmd=arm-none-eabi-size
 compiler.define=-DARDUINO=
 
@@ -41,16 +42,21 @@ build.extra_flags= {build.cpu_flags} {build.hs_flag} {build.common_flags}
 
 # These can be overridden in platform.local.txt
 compiler.c.extra_flags=
-#compiler.c.elf.extra_flags="-L{build.variant.path}/ld"
 compiler.c.elf.extra_flags="-L{build.variant.path}/link-tools"
 compiler.cpp.extra_flags=
 compiler.S.extra_flags=
 compiler.ar.extra_flags=
 compiler.elf2hex.extra_flags=
-compiler.libs.c.flags="-I{build.core.path}" "-I{build.core.path}/usb/STM32_USB_Device_Library/Class/CDC/Inc" "-I{build.core.path}/usb/STM32_USB_Device_Library/Core/Inc" "-I{build.core.path}/usb" "-I{build.core.path}/HAL/Device" "-I{build.core.path}/HAL/inc" "-DUSE_HAL_DRIVER" "-DSTM32F469xx"
-#compiler.libs.c.flags="-I{build.core.path}/libmaple" "-I{build.core.path}/libmaple/usb/STM32_USB_Device_Library/Class/CDC/Inc" "-I{build.core.path}/libmaple/usb/STM32_USB_Device_Library/Core/Inc" "-I{build.core.path}/libmaple/usb" "-I{build.core.path}/libmaple/HAL/Device" "-I{build.core.path}/libmaple/HAL/inc" "-DUSE_HAL_DRIVER" "-DSTM32F469xx"
 
-# STM32 copmpile patterns
+compiler.libs.c.flags="-I{build.system.path}/libstm32f4" "-I{build.system.path}/libstm32f4/include" "-I{build.system.path}/Drivers/STM32F4xx_HAL_Driver/Inc/" "-I{build.system.path}/Drivers/CMSIS/Include/" "-I{build.system.path}/Drivers/CMSIS/Device/ST/STM32F4xx/Include" "-I{build.system.path}/Middlewares/ST/STM32_USB_Device_Library/Core/Inc" "-I{build.variant.path}/usb" "-I{build.system.path}/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc/" "-I{build.system.path}/Drivers/BSP/Components" "-I{build.system.path}/Middlewares/Third_Party/FatFs/src"
+
+compiler.warning_flags=-w
+compiler.warning_flags.none=-w
+compiler.warning_flags.default=
+compiler.warning_flags.more=-Wall
+compiler.warning_flags.all=-Wall -Wextra
+
+# STM32 compile patterns
 # -----------------------
 
 ## Compile c files
@@ -66,7 +72,7 @@ recipe.S.o.pattern="{compiler.path}{compiler.c.cmd}" {compiler.S.flags} -mcpu={b
 recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} {compiler.ar.extra_flags} "{build.path}/{archive_file}" "{object_file}"
 
 ## Combine gc-sections, archives, and objects
-recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" {compiler.c.elf.flags} -mcpu={build.mcu} "-T{build.variant.path}/{build.ldscript}" "-Wl,-Map,{build.path}/{build.project_name}.map" {compiler.c.elf.extra_flags} -o "{build.path}/{build.project_name}.elf" "-L{build.path}" -lm -lgcc -mthumb -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl,--warn-section-align -Wl,--warn-unresolved-symbols -Wl,--start-group {object_files} -Wl,--whole-archive "{build.path}/{archive_file}" -Wl,--no-whole-archive -Wl,--end-group
+recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" {compiler.c.elf.flags} -mcpu={build.mcu} "-T{build.variant.path}/{build.ldscript}" "-Wl,-Map,{build.path}/{build.project_name}.map" {compiler.c.elf.extra_flags} -o "{build.path}/{build.project_name}.elf" "-L{build.path}" -lm -lgcc -mthumb -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl,--warn-section-align -Wl,--warn-unresolved-symbols -Wl,--start-group "{build.path}/syscalls.c.o" {object_files} -Wl,--whole-archive  "{build.variant.path}/{build.variant_system_lib}" -Wl,--no-whole-archive "{build.path}/{archive_file}" -Wl,--end-group
 
 ## Create eeprom
 recipe.objcopy.eep.pattern=

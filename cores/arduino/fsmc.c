@@ -42,53 +42,53 @@
  */
 void fsmc_sram_init_gpios(void) {
     /* Data lines... */
-    gpio_set_mode(GPIOD,  0, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOD,  1, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOD,  8, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOD,  9, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOD, 10, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOD, 14, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOD, 15, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOE,  7, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOE,  8, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOE,  9, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOE, 10, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOE, 11, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOE, 12, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOE, 13, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOE, 14, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOE, 15, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOD_dev,  0, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOD_dev,  1, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOD_dev,  8, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOD_dev,  9, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOD_dev, 10, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOD_dev, 14, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOD_dev, 15, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOE_dev,  7, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOE_dev,  8, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOE_dev,  9, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOE_dev, 10, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOE_dev, 11, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOE_dev, 12, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOE_dev, 13, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOE_dev, 14, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOE_dev, 15, GPIO_AF_OUTPUT_PP);
 
     /* Address lines... */
-    gpio_set_mode(GPIOD, 11, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOD, 12, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOD, 13, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOF,  0, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOF,  1, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOF,  2, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOF,  3, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOF,  4, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOF,  5, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOF, 12, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOF, 13, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOF, 14, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOF, 15, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOG,  0, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOG,  1, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOG,  2, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOG,  3, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOG,  4, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOG,  5, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOD_dev, 11, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOD_dev, 12, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOD_dev, 13, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOF_dev,  0, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOF_dev,  1, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOF_dev,  2, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOF_dev,  3, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOF_dev,  4, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOF_dev,  5, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOF_dev, 12, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOF_dev, 13, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOF_dev, 14, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOF_dev, 15, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOG_dev,  0, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOG_dev,  1, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOG_dev,  2, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOG_dev,  3, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOG_dev,  4, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOG_dev,  5, GPIO_AF_OUTPUT_PP);
 
     /* And control lines... */
-    gpio_set_mode(GPIOD,  4, GPIO_AF_OUTPUT_PP);   // NOE
-    gpio_set_mode(GPIOD,  5, GPIO_AF_OUTPUT_PP);   // NWE
+    gpio_set_mode(GPIOD_dev,  4, GPIO_AF_OUTPUT_PP);   // NOE
+    gpio_set_mode(GPIOD_dev,  5, GPIO_AF_OUTPUT_PP);   // NWE
 
-    gpio_set_mode(GPIOD,  7, GPIO_AF_OUTPUT_PP);   // NE1
-    gpio_set_mode(GPIOG,  9, GPIO_AF_OUTPUT_PP);   // NE2
-    gpio_set_mode(GPIOG, 10, GPIO_AF_OUTPUT_PP);   // NE3
-    gpio_set_mode(GPIOG, 12, GPIO_AF_OUTPUT_PP);   // NE4
+    gpio_set_mode(GPIOD_dev,  7, GPIO_AF_OUTPUT_PP);   // NE1
+    gpio_set_mode(GPIOG_dev,  9, GPIO_AF_OUTPUT_PP);   // NE2
+    gpio_set_mode(GPIOG_dev, 10, GPIO_AF_OUTPUT_PP);   // NE3
+    gpio_set_mode(GPIOG_dev, 12, GPIO_AF_OUTPUT_PP);   // NE4
 
-    gpio_set_mode(GPIOE,  0, GPIO_AF_OUTPUT_PP);   // NBL0
-    gpio_set_mode(GPIOE,  1, GPIO_AF_OUTPUT_PP);   // NBL1
+    gpio_set_mode(GPIOE_dev,  0, GPIO_AF_OUTPUT_PP);   // NBL0
+    gpio_set_mode(GPIOE_dev,  1, GPIO_AF_OUTPUT_PP);   // NBL1
 }

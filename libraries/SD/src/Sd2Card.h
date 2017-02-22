@@ -23,7 +23,7 @@
 #define Sd2Card_h
 
 /* otto includes component */
-#include "BSP/OTTO/otto_sd.h"
+#include "otto_sd.h"
 
 #define   FALSE      ((uint8_t)0x00)
 #define   TRUE       ((uint8_t)0x01)

@@ -204,47 +204,27 @@ static const struct rcc_dev_info rcc_dev_table[] = {
 #define FLASH_ACR_BYTE0_ADDRESS              ((uint32)0x40023C00)
 #define FLASH_ACR_BYTE2_ADDRESS              ((uint32)0x40023C03)
 
-typedef struct
-{
-  __io uint32 CR;   /*!< PWR power control register,        Address offset: 0x00 */
-  __io uint32 CSR;  /*!< PWR power control/status register, Address offset: 0x04 */
-} PWR_TypeDef;
-
 #define PWR_BASE                             (0x40007000)
 #define PWR                                  ((PWR_TypeDef *) PWR_BASE)
 #define PWR_CR_VOS                           ((uint16)0x4000)     /*!< Regulator voltage scaling output selection */
-
-typedef struct
-{
-  __io uint32 ACR;      /*!< FLASH access control register, Address offset: 0x00 */
-  __io uint32 KEYR;     /*!< FLASH key register,            Address offset: 0x04 */
-  __io uint32 OPTKEYR;  /*!< FLASH option key register,     Address offset: 0x08 */
-  __io uint32 SR;       /*!< FLASH status register,         Address offset: 0x0C */
-  __io uint32 CR;       /*!< FLASH control register,        Address offset: 0x10 */
-  __io uint32 OPTCR;    /*!< FLASH option control register, Address offset: 0x14 */
-} FLASH_TypeDef;
 
 #define FLASH_R_BASE          (0x40023C00)
 #define FLASH               ((FLASH_TypeDef *) FLASH_R_BASE)
 #define RESET 0
 
-//typedef uint32 uint32_t;
-
 void InitMCO1()
 {
-    rcc_reg_map *RCC = RCC_BASE;
+    rcc_reg_map *rcc = RCC_BASE;
     // Turn MCO1 Master Clock Output mode
-    RCC->CFGR &= RCC_CFGR_MCO1_RESET_MASK;
-    RCC->CFGR |= RCC_CFGR_MCO1Source_PLLCLK | RCC_CFGR_MCO1Div_1;
+    rcc->CFGR &= RCC_CFGR_MCO1_RESET_MASK;
+    rcc->CFGR |= RCC_CFGR_MCO1Source_PLLCLK | RCC_CFGR_MCO1Div_1;
     // PA8 Output the Master Clock MCO1
-    gpio_set_af_mode(GPIOA, 8, 0);
-    gpio_set_mode(GPIOA, 8, GPIO_MODE_AF | GPIO_OTYPE_PP | GPIO_OSPEED_100MHZ);
+    gpio_set_af_mode(GPIOA_dev, 8, 0);
+    gpio_set_mode(GPIOA_dev, 8, GPIO_MODE_AF | GPIO_OTYPE_PP | GPIO_OSPEED_100MHZ);
 }
-
 
 void SetupClock() // to be setted properly
 {
-	uint32_t SystemCoreClock = 18000000;
 
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
   RCC_OscInitTypeDef RCC_OscInitStruct;

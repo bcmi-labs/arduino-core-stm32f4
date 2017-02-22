@@ -94,27 +94,27 @@ typedef struct gpio_dev {
 } gpio_dev;
 
 extern gpio_dev gpioa;
-extern gpio_dev* const GPIOA;
+extern gpio_dev* const GPIOA_dev;
 extern gpio_dev gpiob;
-extern gpio_dev* const GPIOB;
+extern gpio_dev* const GPIOB_dev;
 extern gpio_dev gpioc;
-extern gpio_dev* const GPIOC;
+extern gpio_dev* const GPIOC_dev;
 extern gpio_dev gpiod;
-extern gpio_dev* const GPIOD;
+extern gpio_dev* const GPIOD_dev;
 extern gpio_dev gpioe;
-extern gpio_dev* const GPIOE;
+extern gpio_dev* const GPIOE_dev;
 extern gpio_dev gpiof;
-extern gpio_dev* const GPIOF;
+extern gpio_dev* const GPIOF_dev;
 extern gpio_dev gpiog;
-extern gpio_dev* const GPIOG;
+extern gpio_dev* const GPIOG_dev;
 extern gpio_dev gpioh;
-extern gpio_dev* const GPIOH;
+extern gpio_dev* const GPIOH_dev;
 extern gpio_dev gpioi;
-extern gpio_dev* const GPIOI;
+extern gpio_dev* const GPIOI_dev;
 extern gpio_dev gpioj;
-extern gpio_dev* const GPIOJ;
+extern gpio_dev* const GPIOJ_dev;
 extern gpio_dev gpiok;
-extern gpio_dev* const GPIOK;
+extern gpio_dev* const GPIOK_dev;
 
 /** GPIO port register map base pointer */
 #define GPIOA_BASE                      ((struct gpio_reg_map*)0x40020000)

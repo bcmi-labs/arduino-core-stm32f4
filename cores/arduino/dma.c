@@ -60,7 +60,7 @@ static dma_dev dma1 = {
                  { .handler = NULL, .irq_line = 47 }}
 };
 
-dma_dev *DMA1 = &dma1;
+dma_dev *DMA1_dev = &dma1;
 
 /** DMA2 device */
 static dma_dev dma2 = {
@@ -76,7 +76,7 @@ static dma_dev dma2 = {
                  { .handler = NULL, .irq_line = 70 }} /* !@#$ */
 };
 
-dma_dev *DMA2 = &dma2;
+dma_dev *DMA2_dev = &dma2;
 
 /*
  * Convenience routines
@@ -167,65 +167,65 @@ static inline void dispatch_handler(dma_dev *dev, dma_stream stream) {
 }
 
 void __irq_dma1_channel1(void) {
-    dispatch_handler(DMA1, DMA_STREAM0);
+    dispatch_handler(DMA1_dev, DMA_STREAM0);
 }
 
 void __irq_dma1_channel2(void) {
-    dispatch_handler(DMA1, DMA_STREAM1);
+    dispatch_handler(DMA1_dev, DMA_STREAM1);
 }
 
 void __irq_dma1_channel3(void) {
-    dispatch_handler(DMA1, DMA_STREAM2);
+    dispatch_handler(DMA1_dev, DMA_STREAM2);
 }
 
 void __irq_dma1_channel4(void) {
-    dispatch_handler(DMA1, DMA_STREAM3);
+    dispatch_handler(DMA1_dev, DMA_STREAM3);
 }
 
 void __irq_dma1_channel5(void) {
-    dispatch_handler(DMA1, DMA_STREAM4);
+    dispatch_handler(DMA1_dev, DMA_STREAM4);
 }
 
 void __irq_dma1_channel6(void) {
-    dispatch_handler(DMA1, DMA_STREAM5);
+    dispatch_handler(DMA1_dev, DMA_STREAM5);
 }
 
 void __irq_dma1_channel7(void) {
-    dispatch_handler(DMA1, DMA_STREAM6);
+    dispatch_handler(DMA1_dev, DMA_STREAM6);
 }
 
 void __irq_adc3(void) {
-    dispatch_handler(DMA1, DMA_STREAM7);
+    dispatch_handler(DMA1_dev, DMA_STREAM7);
 }
 
 void __irq_dma2_channel1(void) {
-    dispatch_handler(DMA2, DMA_STREAM0);
+    dispatch_handler(DMA2_dev, DMA_STREAM0);
 }
 
 void __irq_dma2_channel2(void) {
-    dispatch_handler(DMA2, DMA_STREAM1);
+    dispatch_handler(DMA2_dev, DMA_STREAM1);
 }
 
 void __irq_dma2_channel3(void) {
-    dispatch_handler(DMA2, DMA_STREAM2);
+    dispatch_handler(DMA2_dev, DMA_STREAM2);
 }
 
 void __irq_dma2_channel4_5(void) {
-    dispatch_handler(DMA2, DMA_STREAM3);
+    dispatch_handler(DMA2_dev, DMA_STREAM3);
 }
 
 void __irq_DMA2_Stream4_IRQHandler(void) {
-    dispatch_handler(DMA2, DMA_STREAM4);
+    dispatch_handler(DMA2_dev, DMA_STREAM4);
 }
 
 void __irq_DMA2_Stream5_IRQHandler(void) {
-    dispatch_handler(DMA2, DMA_STREAM5);
+    dispatch_handler(DMA2_dev, DMA_STREAM5);
 }
 
 void __irq_DMA2_Stream6_IRQHandler(void) {
-    dispatch_handler(DMA2, DMA_STREAM6);
+    dispatch_handler(DMA2_dev, DMA_STREAM6);
 }
 
 void __irq_DMA2_Stream7_IRQHandler(void) {
-    dispatch_handler(DMA2, DMA_STREAM7);
+    dispatch_handler(DMA2_dev, DMA_STREAM7);
 }

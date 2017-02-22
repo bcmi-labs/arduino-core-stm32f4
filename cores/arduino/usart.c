@@ -51,7 +51,7 @@ static usart_dev usart1 = {
     .irq_num  = NVIC_USART1
 };
 
-usart_dev *USART1 = &usart1;
+usart_dev *USART1_dev = &usart1;
 
 /** USART2 device */
 static usart_dev usart2 = {
@@ -61,7 +61,7 @@ static usart_dev usart2 = {
     .irq_num  = NVIC_USART2
 };
 
-usart_dev *USART2 = &usart2;
+usart_dev *USART2_dev = &usart2;
 
 /** USART3 device */
 static usart_dev usart3 = {
@@ -71,7 +71,7 @@ static usart_dev usart3 = {
     .irq_num  = NVIC_USART3
 };
 
-usart_dev *USART3 = &usart3;
+usart_dev *USART3_dev = &usart3;
 
 /** UART4 device */
 static usart_dev uart4 = {
@@ -81,7 +81,7 @@ static usart_dev uart4 = {
     .irq_num  = NVIC_UART4
 };
 
-usart_dev *UART4 = &uart4;
+usart_dev *UART4_dev = &uart4;
 
 /** UART5 device */
 static usart_dev uart5 = {
@@ -91,7 +91,7 @@ static usart_dev uart5 = {
     .irq_num  = NVIC_UART5
 };
 
-usart_dev *UART5 = &uart5;
+usart_dev *UART5_dev = &uart5;
 
 /** USART6 device */
 static usart_dev usart6 = {
@@ -101,7 +101,7 @@ static usart_dev usart6 = {
     .irq_num  = NVIC_USART6
 };
 
-usart_dev *USART6 = &usart6;
+usart_dev *USART6_dev = &usart6;
 
 /** UART7 device */
 static usart_dev uart7 = {
@@ -111,7 +111,7 @@ static usart_dev uart7 = {
     .irq_num  = NVIC_UART7
 };
 
-usart_dev *UART7 = &uart7;
+usart_dev *UART7_dev = &uart7;
 
 /** UART8 device */
 static usart_dev uart8 = {
@@ -121,7 +121,7 @@ static usart_dev uart8 = {
     .irq_num  = NVIC_UART8
 };
 
-usart_dev *UART8 = &uart8;
+usart_dev *UART8_dev = &uart8;
 
 /**
  * @brief Initialize a serial port.
@@ -221,14 +221,14 @@ void usart_disable(usart_dev *dev) {
  *  @param fn Function to call.
  */
 void usart_foreach(void (*fn)(usart_dev*)) {
-    fn(USART1);
-    fn(USART2);
-    fn(USART3);
-    fn(UART4);
-    fn(UART5);
-    fn(USART6);
-    fn(UART7);
-    fn(UART8);
+    fn(USART1_dev);
+    fn(USART2_dev);
+    fn(USART3_dev);
+    fn(UART4_dev);
+    fn(UART5_dev);
+    fn(USART6_dev);
+    fn(UART7_dev);
+    fn(UART8_dev);
 }
 
 /**
@@ -311,33 +311,33 @@ static inline void usart_irq(usart_dev *dev) {
 }
 
 void __irq_usart1(void) {
-    usart_irq(USART1);
+    usart_irq(USART1_dev);
 }
 
 void __irq_usart2(void) {
-    usart_irq(USART2);
+    usart_irq(USART2_dev);
 }
 
 void __irq_usart3(void) {
-    usart_irq(USART3);
+    usart_irq(USART3_dev);
 }
 
 void __irq_uart4(void) {
-    usart_irq(UART4);
+    usart_irq(UART4_dev);
 }
 
 void __irq_uart5(void) {
-    usart_irq(UART5);
+    usart_irq(UART5_dev);
 }
 
 void __irq_USART6_IRQHandler(void) {
-    usart_irq(USART6);
+    usart_irq(USART6_dev);
 }
 
 void __irq_UART7_IRQHandler(void) {
-    usart_irq(UART7);
+    usart_irq(UART7_dev);
 }
 
 void __irq_UART8_IRQHandler(void) {
-    usart_irq(UART8);
+    usart_irq(UART8_dev);
 }
