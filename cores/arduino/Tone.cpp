@@ -52,7 +52,7 @@ void tone(uint8_t pin, unsigned int frequency, unsigned long duration)
   if (duration > 0 ) toggle_count = 2 * frequency * duration / 1000;
    else toggle_count = -1;
   timer.setPrescaleFactor(CYCLES_PER_MICROSECOND);  // microseconds
-  timer.setOverflow(1000000/frequency/4);
+  timer.setOverflow(1000000/frequency/16);
 	timer.setMode(TIMER_CH1, TIMER_OUTPUT_COMPARE);
   timer.setCompare(TIMER_CH1, 1);  // Interrupt 1 count after each update
 	timer.toneAttachInterrupt(TIMER_CH1, handler_tone);

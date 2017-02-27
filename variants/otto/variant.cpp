@@ -40,7 +40,8 @@
  * 2016 Dec 20: Modified for HW rev 3
  */
 
-#include "otto.h"
+//#include "otto.h"
+#include "variant.h"
 
 #include "gpio.h"
 #include "rcc.h"
@@ -243,4 +244,3 @@ extern const uint8 boardPWMPins[BOARD_NR_PWM_PINS] __FLASH__ = {
 extern const uint8 boardADCPins[BOARD_NR_ADC_PINS] __FLASH__ = {
     54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67
 };
-
