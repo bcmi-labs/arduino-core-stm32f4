@@ -15,5 +15,9 @@
 #include "WProgram.h"
 #endif
 
+typedef uint8 boolean;
+typedef uint8 byte;
+
 #include "variant.h"
 #include "Tone.h"
+#include "WCharacter.h"
