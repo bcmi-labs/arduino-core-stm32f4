@@ -193,6 +193,6 @@ private:
 };
 
 extern SPIClass SPI;
-extern SPIClass SPI_1;
+extern SPIClass SPI7;
 
 #endif

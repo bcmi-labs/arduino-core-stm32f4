@@ -46,7 +46,7 @@
 #define USART2_RX_GPIO_PIN 	6
 #define USART2_RX_AF		7
 
-// USART3 - Serial1 / SerialESP
+// USART3 - Serial1 / SerialWiFi
 #define USART3_TX_GPIO_DEV	GPIOB_dev
 #define USART3_TX_GPIO_PIN 	10
 #define USART3_TX_AF		7
