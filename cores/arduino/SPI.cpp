@@ -345,4 +345,4 @@ void SPIClass::end(uint8_t slaveSelectPin)
 }
 
 SPIClass SPI = SPIClass(SPI2);
-SPIClass SPI_1 = SPIClass(SPI1);
+SPIClass SPI7 = SPIClass(SPI1);
