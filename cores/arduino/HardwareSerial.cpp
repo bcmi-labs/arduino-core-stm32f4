@@ -48,7 +48,7 @@ HardwareSerial Serial0(UART4_dev);
 HardwareSerial Serial1(USART3_dev);
 HardwareSerial Serial2(USART2_dev);
 HardwareSerial Serial3(USART6_dev);
-HardwareSerial SerialESP(USART3_dev);
+HardwareSerial SerialWiFi(USART3_dev);
 
 HardwareSerial::HardwareSerial(usart_dev *usart_device)
 {
