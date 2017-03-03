@@ -49,6 +49,14 @@
  * @see pinMode()
  */
 typedef enum WiringPinMode {
+    INPUT, /**< Basic digital input. The pin voltage is sampled; when
+              it is closer to 3.3v (Vcc) the pin status is high, and
+              when it is closer to 0v (ground) it is low. If no
+              external circuit is pulling the pin voltage to high or
+              low, it will tend to randomly oscillate and be very
+              sensitive to noise (e.g., a breath of air across the pin
+              might cause the state to flip). */
+              
     OUTPUT, /**< Basic digital output: when the pin is HIGH, the
                voltage is held at +3.3v (Vcc) and when it is LOW, it
                is pulled down to ground. */
@@ -69,13 +77,7 @@ typedef enum WiringPinMode {
                           mode, no current is ever actually sourced
                           from the pin. */
 
-    INPUT, /**< Basic digital input. The pin voltage is sampled; when
-              it is closer to 3.3v (Vcc) the pin status is high, and
-              when it is closer to 0v (ground) it is low. If no
-              external circuit is pulling the pin voltage to high or
-              low, it will tend to randomly oscillate and be very
-              sensitive to noise (e.g., a breath of air across the pin
-              might cause the state to flip). */
+
 
     INPUT_PULLUP, /**< The state of the pin in this mode is reported
                      the same way as with INPUT, but the pin voltage
