@@ -38,7 +38,7 @@
 #include "Arduino.h"
 #include "dac.h"
 
-void pinMode(uint8 pin, WiringPinMode mode)
+void pinMode(uint8 pin, uint8 mode)
 {
     gpio_pin_mode outputMode;
     boolean pwm = false;
