@@ -99,14 +99,6 @@ tools.dfu-util.upload.params.quiet=
 tools.dfu-util.upload.pattern="{path}/{cmd}" "{path}" {upload.usbID} {upload.altID} {upload.mem_start} "{build.path}/{build.project_name}.bin"
 
 #
-# arduino_mcuota
-# --------
-
-tools.dfu-util.network_cmd={runtime.tools.arduino_mcuota-0.0.1.path}/arduino_mcuota
-tools.dfu-util.network_cmd.windows={runtime.tools.arduino_mcuota-0.0.1.path}/arduino_mcuota.exe
-tools.dfu-util.upload.network_pattern="{network_cmd}" -i {serial.port} -p {upload.network.port} -f "{build.path}/{build.project_name}.hex"
-
-#
 # USB Flags
 # ---------
 

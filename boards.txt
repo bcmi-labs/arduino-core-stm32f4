@@ -14,7 +14,6 @@ star_otto.upload.ram.maximum_size=323584
 star_otto.upload.flash.maximum_size=2097152
 star_otto.upload.maximum_size=2097152
 star_otto.upload.mem_start=0x08000000
-star_otto.upload.network.port=80
 
 star_otto.upload.usbID=0483:DF11
 star_otto.upload.altID=0
