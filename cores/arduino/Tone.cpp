@@ -40,7 +40,7 @@ Version Modified By Date     Comments
 
 volatile static int toggle_count=0;
 static int tone_pin;
-int timer_CH = 2;
+int timer_CH = 5;
 
 HardwareTimer timer(timer_CH);
 
@@ -52,10 +52,10 @@ void tone(uint8_t pin, unsigned int frequency, unsigned long duration)
   if (duration > 0 ) toggle_count = 2 * frequency * duration / 1000;
    else toggle_count = -1;
   timer.setPrescaleFactor(CYCLES_PER_MICROSECOND);  // microseconds
-  timer.setOverflow(1000000/frequency/4);
+  timer.setOverflow(1000000/frequency/16);
 	timer.setMode(TIMER_CH1, TIMER_OUTPUT_COMPARE);
   timer.setCompare(TIMER_CH1, 1);  // Interrupt 1 count after each update
-	timer.attachInterrupt(TIMER_CH1, handler_tone);
+	timer.toneAttachInterrupt(TIMER_CH1, handler_tone);
   timer.refresh(); // start it up
   timer.resume();
 
@@ -66,17 +66,23 @@ void tone(uint8_t pin, unsigned int frequency, unsigned long duration)
 void noTone(uint8_t pin)
 {
     timer.pause();
-    gpio_write_bit(PIN_MAP[pin].gpio_device, PIN_MAP[pin].gpio_bit, 0);
+		timer.setPrescaleFactor(1);
+		timer.setOverflow(0xFFFF);
+		timer.setMode(TIMER_CH1, TIMER_PWM);
+		timer.refresh();
+	  timer.resume();
+		gpio_write_bit(PIN_MAP[pin].gpio_device, PIN_MAP[pin].gpio_bit, 0);
+		pinMode(pin,INPUT); //to fix dfu issue
 
-return;
+		return;
 }
-
+/*
 void set_timer(int ch)
 {
   HardwareTimer timer(ch);
   timer_CH = ch;
 }
-
+*/
 void handler_tone(void)
 {
   if (toggle_count != 0){

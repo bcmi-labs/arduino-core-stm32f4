@@ -128,6 +128,10 @@ void HardwareTimer::attachInterrupt(int channel, voidFuncPtr handler) {
     timer_attach_interrupt(this->dev, (uint8)channel, handler);
 }
 
+void HardwareTimer::toneAttachInterrupt(int channel, voidFuncPtr handler) {
+    tone_attach_interrupt(this->dev, (uint8)channel, handler);
+}
+
 void HardwareTimer::detachInterrupt(int channel) {
     timer_detach_interrupt(this->dev, (uint8)channel);
 }

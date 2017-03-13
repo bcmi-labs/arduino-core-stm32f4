@@ -52,7 +52,7 @@ static adc_dev adc1 = {
     .clk_id = RCC_ADC1
 };
 
-const adc_dev *ADC1 = &adc1;
+const adc_dev *ADC1_dev = &adc1;
 
 /* ADC2 device. */
 static adc_dev adc2 = {
@@ -60,7 +60,7 @@ static adc_dev adc2 = {
     .clk_id = RCC_ADC2
 };
 
-const adc_dev *ADC2 = &adc2;
+const adc_dev *ADC2_dev = &adc2;
 
 /* ADC3 device. */
 adc_dev adc3 = {
@@ -68,7 +68,7 @@ adc_dev adc3 = {
     .clk_id = RCC_ADC3
 };
 
-const adc_dev *ADC3 = &adc3;
+const adc_dev *ADC3_dev = &adc3;
 
 
 /**
@@ -105,9 +105,9 @@ void adc_set_extsel(const adc_dev *dev, adc_extsel_event event) {
  * @param fn Function to call on each ADC device.
  */
 void adc_foreach(void (*fn)(const adc_dev*)) {
-    fn(ADC1);
-    fn(ADC2);
-    fn(ADC3);
+    fn(ADC1_dev);
+    fn(ADC2_dev);
+    fn(ADC3_dev);
 }
 
 /**

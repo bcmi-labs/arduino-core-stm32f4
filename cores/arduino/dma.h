@@ -163,8 +163,8 @@ typedef struct dma_dev {
                                     */
 } dma_dev;
 
-extern dma_dev *DMA1;
-extern dma_dev *DMA2;
+extern dma_dev *DMA1_dev;
+extern dma_dev *DMA2_dev;
 
 /*
  * Convenience functions

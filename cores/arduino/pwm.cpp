@@ -57,9 +57,9 @@ void analogWrite(uint8 pin, uint16 passed_val)
 
 
 
-		if (pin == DAC0) dac_write_channel(DAC,1,duty_cycle);
+		if (pin == DAC0) dac_write_channel(DAC_dev,1,duty_cycle);
 
-		if (pin == DAC1) dac_write_channel(DAC,2,duty_cycle);
+		if (pin == DAC1) dac_write_channel(DAC_dev,2,duty_cycle);
 	}
 	else
 	{
@@ -67,7 +67,7 @@ void analogWrite(uint8 pin, uint16 passed_val)
         timer_dev *dev = PIN_MAP[pin].timer_device;
     	if (pin >= GPIO_PINS || dev == NULL || dev->type == TIMER_BASIC)
     	{
-        	return;
+					return;
     	}
 		  if (PIN_MAP[pin].alternate_function != AFx)
 			{
@@ -76,6 +76,7 @@ void analogWrite(uint8 pin, uint16 passed_val)
 		timer_set_compare(dev, PIN_MAP[pin].timer_channel, duty_cycle);
 		timer_cc_enable(dev, PIN_MAP[pin].timer_channel);
 		gpio_set_mode(PIN_MAP[pin].gpio_device, PIN_MAP[pin].gpio_bit, GPIO_AF_OUTPUT_PP);
+
 	}
 }
 
@@ -88,13 +89,13 @@ void setDac (uint8 pin)
                 {
                     // Enablin all channel
                     ADC0_Status = true;
-                    dac_init(DAC, DAC_CH1 | DAC_CH2);
+                    dac_init(DAC_dev, DAC_CH1 | DAC_CH2);
                 }
                 else
                 {
                     // Enabling DAC0 (port A4)
                     ADC0_Status = true;
-                    dac_init(DAC, DAC_CH1);
+                    dac_init(DAC_dev, DAC_CH1);
                 }
             }
             if (pin == DAC1)
@@ -103,13 +104,13 @@ void setDac (uint8 pin)
                 {
                     // Enabling all channel
                     ADC1_Status = true;
-                    dac_init(DAC, DAC_CH1 | DAC_CH2);
+                    dac_init(DAC_dev, DAC_CH1 | DAC_CH2);
                 }
                 else
                 {
                     // Enablink DAC1 (port A5)
                     ADC1_Status = true;
-                    dac_init(DAC, DAC_CH2);
+                    dac_init(DAC_dev, DAC_CH2);
                 }
             }
 }

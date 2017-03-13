@@ -25,8 +25,8 @@
 #include "Sd2Card.h"
 
 /* FatFs includes component */
-#include "FatFs/src/ff_gen_drv.h"
-#include "FatFs/src/drivers/sd_diskio.h"
+#include "ff_gen_drv.h"
+#include "drivers/sd_diskio.h"
 
 // To match Arduino definition
 #define   FILE_WRITE  FA_WRITE

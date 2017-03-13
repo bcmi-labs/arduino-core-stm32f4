@@ -605,6 +605,11 @@ typedef enum timer_interrupt_id {
 void timer_attach_interrupt(timer_dev *dev,
                             uint8 interrupt,
                             voidFuncPtr handler);
+
+void tone_attach_interrupt(timer_dev *dev,
+                           uint8 interrupt,
+                           voidFuncPtr handler);
+
 void timer_detach_interrupt(timer_dev *dev, uint8 interrupt);
 
 /**

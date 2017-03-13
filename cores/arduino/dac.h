@@ -82,7 +82,7 @@ typedef struct dac_dev {
     dac_reg_map *regs; /**< Register map */
 } dac_dev;
 
-extern const dac_dev *DAC;
+extern const dac_dev *DAC_dev;
 
 /*
  * Register bit definitions

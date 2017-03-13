@@ -192,6 +192,7 @@ public:
      * @see voidFuncPtr
      */
     void attachInterrupt(int channel, voidFuncPtr handler);
+    void toneAttachInterrupt(int channel, voidFuncPtr handler); // alfran : used for tone
 
     /**
      * @brief Remove the interrupt handler attached to the given

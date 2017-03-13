@@ -35,7 +35,7 @@
  */
 
 #include "types.h"
-#include "HAL/inc/stm32f4xx_hal.h"
+#include "stm32f4xx_hal.h"
 
 #ifndef _RCC_H_
 #define _RCC_H_

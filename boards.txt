@@ -1,9 +1,8 @@
-# edited 01 jun 2016 - Arduino Srl (http://www.arduino.org/) - Francesco Alessi (alfran) - francesco@arduino.org
 
 ##############################################################
 star_otto.name=Arduino Star OTTO
 
-star_otto.vid.0=0x2341
+star_otto.vid.0=0x2A03
 star_otto.pid.0=0x0058
 
 star_otto.upload.tool=dfu-util
@@ -20,12 +19,15 @@ star_otto.upload.usbID=0483:DF11
 star_otto.upload.altID=0
 
 star_otto.build.mcu=cortex-m4
+star_otto.build.board=STM32_STAR_OTTO
 star_otto.build.f_cpu=180000000L
 star_otto.build.core=arduino
-star_otto.build.extra_flags=-DMCU_STM32F469NI -mthumb -DSTM32_HIGH_DENSITY -DSTM32F2 -DSTM32F4 -DBOARD_discovery_f4
+star_otto.build.esp_ch_uart_br=460800
+star_otto.build.extra_flags=-DSTM32F469xx -DMCU_STM32F469NI -mthumb -DSTM32_HIGH_DENSITY -DESP_CH_UART -DESP_CH_UART_BR={build.esp_ch_uart_br}
 star_otto.build.ldscript=link-tools/jtag.ld
 star_otto.build.variant=otto
-star_otto.build.variant_system_lib=lib_f469.a
+star_otto.build.variant_system_lib=libstm32f4_otto_gcc_rel.a
 star_otto.build.vect=VECT_TAB_BASE
 star_otto.build.density=STM32_HIGH_DENSITY
+
 ##############################################################

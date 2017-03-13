@@ -50,8 +50,8 @@
 #include "memory.h"
 #include "gpio.h"
 #include "timer.h"
-
 #include "wiring_types.h"
+#include "variant.h"
 
 /* Set of all possible pin names; not all boards have all these (note
  * that we use the Dx convention since all of the Maple's pins are
@@ -133,8 +133,6 @@ bool boardUsesPin(uint8 pin);
  * Maple with an STM32F103RET6 (...RET6) instead of an STM32F103RBT6
  * (...RBT6) on it.  Maple Rev6 (as of March 2011) DOES NOT EXIST.
  */
-
-#include "otto.h"
 
 /*
  * TODO turn this into a warning so people can:

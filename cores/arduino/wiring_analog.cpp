@@ -63,9 +63,9 @@ void analogReadResolution(int resolution)
 {
 
 	/*##-1- Configure the ADC peripheral #######################################*/
-  AdcHandle_ADC1.Instance          = HAL_ADC1;
-  AdcHandle_ADC2.Instance          = HAL_ADC2;
-  AdcHandle_ADC3.Instance          = HAL_ADC3;
+  AdcHandle_ADC1.Instance          = ADC1;
+  AdcHandle_ADC2.Instance          = ADC2;
+  AdcHandle_ADC3.Instance          = ADC3;
 
   AdcHandle_ADC1.Init.ClockPrescaler        = ADC_CLOCKPRESCALER_PCLK_DIV4;
   AdcHandle_ADC2.Init.ClockPrescaler        = ADC_CLOCKPRESCALER_PCLK_DIV4;

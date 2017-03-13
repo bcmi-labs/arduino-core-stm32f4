@@ -44,11 +44,11 @@
 /* UART handler declaration */
 UART_HandleTypeDef UartHandle;
 
-HardwareSerial Serial0(UART4);
-HardwareSerial Serial1(USART3);
-HardwareSerial Serial2(USART2);
-HardwareSerial Serial3(USART6);
-HardwareSerial SerialESP(USART3);
+HardwareSerial Serial0(UART4_dev);
+HardwareSerial Serial1(USART3_dev);
+HardwareSerial Serial2(USART2_dev);
+HardwareSerial Serial3(USART6_dev);
+HardwareSerial SerialWiFi(USART3_dev);
 
 HardwareSerial::HardwareSerial(usart_dev *usart_device)
 {
@@ -64,7 +64,7 @@ void HardwareSerial::begin(uint32 baud)
         return;
     }
 
-    if (usart_device == USART1) // Arduino OTTO not use this device
+    if (usart_device == USART1_dev) // Arduino OTTO not use this device
     {
 
         // USART 1 pin definition
@@ -82,7 +82,7 @@ void HardwareSerial::begin(uint32 baud)
 
     }
 
-    else if (usart_device == USART2)
+    else if (usart_device == USART2_dev)
     {
         // USART 2 pin definition
 
@@ -98,7 +98,7 @@ void HardwareSerial::begin(uint32 baud)
         *((uint32_t*)(RCC_APB1ENR)) |= (1 << RCC_APB1ENR_USART2EN_BIT);
     }
 
-    else if (usart_device == USART3)
+    else if (usart_device == USART3_dev)
     {
         // USART 3 pin definition (Used also for ESP8266)
         // USART3 TX
@@ -113,7 +113,7 @@ void HardwareSerial::begin(uint32 baud)
         *((uint32_t*)(RCC_APB1ENR)) |= (1 << RCC_APB1ENR_USART3EN_BIT);
     }
 
-    else if (usart_device == UART4)
+    else if (usart_device == UART4_dev)
     {
 		// USART 4 pin definition
 
@@ -129,7 +129,7 @@ void HardwareSerial::begin(uint32 baud)
         *((uint32_t*)(RCC_APB1ENR)) |= (1 << RCC_APB1ENR_UART4EN_BIT);
     }
 
-    else if (usart_device == UART5) // Arduino OTTO not use this device
+    else if (usart_device == UART5_dev) // Arduino OTTO not use this device
     {
         // UART 5 pin definition
 
@@ -145,7 +145,7 @@ void HardwareSerial::begin(uint32 baud)
         *((uint32_t*)(RCC_APB1ENR)) |= (1 << RCC_APB1ENR_UART5EN_BIT);
     }
 
-    else if (usart_device == USART6)
+    else if (usart_device == USART6_dev)
     {
         // USART 6 pin definition
 
@@ -161,7 +161,7 @@ void HardwareSerial::begin(uint32 baud)
         *((uint32_t*)(RCC_APB2ENR)) |= (1 << RCC_APB2ENR_USART6EN_BIT);
     }
 
-    else if (usart_device == UART7) // Arduino OTTO not use this device
+    else if (usart_device == UART7_dev) // Arduino OTTO not use this device
     {
         // UART 7 pin definition
 
@@ -177,7 +177,7 @@ void HardwareSerial::begin(uint32 baud)
         *((uint32_t*)(RCC_APB1ENR)) |= (1 << RCC_APB1ENR_UART7EN_BIT);
     }
 
-    else if (usart_device == UART8) // Arduino OTTO not use this device
+    else if (usart_device == UART8_dev) // Arduino OTTO not use this device
     {
         // UART 8 pin definition
 

@@ -88,7 +88,7 @@ extern HardwareSerial Serial5;
 extern HardwareSerial Serial6;
 extern HardwareSerial Serial7;
 extern HardwareSerial Serial8;
-extern HardwareSerial SerialESP;
+extern HardwareSerial SerialWiFi;
 
 extern HardwareSerial &SerialDebug;
 #endif

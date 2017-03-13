@@ -24,8 +24,6 @@
  * SOFTWARE.
  *****************************************************************************/
 
- #ifdef STM32F2
-
 /**
  * @file gpio.c
  * @brief GPIO initialization routine
@@ -50,7 +48,7 @@ gpio_dev gpioa = {
     .clk_id    = RCC_GPIOA,
     .exti_port = AFIO_EXTI_PA,
 };
-gpio_dev* const GPIOA = &gpioa;
+gpio_dev* const GPIOA_dev = &gpioa;
 
 /** GPIO port B device. */
 gpio_dev gpiob = {
@@ -58,7 +56,7 @@ gpio_dev gpiob = {
     .clk_id    = RCC_GPIOB,
     .exti_port = AFIO_EXTI_PB,
 };
-gpio_dev* const GPIOB = &gpiob;
+gpio_dev* const GPIOB_dev = &gpiob;
 
 /** GPIO port C device. */
 gpio_dev gpioc = {
@@ -66,7 +64,7 @@ gpio_dev gpioc = {
     .clk_id    = RCC_GPIOC,
     .exti_port = AFIO_EXTI_PC,
 };
-gpio_dev* const GPIOC = &gpioc;
+gpio_dev* const GPIOC_dev = &gpioc;
 
 /** GPIO port D device. */
 gpio_dev gpiod = {
@@ -74,7 +72,7 @@ gpio_dev gpiod = {
     .clk_id    = RCC_GPIOD,
     .exti_port = AFIO_EXTI_PD,
 };
-gpio_dev* const GPIOD = &gpiod;
+gpio_dev* const GPIOD_dev = &gpiod;
 
 #ifdef STM32_HIGH_DENSITY
 
@@ -84,7 +82,7 @@ gpio_dev gpioe = {
     .clk_id    = RCC_GPIOE,
     .exti_port = AFIO_EXTI_PE,
 };
-gpio_dev* const GPIOE = &gpioe;
+gpio_dev* const GPIOE_dev = &gpioe;
 
 /** GPIO port F device. */
 gpio_dev gpiof = {
@@ -92,7 +90,7 @@ gpio_dev gpiof = {
     .clk_id    = RCC_GPIOF,
     .exti_port = AFIO_EXTI_PF,
 };
-gpio_dev* const GPIOF = &gpiof;
+gpio_dev* const GPIOF_dev = &gpiof;
 
 /** GPIO port G device. */
 gpio_dev gpiog = {
@@ -100,7 +98,7 @@ gpio_dev gpiog = {
     .clk_id    = RCC_GPIOG,
     .exti_port = AFIO_EXTI_PG,
 };
-gpio_dev* const GPIOG = &gpiog;
+gpio_dev* const GPIOG_dev = &gpiog;
 
 /** GPIO port H device. */
 gpio_dev gpioh = {
@@ -108,7 +106,7 @@ gpio_dev gpioh = {
     .clk_id    = RCC_GPIOH,
     .exti_port = AFIO_EXTI_PH,
 };
-gpio_dev* const GPIOH = &gpioh;
+gpio_dev* const GPIOH_dev = &gpioh;
 
 /** GPIO port I device. */
 gpio_dev gpioi = {
@@ -116,7 +114,7 @@ gpio_dev gpioi = {
     .clk_id    = RCC_GPIOI,
     .exti_port = AFIO_EXTI_PI,
 };
-gpio_dev* const GPIOI = &gpioi;
+gpio_dev* const GPIOI_dev = &gpioi;
 
 /** GPIO port J device. */
 gpio_dev gpioj = {
@@ -124,7 +122,7 @@ gpio_dev gpioj = {
     .clk_id    = RCC_GPIOJ,
     .exti_port = AFIO_EXTI_PJ,
 };
-gpio_dev* const GPIOJ = &gpioj;
+gpio_dev* const GPIOJ_dev = &gpioj;
 
 /** GPIO port K device. */
 gpio_dev gpiok = {
@@ -132,7 +130,7 @@ gpio_dev gpiok = {
     .clk_id    = RCC_GPIOK,
     .exti_port = AFIO_EXTI_PK,
 };
-gpio_dev* const GPIOK = &gpiok;
+gpio_dev* const GPIOK_dev = &gpiok;
 
 #endif
 
@@ -156,17 +154,17 @@ void gpio_init(gpio_dev *dev) {
  * Initialize and reset all available GPIO devices.
  */
 void gpio_init_all(void) {
-    gpio_init(GPIOA);
-    gpio_init(GPIOB);
-    gpio_init(GPIOC);
-    gpio_init(GPIOD);
-    gpio_init(GPIOE);
-    gpio_init(GPIOF);
-    gpio_init(GPIOG);
-    gpio_init(GPIOH);
-    gpio_init(GPIOI);
-    gpio_init(GPIOJ);
-    gpio_init(GPIOK);
+    gpio_init(GPIOA_dev);
+    gpio_init(GPIOB_dev);
+    gpio_init(GPIOC_dev);
+    gpio_init(GPIOD_dev);
+    gpio_init(GPIOE_dev);
+    gpio_init(GPIOF_dev);
+    gpio_init(GPIOG_dev);
+    gpio_init(GPIOH_dev);
+    gpio_init(GPIOI_dev);
+    gpio_init(GPIOJ_dev);
+    gpio_init(GPIOK_dev);
 }
 
 /**
@@ -246,4 +244,3 @@ void afio_remap(afio_remap_peripheral remapping) {
 }
 #endif
 
-#endif
