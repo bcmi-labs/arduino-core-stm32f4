@@ -19,7 +19,6 @@
 
 #ifndef Character_h
 #define Character_h
-//ciao
 #include <ctype.h>
 
 // WCharacter.h prototypes

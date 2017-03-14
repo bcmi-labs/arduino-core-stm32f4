@@ -1,12 +1,12 @@
 /*
   Listfiles
- 
- This example shows how print out the files in a 
- directory on a SD card 
- 	
+
+ This example shows how print out the files in a
+ directory on a SD card
+
  The circuit:
  * SD card attached
- 
+
  This example code is in the public domain.
 
  */
@@ -17,30 +17,30 @@ File root;
 void setup()
 {
   // Open serial communications and wait for port to open:
-  Serial.begin(9600);
-  while (!Serial) {
-    ; // wait for serial port to connect. Needed for Leonardo only
+  SerialUSB.begin(9600);
+  while (!SerialUSB) {
+    ; // wait for Serial port to connect. Needed for Leonardo only
   }
 
-  Serial.print("Initializing SD card...");
+  SerialUSB.print("Initializing SD card...");
   while (SD.begin(SD_DETECT_PIN) != TRUE)
   {
     delay(10);
   }
-  Serial.println("initialization done.");
+  SerialUSB.println("initialization done.");
 
   root = SD.open("/");
   if(root)
     printDirectory(root, 0);
   else
-    Serial.println("Could not open root");
+    SerialUSB.println("Could not open root");
   delay(2000);
-  Serial.println();
-  Serial.println("Rewinding, and repeating below:" );
-  Serial.println();
+  SerialUSB.println();
+  SerialUSB.println("Rewinding, and repeating below:" );
+  SerialUSB.println();
   delay(2000);
   root.rewindDirectory();
-  printDirectory(root, 0);    
+  printDirectory(root, 0);
   root.close();
 }
 
@@ -50,29 +50,26 @@ void loop()
 }
 
 void printDirectory(File dir, int numTabs) {
-   while(true) {  
+   while(true) {
      File entry =  dir.openNextFile();
      if (! entry) {
        // no more files
        break;
      }
      for (uint8_t i=0; i<numTabs; i++) {
-       Serial.print('\t');
-  
+       SerialUSB.print('\t');
+
      }
-     Serial.print(entry.name());
+     SerialUSB.print(entry.name());
      if (entry.isDirectory()) {
-       
-       Serial.println("/");
+
+       SerialUSB.println("/");
        printDirectory(entry, numTabs+1);
      } else {
        // files have sizes, directories do not
-       Serial.print("\t\t");
-       Serial.println(entry.size(), DEC);
+       SerialUSB.print("\t\t");
+       SerialUSB.println(entry.size(), DEC);
      }
      entry.close();
    }
 }
-
-
-

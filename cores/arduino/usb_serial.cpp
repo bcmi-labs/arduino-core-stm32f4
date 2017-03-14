@@ -57,7 +57,7 @@ extern __IO uint32_t UserRxBufPtrIn;
 extern __IO uint32_t UserRxBufPtrOut;
 __IO  uint32_t usbEnableBlockingTx;
 
-USBSerial Serial;
+//USBSerial Serial;
 USBSerial SerialUSB;
 
 

@@ -79,7 +79,7 @@ private:
     uint8 rx_pin;
 };
 
-extern HardwareSerial Serial0;
+extern HardwareSerial Serial;//Serial0;
 extern HardwareSerial Serial1;
 extern HardwareSerial Serial2;
 extern HardwareSerial Serial3;

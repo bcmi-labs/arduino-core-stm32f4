@@ -223,7 +223,7 @@ void InitMCO1()
     gpio_set_mode(GPIOA_dev, 8, GPIO_MODE_AF | GPIO_OTYPE_PP | GPIO_OSPEED_100MHZ);
 }
 
-void SetupClock() // to be setted properly
+void SetupClock()
 {
 
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
@@ -301,9 +301,6 @@ void SetupClock() // to be setted properly
   rcc_dev_clk_speed_table[RCC_APB2] = (SystemCoreClock/2);
   rcc_dev_clk_speed_table[RCC_APB1] = (SystemCoreClock/4);
 }
-
-// alfran ----- end
-
 
 void rcc_clk_init(rcc_sysclk_src sysclk_src,
                   rcc_pllsrc pll_src,

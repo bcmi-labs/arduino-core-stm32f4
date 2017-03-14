@@ -15,19 +15,19 @@
 void setup()
 {
   // Open serial communications and wait for port to open:
-  Serial.begin(9600);
-  while (!Serial) {
+  SerialUSB.begin(9600);
+  while (!SerialUSB) {
     ; // wait for serial port to connect. Needed for Leonardo only
   }
 
-  Serial.print("Initializing SD card...");
+  SerialUSB.print("Initializing SD card...");
   // see if the card is present and can be initialized:
   while (SD.begin(SD_DETECT_PIN) != TRUE)
   {
     delay(10);
   }
   delay(100);
-  Serial.println("card initialized.");
+  SerialUSB.println("card initialized.");
 }
 
 void loop()
@@ -54,20 +54,11 @@ void loop()
     dataFile.println(dataString);
     dataFile.close();
     // print to the serial port too:
-    Serial.println(dataString);
+    SerialUSB.println(dataString);
   }
   // if the file isn't open, pop up an error:
   else {
-    Serial.println("error opening datalog.txt");
+    SerialUSB.println("error opening datalog.txt");
   }
   delay(100);
 }
-
-
-
-
-
-
-
-
-

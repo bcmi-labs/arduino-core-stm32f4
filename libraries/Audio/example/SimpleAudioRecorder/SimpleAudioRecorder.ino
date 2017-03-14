@@ -10,7 +10,7 @@
  Original by Frederic Pillon November 09, 2016
 
  This example code is in the public domain
- 
+
  * A sound file named "record.wav" in the root directory of the SD card
  * will be created. Record duration is 30 seconds.
 
@@ -26,9 +26,9 @@ const char recFile[] = "record.wav";
 #define RECORD_5PERCENT     ((5*REC_SAMPLE_LENGTH)/100)
 
 void setup() {
-  // initialize serial communication at 115200 bits per second:
-  Serial.begin(115200);
-  delay(15000);
+  // initialize SerialUSB communication at 115200 bits per second:
+  SerialUSB.begin(115200);
+  while(!SerialUSB);
 
   while (SD.begin(SD_DETECT_PIN) != TRUE)
   {
@@ -48,37 +48,37 @@ void loop() {
   File myFile = SD.open(recFile, FILE_WRITE);
   if (!SD.exists(recFile)) {
     // If the file didn't open, print an error and stop
-    Serial.print("Error: failed to create ");
-    Serial.println(recFile);
+    SerialUSB.print("Error: failed to create ");
+    SerialUSB.println(recFile);
     while (true);
   } else {
-    Serial.print(recFile);
-    Serial.println(" created succesfully.");
+    SerialUSB.print(recFile);
+    SerialUSB.println(" created succesfully.");
   }
 
   // Initialize header file
   status = WavProcess_EncInit(&WaveFormat, AUDIO_IN_FREQUENCY, pHeaderBuff);
   if( status != 0 ) {
-    Serial.print("Error: could not encode wav header: ");
-    Serial.println(status, DEC);
-    while (true);      
+    SerialUSB.print("Error: could not encode wav header: ");
+    SerialUSB.println(status, DEC);
+    while (true);
   }
   if (myFile.write(pHeaderBuff, sizeof(pHeaderBuff)) != sizeof(pHeaderBuff)){
-    Serial.print("Error: could not write header to ");
-    Serial.println(recFile);
+    SerialUSB.print("Error: could not write header to ");
+    SerialUSB.println(recFile);
     while (true);
   }
 
   delay(1000);
-  Serial.println("Start AUDIO record");
+  SerialUSB.println("Start AUDIO record");
   delay(1000);
   status = Audio.begin(WaveFormat.SampleRate, 100, AUDIO_IN);
   if (status != 0) {
-    Serial.print("Error: Audio could not begin: ");
-    Serial.println(status, DEC);
+    SerialUSB.print("Error: Audio could not begin: ");
+    SerialUSB.println(status, DEC);
     while (true);
   } else {
-    Serial.println("Audio begin: OK");
+    SerialUSB.println("Audio begin: OK");
   }
 
   delay(1000);
@@ -87,42 +87,42 @@ void loop() {
   int volume = 100;
   Audio.prepare(NULL, S, volume);
   delay(1000);
-  
+
   // MAX Recording time reached, so stop audio interface and close file
   while ( Audio.getSampleIn() < REC_SAMPLE_LENGTH) {
     if ( Audio.isBufferInFull()) {
       byteswritten = myFile.write((uint8_t*)Audio.getBufferInWithOffset(), Audio.getBufferInSize());
       Audio.setBufferInEmpty(byteswritten);
     }
-    
+
     // Display percent of recording every 5%
     if ( ((Audio.getSampleIn() / RECORD_5PERCENT) - count) == 1)
-    {    
+    {
       count++;
-      Serial.print(5*count, DEC);
-      Serial.println("%");
+      SerialUSB.print(5*count, DEC);
+      SerialUSB.println("%");
     }
-    
+
   }
-  
+
   // Update wav header file
   if (myFile.seek(0) == TRUE)
   {
       // Update the wav file header and save it into wav file
       WavProcess_HeaderUpdate(pHeaderBuff, Audio.getSampleIn());
       if (myFile.write(pHeaderBuff, sizeof(pHeaderBuff)) != sizeof(pHeaderBuff)){
-        Serial.print("Error: header not updated to ");
-        Serial.println(recFile);
+        SerialUSB.print("Error: header not updated to ");
+        SerialUSB.println(recFile);
         while (true);
       }
   }
   else
   {
-    Serial.println("Error: could not update wav header.");
+    SerialUSB.println("Error: could not update wav header.");
     while (true);
   }
 
-  Serial.println("End of recording. Thank you!");
+  SerialUSB.println("End of recording. Thank you!");
   Audio.end();
   myFile.close();
   while(1);
