@@ -15,8 +15,8 @@ File MyFile;
 
 void setup()
 {
-  Serial.begin(9600);
-  while (!Serial);
+  SerialUSB.begin(9600);
+  while (!SerialUSB);
 
   /* Test begin() method */
   while (SD.begin(SD_DETECT_PIN) != TRUE)
@@ -26,168 +26,168 @@ void setup()
   delay(100);
 
   /* Test mkdir() method */
-  Serial.println("Creating 'STM32F4' directory");
+  SerialUSB.println("Creating 'STM32F4' directory");
   SD.mkdir("STM32F4");
-  Serial.println("Creating 'ARDUINO' directory");
+  SerialUSB.println("Creating 'ARDUINO' directory");
   SD.mkdir("ARDUINO");
-  Serial.println("Creating 'ARDUINO/OTTO' directory");
+  SerialUSB.println("Creating 'ARDUINO/OTTO' directory");
   SD.mkdir("ARDUINO/OTTO");
 
   /* Test open() method */
-  Serial.println("Opening 'STM32F4/Toremove.txt' file");
+  SerialUSB.println("Opening 'STM32F4/Toremove.txt' file");
   MyFile = SD.open("STM32F4/Toremove.txt", FILE_WRITE);
   if(MyFile) {
-    Serial.println("Closing 'STM32F4/Toremove.txt' file");
+    SerialUSB.println("Closing 'STM32F4/Toremove.txt' file");
     MyFile.close();
   } else {
-    Serial.println("Error to open 'STM32F4/Toremove.txt' file");
+    SerialUSB.println("Error to open 'STM32F4/Toremove.txt' file");
   }
-  Serial.println("Opening 'ARDUINO/OTTO/ARDUINO_OTTO_TEXT.txt' file");
+  SerialUSB.println("Opening 'ARDUINO/OTTO/ARDUINO_OTTO_TEXT.txt' file");
   MyFile = SD.open("ARDUINO/OTTO/ARDUINO_OTTO_TEXT.txt", FILE_WRITE);
   if(MyFile) {
     /* Test print() method */
-    Serial.print("writing \"");
-    Serial.print((const char*)wtext);
-    Serial.println("\" into ARDUINO_OTTO_TEXT.txt file");
+    SerialUSB.print("writing \"");
+    SerialUSB.print((const char*)wtext);
+    SerialUSB.println("\" into ARDUINO_OTTO_TEXT.txt file");
     byteswritten = MyFile.print((const char*)wtext);
     byteswritten += MyFile.print("\n");
-    Serial.print(byteswritten, DEC);
-    Serial.println(" bytes written.");
-    Serial.println("Closing 'ARDUINO/OTTO/ARDUINO_OTTO_TEXT.txt' file");
+    SerialUSB.print(byteswritten, DEC);
+    SerialUSB.println(" bytes written.");
+    SerialUSB.println("Closing 'ARDUINO/OTTO/ARDUINO_OTTO_TEXT.txt' file");
     MyFile.close();
   } else {
-    Serial.println("Error to open 'ARDUINO/OTTO/ARDUINO_OTTO_TEXT.txt' file");
+    SerialUSB.println("Error to open 'ARDUINO/OTTO/ARDUINO_OTTO_TEXT.txt' file");
   }
 
-  Serial.println("Opening 'ARDUINO/OTTO/ARDUINO_OTTO_TEXT.txt' file");
+  SerialUSB.println("Opening 'ARDUINO/OTTO/ARDUINO_OTTO_TEXT.txt' file");
   MyFile = SD.open("ARDUINO/OTTO/ARDUINO_OTTO_TEXT.txt");
   if(MyFile) {
     bytesread = MyFile.read(rtext, MyFile.size());
-    Serial.println("Closing 'ARDUINO/OTTO/ARDUINO_OTTO_TEXT.txt' file");
+    SerialUSB.println("Closing 'ARDUINO/OTTO/ARDUINO_OTTO_TEXT.txt' file");
     MyFile.close();
   } else {
-    Serial.println("Error to open 'ARDUINO/OTTO/ARDUINO_OTTO_TEXT.txt' file");
+    SerialUSB.println("Error to open 'ARDUINO/OTTO/ARDUINO_OTTO_TEXT.txt' file");
   }
 
-  Serial.println("Opening 'ARDUINO/OTTO/TEXT.txt' file");
+  SerialUSB.println("Opening 'ARDUINO/OTTO/TEXT.txt' file");
   MyFile = SD.open("ARDUINO/OTTO/TEXT.txt", FILE_WRITE);
   if(MyFile) {
     byteswritten = MyFile.print((const char*)rtext);
     MyFile.flush();
-    Serial.println("Closing 'ARDUINO/OTTO/TEXT.txt' file");
+    SerialUSB.println("Closing 'ARDUINO/OTTO/TEXT.txt' file");
     MyFile.close();
   } else {
-    Serial.println("Error to open 'ARDUINO/OTTO/TEXT.txt' file");
+    SerialUSB.println("Error to open 'ARDUINO/OTTO/TEXT.txt' file");
   }
 
-  Serial.println("Opening 'ARDUINO/OTTO/TEXT.txt' file");
+  SerialUSB.println("Opening 'ARDUINO/OTTO/TEXT.txt' file");
   MyFile = SD.open("ARDUINO/OTTO/TEXT.txt");
   if(MyFile) {
     /* Test size() method */
     file_size = MyFile.size();
-    Serial.print("TEXT.txt size: ");
-    Serial.println(file_size);
+    SerialUSB.print("TEXT.txt size: ");
+    SerialUSB.println(file_size);
 
     /* Test position and seek method */
-    Serial.print("TEXT.txt position value: ");
-    Serial.println(MyFile.position());
+    SerialUSB.print("TEXT.txt position value: ");
+    SerialUSB.println(MyFile.position());
     if(!MyFile.seek(MyFile.size()+1)) {
-      Serial.println("TEXT.txt seek value over size: OK");
+      SerialUSB.println("TEXT.txt seek value over size: OK");
     } else {
-      Serial.println("TEXT.txt seek value over size: KO");
+      SerialUSB.println("TEXT.txt seek value over size: KO");
     }
     if(MyFile.seek(MyFile.size())) {
-      Serial.println("TEXT.txt seek value to size: OK");
+      SerialUSB.println("TEXT.txt seek value to size: OK");
     } else {
-      Serial.println("TEXT.txt seek value to size: KO");
+      SerialUSB.println("TEXT.txt seek value to size: KO");
     }
-    Serial.print("TEXT.txt position value: ");
-    Serial.println(MyFile.position());
+    SerialUSB.print("TEXT.txt position value: ");
+    SerialUSB.println(MyFile.position());
 
     if(MyFile.seek(0)) {
-      Serial.println("TEXT.txt seek value to 0: OK");
+      SerialUSB.println("TEXT.txt seek value to 0: OK");
     } else {
-      Serial.println("TEXT.txt seek value to 0: KO");
+      SerialUSB.println("TEXT.txt seek value to 0: KO");
     }
-    Serial.print("TEXT.txt position value: ");
-    Serial.println(MyFile.position());
+    SerialUSB.print("TEXT.txt position value: ");
+    SerialUSB.println(MyFile.position());
 
     /* Test peek() method */
-    Serial.println("TEXT.txt peek (10 times): ");
+    SerialUSB.println("TEXT.txt peek (10 times): ");
     for(i = 0; i<10; i++)
     {
       peek_val = MyFile.peek();
-      Serial.print(peek_val);
-      Serial.print(" '");
-      Serial.write(peek_val);
-      Serial.println("'");
+      SerialUSB.print(peek_val);
+      SerialUSB.print(" '");
+      SerialUSB.write(peek_val);
+      SerialUSB.println("'");
     }
     i = 0;
 
     /* Test available() and read() methods */
-    Serial.println("TEXT.txt content read byte per byte: ");
+    SerialUSB.println("TEXT.txt content read byte per byte: ");
     while(MyFile.available())
     {
       rtext[i] = (uint8)MyFile.read();
-      Serial.print(rtext[i]);
-      Serial.print(" '");
-      Serial.write(rtext[i]);
-      Serial.println("'");
+      SerialUSB.print(rtext[i]);
+      SerialUSB.print(" '");
+      SerialUSB.write(rtext[i]);
+      SerialUSB.println("'");
       i++;
     }
     /* Test close method */
-    Serial.println("Closing 'ARDUINO/OTTO/TEXT.txt' file");
+    SerialUSB.println("Closing 'ARDUINO/OTTO/TEXT.txt' file");
     MyFile.close();
   } else {
-    Serial.println("Error to open 'ARDUINO/OTTO/TEXT.txt' file");
+    SerialUSB.println("Error to open 'ARDUINO/OTTO/TEXT.txt' file");
   }
 
   /* Test isDirectory() method */
   MyFile = File("STM32F4");
   if(MyFile) {
-    Serial.print("Is 'STM32F4' is a dir: ");
+    SerialUSB.print("Is 'STM32F4' is a dir: ");
     if (MyFile.isDirectory())
-      Serial.println("OK");
+      SerialUSB.println("OK");
     else
-      Serial.println("KO");
+      SerialUSB.println("KO");
   } else {
-    Serial.println("Error to open 'STM32F4' dir");
+    SerialUSB.println("Error to open 'STM32F4' dir");
   }
 
-  Serial.println("Opening 'STM32F4/Toremove.txt' file");
+  SerialUSB.println("Opening 'STM32F4/Toremove.txt' file");
   MyFile = SD.open("STM32F4/Toremove.txt");
   if(MyFile) {
-    Serial.print("Is 'STM32F4/Toremove.txt' is a file: ");
+    SerialUSB.print("Is 'STM32F4/Toremove.txt' is a file: ");
     if (MyFile.isDirectory())
-      Serial.println("KO");
+      SerialUSB.println("KO");
     else
-      Serial.println("OK");
-    Serial.println("Closing 'STM32F4/Toremove.txt' file");
+      SerialUSB.println("OK");
+    SerialUSB.println("Closing 'STM32F4/Toremove.txt' file");
     MyFile.close();
   } else {
-    Serial.println("Error to open 'STM32F4/Toremove.txt' file");
+    SerialUSB.println("Error to open 'STM32F4/Toremove.txt' file");
   }
   /* Test exists(), remove() and rmdir() methods */
-  Serial.print("Removing 'STM32F4/Toremove.txt' file...");
+  SerialUSB.print("Removing 'STM32F4/Toremove.txt' file...");
   while(SD.exists("STM32F4/Toremove.txt") == TRUE)
   {
     SD.remove("STM32F4/Toremove.txt");
    }
-  Serial.println("done");
+  SerialUSB.println("done");
 
-  Serial.print("Removing 'STM32F4' dir...");
+  SerialUSB.print("Removing 'STM32F4' dir...");
   while(SD.exists("STM32F4") == TRUE)
   {
     SD.rmdir("STM32F4");
    }
-  Serial.println("done");
+  SerialUSB.println("done");
 
   /* Test println(), println(data) methods */
-  Serial.println("Opening 'ARDUINO/OTTO/PRINT.txt' file");
+  SerialUSB.println("Opening 'ARDUINO/OTTO/PRINT.txt' file");
   MyFile = SD.open("ARDUINO/OTTO/PRINT.txt", FILE_WRITE);
   if(MyFile) {
     String str = String("This is a String object on line 7");
-    Serial.print("Printing to 'ARDUINO/OTTO/PRINT.txt' file...");
+    SerialUSB.print("Printing to 'ARDUINO/OTTO/PRINT.txt' file...");
     MyFile.println("This should be line 1");
     MyFile.println();
     MyFile.println("This should be line 3");
@@ -195,40 +195,40 @@ void setup()
     MyFile.println();
     MyFile.println("This should be line 6");
     MyFile.println(str);
-    Serial.println("done");
-    Serial.println("Closing 'ARDUINO/OTTO/PRINT.txt' file");
+    SerialUSB.println("done");
+    SerialUSB.println("Closing 'ARDUINO/OTTO/PRINT.txt' file");
     MyFile.close();
   } else {
-    Serial.println("Error to open 'ARDUINO/OTTO/PRINT.txt' file");
+    SerialUSB.println("Error to open 'ARDUINO/OTTO/PRINT.txt' file");
   }
 
   /* Test write(buf, len) method */
-  Serial.println("Opening 'ARDUINO/OTTO/WRITE.txt' file");
+  SerialUSB.println("Opening 'ARDUINO/OTTO/WRITE.txt' file");
   MyFile = SD.open("ARDUINO/OTTO/WRITE.txt", FILE_WRITE);
   if(MyFile) {
-    Serial.print("Writing 'ARDUINO/OTTO/WRITE.txt' file: ");
+    SerialUSB.print("Writing 'ARDUINO/OTTO/WRITE.txt' file: ");
     byteswritten = MyFile.write(wtext, BUFFERSIZE);
-    Serial.print(byteswritten);
-    Serial.println(" bytes written");
-    Serial.println("Closing 'ARDUINO/OTTO/WRITE.txt' file");
+    SerialUSB.print(byteswritten);
+    SerialUSB.println(" bytes written");
+    SerialUSB.println("Closing 'ARDUINO/OTTO/WRITE.txt' file");
     MyFile.close();
   } else {
-    Serial.println("Error to open 'ARDUINO/OTTO/WRITE.txt' file");
+    SerialUSB.println("Error to open 'ARDUINO/OTTO/WRITE.txt' file");
   }
 
   /* Test read(buf, len) method */
-  Serial.println("Opening 'ARDUINO/OTTO/WRITE.txt' file");
+  SerialUSB.println("Opening 'ARDUINO/OTTO/WRITE.txt' file");
   MyFile = SD.open("ARDUINO/OTTO/WRITE.txt");
   if(MyFile) {
-    Serial.println("Reading 'ARDUINO/OTTO/WRITE.txt' file:");
+    SerialUSB.println("Reading 'ARDUINO/OTTO/WRITE.txt' file:");
     bytesread = MyFile.read(rtext, MyFile.size());
-    Serial.println((const char*)rtext);
-    Serial.println("Closing 'ARDUINO/OTTO/WRITE.txt' file");
+    SerialUSB.println((const char*)rtext);
+    SerialUSB.println("Closing 'ARDUINO/OTTO/WRITE.txt' file");
     MyFile.close();
    } else {
-    Serial.println("Error to open 'ARDUINO/OTTO/WRITE.txt' file");
+    SerialUSB.println("Error to open 'ARDUINO/OTTO/WRITE.txt' file");
   }
-  Serial.println("###### End of the SD tests ######");
+  SerialUSB.println("###### End of the SD tests ######");
 }
 
 void loop()
