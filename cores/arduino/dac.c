@@ -79,7 +79,7 @@ void dac_init(const dac_dev *dev, uint32 flags) {
  *      DAC_CH1: Select channel 1
  *      DAC_CH2: Select channel 2
  * @param status Status:
- *      1:  enable buffer
+ *      1: enable buffer
  *      0: disable buffer
  */
 void dac_enable_buffer(const dac_dev *dev, uint32 flags, int status) {
@@ -124,7 +124,6 @@ void dac_write_channel(const dac_dev *dev, uint8 channel, uint16 val) {
  * @brief Enable a DAC channel
  * @param dev DAC device
  * @param channel channel to enable, either 1 or 2
- * @sideeffect May change pin mode of PA4 or PA5
  */
 void dac_enable_channel(const dac_dev *dev, uint8 channel) {
     /*

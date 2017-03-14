@@ -11,6 +11,11 @@
  * published by the Free Software Foundation.
  */
 
+ /*
+ * Arduino srl - www.arduino.org
+ * 2016 Jun 9: Edited Francesco Alessi (alfran) - francesco@arduino.org
+ */
+
 #ifndef _SPI_H_INCLUDED
 #define _SPI_H_INCLUDED
 
