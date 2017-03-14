@@ -22,8 +22,8 @@
 
 void setup() {
   // initialize serial communication at 9600 bits per second:
-  Serial.begin(115200);
-  delay(15000);
+  SerialUSB.begin(115200);
+  while(!SerialUSB);
 
   /* Test begin() method */
   while (SD.begin(SD_DETECT_PIN) != TRUE)
@@ -38,21 +38,21 @@ void loop() {
   const int S = 1024; // Number of samples to read in block
   uint32_t buffer[S];
   int duration;
-  delay(5000);        // delay for console
+  delay(1000);        // delay for console
 
   File myFile = SD.open("test.wav");
   if (!myFile.available()) {
     // if the file didn't open, print an error and stop
-    Serial.println("error opening test.wav");
+    SerialUSB.println("error opening test.wav");
     while (true);
   } else {
-    Serial.println("test.wav open OK");
+    SerialUSB.println("test.wav open OK");
   }
 
   myFile.read((void*) &WaveFormat, sizeof(WaveFormat));
 
   delay(1000);
-  Serial.println("STARTUP AUDIO\r\n");
+  SerialUSB.println("STARTUP AUDIO\r\n");
   delay(1000);
   Audio.begin(WaveFormat.SampleRate, 100);
 
@@ -68,7 +68,7 @@ void loop() {
     // Every 100 block print a '.'
     count++;
     if (count == 1000) {
-      Serial.print(".");
+      SerialUSB.print(".");
       count = 0;
     }
     // read from the file into buffer
@@ -78,11 +78,11 @@ void loop() {
     Audio.write(buffer, sizeof(buffer));
   }
   /* reaching end of file */
-  Serial.println("End of file. Thank you for listening!");
+  SerialUSB.println("End of file. Thank you for listening!");
   Audio.end();
   myFile.close();
 
   delay(5000);
-  Serial.println("Restart Playing");
+  SerialUSB.println("Restart Playing");
 
   }

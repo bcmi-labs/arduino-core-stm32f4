@@ -44,7 +44,7 @@
 /* UART handler declaration */
 UART_HandleTypeDef UartHandle;
 
-HardwareSerial Serial0(UART4_dev);
+HardwareSerial Serial(UART4_dev);//Serial0(UART4_dev);
 HardwareSerial Serial1(USART3_dev);
 HardwareSerial Serial2(USART2_dev);
 HardwareSerial Serial3(USART6_dev);

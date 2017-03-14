@@ -5,7 +5,7 @@
  SD library is based in order to get info about your SD card.
  Very useful for testing a card when you're not sure whether its working or not.
 
-  * SD card attached 
+  * SD card attached
 
  */
 // include the SD library:
@@ -18,62 +18,62 @@ void setup()
 {
   bool disp = false;
   // Open serial communications and wait for port to open:
-  Serial.begin(9600);
-  
-  while (!Serial);
-  Serial.print("\nInitializing SD card...");
+  SerialUSB.begin(9600);
+
+  while (!SerialUSB);
+  SerialUSB.print("\nInitializing SD card...");
   while(!card.init(SD_DETECT_PIN)) {
     if (!disp) {
-      Serial.println("initialization failed. Is a card inserted?");
+      SerialUSB.println("initialization failed. Is a card inserted?");
       disp = true;
     }
     delay(10);
   }
 
-  Serial.println("A card is present.");
-  
+  SerialUSB.println("A card is present.");
+
   // print the type of card
-  Serial.print("\nCard type: ");
+  SerialUSB.print("\nCard type: ");
   switch (card.type()) {
     case STD_CAPACITY_SD_CARD_V1_1:
-      Serial.println("SD1");
+      SerialUSB.println("SD1");
       break;
     case STD_CAPACITY_SD_CARD_V2_0:
-      Serial.println("SD2");
+      SerialUSB.println("SD2");
       break;
     case HIGH_CAPACITY_SD_CARD:
-      Serial.println("SDHC");
+      SerialUSB.println("SDHC");
       break;
     default:
-      Serial.println("Unknown");
+      SerialUSB.println("Unknown");
   }
-  
+
   // Now we will try to open the 'volume'/'partition' - it should be FAT16 or FAT32
   if (!fatFs.init()) {
-    Serial.println("Could not find FAT16/FAT32 partition.\nMake sure you've formatted the card");
+    SerialUSB.println("Could not find FAT16/FAT32 partition.\nMake sure you've formatted the card");
     return;
   }
-  
+
   // print the type and size of the first FAT-type volume
   uint32_t volumesize;
-  Serial.print("\nVolume type is FAT");
-  Serial.println(fatFs.fatType(), DEC);
-  Serial.println();
+  SerialUSB.print("\nVolume type is FAT");
+  SerialUSB.println(fatFs.fatType(), DEC);
+  SerialUSB.println();
 
   volumesize = fatFs.blocksPerCluster();    // clusters are collections of blocks
   volumesize *= fatFs.clusterCount();       // we'll have a lot of clusters
   volumesize *= 512;                        // SD card blocks are always 512 bytes
-  Serial.print("Volume size (bytes): ");
-  Serial.println(volumesize);
-  Serial.print("Volume size (Kbytes): ");
+  SerialUSB.print("Volume size (bytes): ");
+  SerialUSB.println(volumesize);
+  SerialUSB.print("Volume size (Kbytes): ");
   volumesize /= 1024;
-  Serial.println(volumesize);
-  Serial.print("Volume size (Mbytes): ");
+  SerialUSB.println(volumesize);
+  SerialUSB.print("Volume size (Mbytes): ");
   volumesize /= 1024;
-  Serial.println(volumesize);
+  SerialUSB.println(volumesize);
 
 
-  Serial.println("\nFiles found on the card (name, date and size in bytes): ");
+  SerialUSB.println("\nFiles found on the card (name, date and size in bytes): ");
   File root = SD.openRoot();
 
   // list all files in the card with date and size
