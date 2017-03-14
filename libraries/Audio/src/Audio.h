@@ -75,7 +75,7 @@ public:
 	uint32_t bufferIn_fptr = 0; //fptr
 
 private:
-	uint32_t volume = 60;
+	uint32_t volume = 100;
 	AudioMode mode;
 };
 
