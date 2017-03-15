@@ -1,4 +1,4 @@
-//*
+/*
   Simple Audio Recorder
 
  Demonstrates the use of the Audio library for the Arduino OTTO
@@ -45,8 +45,7 @@ void setup() {
     }
     counter++;
   }
-  //SerialUSB.println("");
-  SerialUSB.println("done.");
+  SerialUSB.println("...done.");
 }
 
 void loop() {

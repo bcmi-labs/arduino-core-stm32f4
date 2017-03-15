@@ -11,8 +11,6 @@
 #include "Audio.h"
 #include "otto_audio_inout.h"
 
-int audioVolume = 100;
-
 AudioClass Audio;
 
 /*  Begin class can be extended to support more options */
@@ -33,12 +31,12 @@ int AudioClass::begin(uint32_t sampleRate, uint32_t msPreBuffer, AudioMode audio
 	    next = bufferOut;
 	}
 
-	ret = BSP_AUDIO_OUT_Init(OUTPUT_DEVICE_HEADPHONE, volume, sampleRate);
+	ret = BSP_AUDIO_OUT_Init(OUTPUT_DEVICE_HEADPHONE, 0, sampleRate);
 
 	/* Audio In */
 	if(mode != AUDIO_OUT)
 	{
-		ret += BSP_AUDIO_IN_Init(INPUT_DEVICE_DIGITAL_MICROPHONE_2, volume, sampleRate);
+		ret += BSP_AUDIO_IN_Init(INPUT_DEVICE_DIGITAL_MICROPHONE_2, 0, sampleRate);
 		ret += BSP_AUDIO_IN_Record((uint16_t*)&bufferIn[0], bufferInSize);
 		bufferIn_fptr += 44;
 	}
@@ -64,18 +62,26 @@ void AudioClass::end() {
 void AudioClass::prepare(int16_t *buffer, int S, int volume){
     uint16_t *ubuffer = (uint16_t*) buffer;
 
-    if(volume >= 100)
-        audioVolume = 100;
+    if (volume >= 100)
+        volume = 100;
     if (volume <= 0)
-        audioVolume = 0;
-		BSP_AUDIO_OUT_SetVolume(audioVolume);
-		BSP_AUDIO_IN_SetVolume(audioVolume);
+        volume = 0;
+
+		if (mode == AUDIO_OUT)
+    		BSP_AUDIO_OUT_SetVolume(volume);
+		if (mode == AUDIO_IN)
+				BSP_AUDIO_IN_SetVolume(volume);
+		if (mode == AUDIO_BOTH) {
+				BSP_AUDIO_OUT_SetVolume(volume);
+				BSP_AUDIO_IN_SetVolume(volume);
+		}
+
+
 }
 
 size_t AudioClass::write(const uint32_t *data, size_t size) {
+
 	int i;
-	BSP_AUDIO_OUT_SetVolume(audioVolume);
-	BSP_AUDIO_IN_SetVolume(audioVolume);
 
   if(size > (bufferOutSize / 2))
       return size;
