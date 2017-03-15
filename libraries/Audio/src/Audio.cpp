@@ -11,7 +11,7 @@
 #include "Audio.h"
 #include "otto_audio_inout.h"
 
-
+int audioVolume = 100;
 
 AudioClass Audio;
 
@@ -53,7 +53,7 @@ void AudioClass::end() {
 	    BSP_AUDIO_IN_Stop(CODEC_PDWN_SW);
 	}
     BSP_AUDIO_OUT_Stop(CODEC_PDWN_SW);
-    if (bufferOut) 
+    if (bufferOut)
 	{
 		free(bufferOut);
 		bufferOut = NULL;
@@ -65,46 +65,50 @@ void AudioClass::prepare(int16_t *buffer, int S, int volume){
     uint16_t *ubuffer = (uint16_t*) buffer;
 
     if(volume >= 100)
-        volume = 100;
-    if (volume <= 10)
-        volume = 10;
+        audioVolume = 100;
+    if (volume <= 0)
+        audioVolume = 0;
+		BSP_AUDIO_OUT_SetVolume(audioVolume);
+		BSP_AUDIO_IN_SetVolume(audioVolume);
 }
 
 size_t AudioClass::write(const uint32_t *data, size_t size) {
 	int i;
+	BSP_AUDIO_OUT_SetVolume(audioVolume);
+	BSP_AUDIO_IN_SetVolume(audioVolume);
 
-    if(size > (bufferOutSize / 2))
-        return size;
+  if(size > (bufferOutSize / 2))
+      return size;
 
-    /*  not running yet, need to fill-in full FIFO */
-    if(running == NULL) {
-        memcpy(next, (uint8_t *) data, size);
-        /* First half FIFO  */
-        if(next == bufferOut) {
-            next = half;
-        /*  Second half FIfO, when copied, start playing */
-        } else {
-            next = bufferOut;
-            running = bufferOut;
-            BSP_AUDIO_OUT_Play((uint16_t*)bufferOut, bufferOutSize);
-        }
-        _receivedBytes += size;
-        return size;
-    }
+  /*  not running yet, need to fill-in full FIFO */
+  if(running == NULL) {
+      memcpy(next, (uint8_t *) data, size);
+      /* First half FIFO  */
+      if(next == bufferOut) {
+          next = half;
+      /*  Second half FIfO, when copied, start playing */
+      } else {
+          next = bufferOut;
+          running = bufferOut;
+          BSP_AUDIO_OUT_Play((uint16_t*)bufferOut, bufferOutSize);
+      }
+      _receivedBytes += size;
+      return size;
+  }
 
-    /*  Wait for room in FIFO*/
-    while((int)next == (int) running);
+  /*  Wait for room in FIFO*/
+  while((int)next == (int) running);
 
-    _receivedBytes += size;
+  _receivedBytes += size;
 
-    /*  If running is not next there is room in fifo */
-    memcpy(next,(uint8_t *) data, size);
+  /*  If running is not next there is room in fifo */
+  memcpy(next,(uint8_t *) data, size);
 
-    if(next == bufferOut) {
-        next = half;
-    } else {
-        next = bufferOut;
-    }
+  if(next == bufferOut) {
+      next = half;
+  } else {
+      next = bufferOut;
+  }
 
 	return size;
 }
