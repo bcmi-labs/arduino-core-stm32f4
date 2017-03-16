@@ -1,4 +1,3 @@
-
 # Arduino STM32F4 Core and platform
 # ------------------------------
 #
@@ -96,7 +95,7 @@ tools.dfu-util.cmd.windows=dfu-util.cmd
 
 tools.dfu-util.upload.params.verbose=-v
 tools.dfu-util.upload.params.quiet=
-tools.dfu-util.upload.pattern="{path}/{cmd}" "{path}" {upload.usbID} {upload.altID} {upload.mem_start} "{build.path}/{build.project_name}.bin"
+tools.dfu-util.upload.pattern="{path}/{cmd}" "{path}" {upload.usbID} {upload.altID} {upload.mem_start} "{build.path}/{build.project_name}.bin" "{serial.port}"
 
 #
 # USB Flags
