@@ -487,7 +487,7 @@ uint32_t File::size()
 }
 
 File::operator bool() {
-  return  (_name == NULL)? FALSE : TRUE;
+  return  ((_name == NULL) || ((_fil.fs == 0) && (_dir.fs == 0))) ? FALSE : TRUE;
 }
 /**
   * @brief  Write data to the file
