@@ -122,7 +122,7 @@ uint8_t lineSetup[] = {0x00, 0xc2, 0x01, 0x00, 0x00, 0x00, 0x08};
 TIM_HandleTypeDef  TimHandle;
 
 volatile uint8_t dfu_request = 0;
-/* For a bug in some Linux 64 bit PC we need to delay the reset of the CPU of 500m second */
+/* For a bug in some Linux 64 bit PC we need to delay the reset of the CPU of 500ms seconds */
 int counter_dfu_reset = 100; /* the unit is equal to CDC_POLLING_INTERVAL that is 5ms by default */
 
 static void TIM_Config(void);
@@ -501,4 +501,31 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     }
     else
     {
-      USBD_CDC_SetTxBuffer(&hUsbDeviceFS, (uint8_t*)&UserTxBufferFS[UserTxBufPtrO
+      USBD_CDC_SetTxBuffer(&hUsbDeviceFS, (uint8_t*)&UserTxBufferFS[UserTxBufPtrOut], (UserTxBufPtrIn - UserTxBufPtrOut));
+
+      status = USBD_CDC_TransmitPacket(&hUsbDeviceFS);
+
+      if(status == USBD_OK)
+      {
+        UserTxBufPtrOut = UserTxBufPtrIn;
+      }
+    }
+  }
+}
+
+/* USER CODE BEGIN PRIVATE_FUNCTIONS_IMPLEMENTATION */
+/* USER CODE END  PRIVATE_FUNCTIONS_IMPLEMENTATION */
+
+/**
+  * @}
+  */
+
+/**
+  * @}
+  */
+
+#ifdef __cplusplus
+}
+#endif
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
