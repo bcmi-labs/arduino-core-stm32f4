@@ -31,7 +31,9 @@
 
 #include "HardwareTimer.h"
 #include "boards.h"             // for CYCLES_PER_MICROSECOND
-#include "wiring_math.h"
+//#include "wiring_math.h"
+#include "WMath.h"
+
 
 #define NR_TIMERS 14
 
