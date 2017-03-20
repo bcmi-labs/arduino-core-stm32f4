@@ -126,7 +126,7 @@ void AudioClass::prepare(int16_t *buffer, int S, int volume) {
         volume = 100;
     if (volume <= 0)
         volume = 0;
-    setVolume(volume);
+    amp(volume);
 }
 
 /**
@@ -185,7 +185,7 @@ size_t AudioClass::write(const uint32_t *data, size_t size) {
   *			- AUDIO_BOTH
   * @retval AUDIO_OK if correct communication, else wrong communication
   */
-uint32_t AudioClass::setVolume(uint8_t volume, AudioMode audioMode) {
+uint32_t AudioClass::amp(uint8_t volume, AudioMode audioMode) {
 	uint32_t ret = AUDIO_OK;
 	if ((!audio_in_init) && (!audio_out_init))
 		ret = AUDIO_ERROR;
