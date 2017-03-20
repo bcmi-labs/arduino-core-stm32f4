@@ -44,7 +44,7 @@ public:
 	virtual size_t write(const int16_t *data, size_t size)  { return write(reinterpret_cast<const uint32_t*>(data), size/2) * 2; };
 	virtual size_t write(const uint32_t *data, size_t size);
 
-	uint32_t setVolume(uint8_t volume, AudioMode audioMode = AUDIO_OUT);
+	uint32_t amp(uint8_t volume, AudioMode audioMode = AUDIO_OUT);
 
 	// Total number of samples
 	uint32_t getSampleIn(void) { return bufferIn_fptr; }
