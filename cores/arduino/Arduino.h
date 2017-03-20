@@ -37,3 +37,4 @@ typedef uint8 byte;
 #include "variant.h"
 #include "Tone.h"
 #include "WCharacter.h"
+#include "WMath.h"

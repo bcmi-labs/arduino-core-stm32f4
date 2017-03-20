@@ -115,11 +115,15 @@ __IO uint32_t lineState = 0;
 uint8_t cptlineState = 0;
 
 /* Default configuration: 115200, 8N1 */
-uint8_t lineSetup[] = {0x00, 0x00, 0x20, 0x1c, 0x00, 0x00, 0x08};
+uint8_t lineSetup[] = {0x00, 0xc2, 0x01, 0x00, 0x00, 0x00, 0x08};
 
 #define CDC_POLLING_INTERVAL             5 /* in ms. The max is 65 and the min is 1 */
 
 TIM_HandleTypeDef  TimHandle;
+
+volatile uint8_t dfu_request = 0;
+/* For a bug in some Linux 64 bit PC we need to delay the reset of the CPU of 500ms seconds */
+int counter_dfu_reset = 100; /* the unit is equal to CDC_POLLING_INTERVAL that is 5ms by default */
 
 static void TIM_Config(void);
 
@@ -276,9 +280,7 @@ static int8_t CDC_Control_FS  (uint8_t cmd, uint8_t* pbuf, uint16_t length)
     memcpy(lineSetup, pbuf, 7);
 
     if(*((uint32_t*)pbuf) == 1200){
-      /* Set magic number in SRAM so application enters DFU after reset */
-      *((unsigned int*)0x2004FFF0) = 0xb311a21a;
-      NVIC_SystemReset();
+      dfu_request = 1;
     }
 
     break;
@@ -467,6 +469,18 @@ void __irq_tim6(void)
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   uint8_t status;
+
+  if(dfu_request)
+  {
+    counter_dfu_reset--;
+    if(counter_dfu_reset == 0)
+    {
+      dfu_request = 0;
+      /* Set magic number in SRAM so application enters DFU after reset */
+      *((unsigned int*)0x2004FFF0) = 0xb311a21a;
+      NVIC_SystemReset();
+    }
+  }
 
   if(UserTxBufPtrOut != UserTxBufPtrIn)
   {
