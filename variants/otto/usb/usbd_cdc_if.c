@@ -54,12 +54,6 @@
   * @{
   */
 /* USER CODE BEGIN PRIVATE TYPES  */
-//uint8_t buffer[32];
-//<<<<<<< HEAD
-//=======
-int enterDFU = 0;
-//extern uint8_t *Rbuffer;
-//>>>>>>> USB-CDC
 /* USER CODE END PRIVATE TYPES */
 /**
   * @}
@@ -186,28 +180,10 @@ static int8_t CDC_Init_FS(void)
   /*##-4- Start the TIM Base generation in interrupt mode ####################*/
   /* Start Channel1 */
   HAL_TIM_Base_Start_IT(&TimHandle);
-
-//  GPIO_InitTypeDef  gpio_init_structure;
-//  //hUsbDevice_0 = &hUsbDeviceFS;
 //  /* USER CODE BEGIN 3 */
 //  /* Set Application Buffers */
   USBD_CDC_SetTxBuffer(&hUsbDeviceFS, UserTxBufferFS, 1);
   USBD_CDC_SetRxBuffer(&hUsbDeviceFS, StackRxBufferFS);
-//
-
-//
-//  __HAL_RCC_GPIOK_CLK_ENABLE();
-//
-//    gpio_init_structure.Pin   = GPIO_PIN_3;
-//    gpio_init_structure.Mode  = GPIO_MODE_OUTPUT_PP;
-//    gpio_init_structure.Pull  = GPIO_PULLUP;
-//    gpio_init_structure.Speed = GPIO_SPEED_HIGH;
-//
-//    HAL_GPIO_Init(GPIOK, &gpio_init_structure);
-//
-
-//    /* By default, turn off LED by setting a high level on corresponding GPIO */
-//    HAL_GPIO_WritePin(GPIOK, GPIO_PIN_3, GPIO_PIN_SET);
 
   return (USBD_OK);
   /* USER CODE END 3 */
@@ -326,22 +302,6 @@ static int8_t CDC_Control_FS  (uint8_t cmd, uint8_t* pbuf, uint16_t length)
 static int8_t CDC_Receive_FS (uint8_t* Buf, uint32_t *Len)
 {
 
-  //USBD_CDC_SetTxBuffer(&hUsbDeviceFS, UserTxBufferFS, 1);
-
-
-//    USBD_CDC_SetTxBuffer(&hUsbDeviceFS, Buf, *Len);
-//    USBD_CDC_TransmitPacket(&hUsbDeviceFS);
-
-//  /* Transmit after reception data */
-//  if(USBD_CDC_TransmitPacket(&hUsbDeviceFS) == USBD_FAIL)
-//  {
-//    GPIOK->ODR ^= GPIO_PIN_3;
-//  }
-
-//  GPIOK->ODR ^= GPIO_PIN_3;
-  //while(1);
-  //USBD_CDC_TransmitPacket(&hUsbDevice_0);
-  /* USER CODE BEGIN 6 */
   /* Initiate next USB packet transfer once a packet is received */
 
   if(UserRxBufPtrIn + (*Len) > APP_RX_DATA_SIZE)
@@ -355,7 +315,6 @@ static int8_t CDC_Receive_FS (uint8_t* Buf, uint32_t *Len)
   UserRxBufPtrIn = ((UserRxBufPtrIn + (*Len)) % APP_RX_DATA_SIZE);
   }
 
-  //USBD_CDC_SetRxBuffer(&hUsbDeviceFS, Rbuffer);
   USBD_CDC_ReceivePacket(&hUsbDeviceFS);
   return (USBD_OK);
   /* USER CODE END 6 */
@@ -376,7 +335,6 @@ uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len)
 {
   uint8_t result = USBD_OK;
   /* USER CODE BEGIN 7 */
-  //USBD_CDC_SetTxBuffer(hUsbDevice_0, Buf, Len);
   USBD_CDC_SetTxBuffer(&hUsbDeviceFS, UserTxBufferFS, 1);
   result = USBD_CDC_TransmitPacket(&hUsbDeviceFS);
   /* USER CODE END 7 */
