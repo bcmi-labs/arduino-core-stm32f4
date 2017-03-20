@@ -2,4 +2,5 @@
 
 - Library:
   - Audio:
-       .added amp() 
+       .added amp()
+       .Updated README.adoc
