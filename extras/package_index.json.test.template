@@ -1,7 +1,7 @@
 {
   "packages": [
     {
-      "name": "arduino-test",
+      "name": "arduino-org",
       "maintainer": "Arduino Test",
       "websiteURL": "http://www.arduino.org/",
       "email": "swdev@arduino.org",
