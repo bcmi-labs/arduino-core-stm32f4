@@ -3,5 +3,9 @@
 
 - Library:
   - Audio:
-       .added amp()
-       .Updated README.adoc
+    - added amp()
+    - Updated README.adoc
+
+- Miscellany:
+  - Added ChangeLog.txt
+  - Code Cleanup
