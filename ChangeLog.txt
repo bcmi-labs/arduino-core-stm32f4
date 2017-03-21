@@ -1,4 +1,5 @@
-- Core
+- Core:
+  - Fixed USB CDC issue if the chunk is greater than 64 bytes
 
 - Library:
   - Audio:
