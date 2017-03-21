@@ -1,0 +1,32 @@
+{
+  "packages": [
+    {
+      "name": "arduino-test",
+      "maintainer": "Arduino Test",
+      "websiteURL": "http://www.arduino.org/",
+      "email": "swdev@arduino.org",
+      "help": {
+        "online": "http://www.arduino.org/forums"
+      },
+      "platforms": [
+        {
+          "name": "Arduino STM32F4 Boards - Test",
+          "architecture": "stm32f4",
+          "version": "%%VERSION%%",
+          "category": "Arduino",
+          "url": "http://download.arduino.org/test/platforms/stm32f4/%%FILENAME%%",
+          "archiveFileName": "%%FILENAME%%",
+          "checksum": "SHA-256:%%CHECKSUM%%",
+          "size": "%%SIZE%%",
+          "boards": [
+            {
+              "name": "Arduino Star OTTO"
+            }
+          ],
+          "toolsDependencies": [
+          ]
+        }
+      ]
+    }
+  ]
+}
