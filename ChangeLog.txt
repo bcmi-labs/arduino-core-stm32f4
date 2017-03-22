@@ -1,6 +1,8 @@
 - Core:
   - Fixed USB CDC issue if the chunk is greater than 64 bytes
   - Fixed I2C Pin definition
+  - Fixed CAN-BUS pin definition
+  - Added CAN-BUS port 2 definition  
 
 - Library:
   - Audio:

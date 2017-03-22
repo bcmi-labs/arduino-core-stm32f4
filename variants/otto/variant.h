@@ -164,10 +164,10 @@
 #define LED_BUILTIN  D13
 
 // CAN PIN
-#define CANRX		     D68
-#define CANTX		     D69
-// #define CANRX1	D
-// #define CANTX1	D
+#define CANTX		     D68
+#define CANRX		     D69
+#define CANTX1	     D51
+#define CANRX1	     D53
 
 // SPI PIN
 #define MISO 		     D72
