@@ -1,5 +1,6 @@
 - Core:
   - Fixed USB CDC issue if the chunk is greater than 64 bytes
+  - Fixed I2C Pin definition
 
 - Library:
   - Audio:
