@@ -89,7 +89,7 @@ recipe.size.regex.data=^(?:\.data|\.bss|\.noinit)\s+([0-9]+).*
 # DFU Util
 # --------
 
-tools.dfu-util.path={runtime.tools.dfu-util-0.8.0-stm32-arduino1.path}
+tools.dfu-util.path={runtime.tools.dfu-util-0.8.0-stm32-arduino2.path}
 tools.dfu-util.cmd=dfu-util
 tools.dfu-util.cmd.windows=dfu-util.cmd
 
