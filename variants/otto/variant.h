@@ -180,10 +180,10 @@
 #define SS1   	     D10
 
 // I2C PIN
-#define SCL 		     D70
-#define SDA 		     D71
-#define SDA1		     D20
-#define SCL1 		     D21
+#define SCL 		     D71
+#define SDA 		     D70
+#define SCL1		     D20
+#define SDA1 		     D21
 
 // SERIAL PORT PIN
 #define RX 			     D0
