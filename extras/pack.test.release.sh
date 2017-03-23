@@ -1,9 +1,12 @@
 #!/bin/bash
 TEST_BUILD_NUMBER=$1
 
+#Gets the sha of the commit of the current release
+GIT_COMMIT=`git log --pretty=format:'%h' -n 1`
+
 #Gets current version number and sets next version number
 VERSION_CURR=$(cat platform.txt | grep version= | head -n 1 | sed s/^.*version=//g)
-VERSION=$VERSION_CURR"-"$TEST_BUILD_NUMBER
+VERSION=$VERSION_CURR"-"$TEST_BUILD_NUMBER"-"$GIT_COMMIT
 
 #Gets current platform name and sets next platform name based on next version number
 PLATFORM_CURR=$(cat platform.txt | grep name= | head -n 1 | sed s/^.*name=//g)
