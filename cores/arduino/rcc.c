@@ -176,45 +176,14 @@ static const struct rcc_dev_info rcc_dev_table[] = {
  * @param pll_mul pll multiplier
  */
 
-#define  HSE_STARTUP_TIMEOUT                 ((uint16)0x05000)            /*!< Time out for HSE start up */
-#define  RCC_CFGR_HPRE_DIV1                  ((uint32)0x00000000)        /*!< SYSCLK not divided */
-#define  RCC_CFGR_PPRE1_DIV2                 ((uint32)0x00001000)        /*!< HCLK divided by 2 */
-#define  RCC_CFGR_PPRE1_DIV4                 ((uint32)0x00001400)        /*!< HCLK divided by 4 */
-#define  RCC_CFGR_PPRE2_DIV1                 ((uint32)0x00000000)        /*!< HCLK not divided */
-#define  RCC_CFGR_PPRE2_DIV2                 ((uint32)0x00008000)        /*!< HCLK divided by 2 */
-
-#define  RCC_PLLCFGR_PLLSRC_HSE              ((uint32)0x00400000)
 
 /*******************  Bits definition for FLASH_ACR register  *****************/
-//#define FLASH_ACR_LATENCY                    ((uint32_t)0x00000007)
-#define FLASH_ACR_LATENCY_0WS                ((uint32)0x00000000)
-#define FLASH_ACR_LATENCY_1WS                ((uint32)0x00000001)
-#define FLASH_ACR_LATENCY_2WS                ((uint32)0x00000002)
-#define FLASH_ACR_LATENCY_3WS                ((uint32)0x00000003)
-#define FLASH_ACR_LATENCY_4WS                ((uint32)0x00000004)
-#define FLASH_ACR_LATENCY_5WS                ((uint32)0x00000005)
-#define FLASH_ACR_LATENCY_6WS                ((uint32)0x00000006)
-#define FLASH_ACR_LATENCY_7WS                ((uint32)0x00000007)
 
-#define FLASH_ACR_PRFTEN                     ((uint32)0x00000100)
-#define FLASH_ACR_ICEN                       ((uint32)0x00000200)
-#define FLASH_ACR_DCEN                       ((uint32)0x00000400)
-#define FLASH_ACR_ICRST                      ((uint32)0x00000800)
-#define FLASH_ACR_DCRST                      ((uint32)0x00001000)
-#define FLASH_ACR_BYTE0_ADDRESS              ((uint32)0x40023C00)
-#define FLASH_ACR_BYTE2_ADDRESS              ((uint32)0x40023C03)
-
-#define PWR_BASE                             (0x40007000)
-#define PWR                                  ((PWR_TypeDef *) PWR_BASE)
-#define PWR_CR_VOS                           ((uint16)0x4000)     /*!< Regulator voltage scaling output selection */
-
-#define FLASH_R_BASE          (0x40023C00)
-#define FLASH               ((FLASH_TypeDef *) FLASH_R_BASE)
 #define RESET 0
 
 void InitMCO1()
 {
-    rcc_reg_map *rcc = RCC_BASE;
+    RCC_TypeDef *rcc = RCC;
     // Turn MCO1 Master Clock Output mode
     rcc->CFGR &= RCC_CFGR_MCO1_RESET_MASK;
     rcc->CFGR |= RCC_CFGR_MCO1Source_PLLCLK | RCC_CFGR_MCO1Div_1;
@@ -325,7 +294,7 @@ void rcc_clk_init2(rcc_sysclk_src sysclk_src,
 /*            PLL (clocked by HSE) used as System clock source                */
 /******************************************************************************/
   uint32 StartUpCounter = 0, HSEStatus = 0;
-  rcc_reg_map *pRCC = RCC_BASE;
+  RCC_TypeDef *pRCC = RCC;
 
   /* Enable HSE */
   pRCC->CR |= RCC_CR_HSEON;
@@ -425,11 +394,11 @@ void rcc_clk_init2(rcc_sysclk_src sysclk_src,
  */
 void rcc_clk_enable(rcc_clk_id id) {
     static const __io uint32* enable_regs[] = {
-        [APB1] = &RCC_BASE->APB1ENR,
-        [APB2] = &RCC_BASE->APB2ENR,
-        [AHB1] = &RCC_BASE->AHB1ENR,
-        [AHB2] = &RCC_BASE->AHB2ENR,
-        [AHB3] = &RCC_BASE->AHB3ENR,
+        [APB1] = (uint32*)&RCC->APB1ENR,
+        [APB2] = (uint32*)&RCC->APB2ENR,
+        [AHB1] = (uint32*)&RCC->AHB1ENR,
+        [AHB2] = (uint32*)&RCC->AHB2ENR,
+        [AHB3] = (uint32*)&RCC->AHB3ENR,
     };
 
     rcc_clk_domain clk_domain = rcc_dev_clk(id);
@@ -445,11 +414,11 @@ void rcc_clk_enable(rcc_clk_id id) {
  */
 void rcc_clk_disable(rcc_clk_id id) {
     static const __io uint32* enable_regs[] = {
-        [APB1] = &RCC_BASE->APB1ENR,
-        [APB2] = &RCC_BASE->APB2ENR,
-        [AHB1] = &RCC_BASE->AHB1ENR,
-        [AHB2] = &RCC_BASE->AHB2ENR,
-        [AHB3] = &RCC_BASE->AHB3ENR,
+        [APB1] = (uint32*)&RCC->APB1ENR,
+        [APB2] = (uint32*)&RCC->APB2ENR,
+        [AHB1] = (uint32*)&RCC->AHB1ENR,
+        [AHB2] = (uint32*)&RCC->AHB2ENR,
+        [AHB3] = (uint32*)&RCC->AHB3ENR,
     };
 
     rcc_clk_domain clk_domain = rcc_dev_clk(id);
@@ -465,11 +434,11 @@ void rcc_clk_disable(rcc_clk_id id) {
  */
 void rcc_reset_dev(rcc_clk_id id) {
     static const __io uint32* reset_regs[] = {
-        [APB1] = &RCC_BASE->APB1RSTR,
-        [APB2] = &RCC_BASE->APB2RSTR,
-        [AHB1] = &RCC_BASE->AHB1RSTR,
-        [AHB2] = &RCC_BASE->AHB2RSTR,
-        [AHB3] = &RCC_BASE->AHB3RSTR,
+        [APB1] = (uint32*)&RCC->APB1RSTR,
+        [APB2] = (uint32*)&RCC->APB2RSTR,
+        [AHB1] = (uint32*)&RCC->AHB1RSTR,
+        [AHB2] = (uint32*)&RCC->AHB2RSTR,
+        [AHB3] = (uint32*)&RCC->AHB3RSTR,
     };
 
     rcc_clk_domain clk_domain = rcc_dev_clk(id);
@@ -522,9 +491,9 @@ void rcc_set_prescaler(rcc_prescaler prescaler, uint32 divider) {
         [RCC_PRESCALER_ADC] = RCC_CFGR_ADCPRE,
     };
 
-    uint32 cfgr = RCC_BASE->CFGR;
+    uint32 cfgr = RCC->CFGR;
     cfgr &= ~masks[prescaler];
     cfgr |= divider;
-    RCC_BASE->CFGR = cfgr;
+    RCC->CFGR = cfgr;
 #endif
 }

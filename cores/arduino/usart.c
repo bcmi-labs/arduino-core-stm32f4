@@ -45,80 +45,80 @@
 
 /** USART1 device */
 static usart_dev usart1 = {
-    .regs     = USART1_BASE,
+    .regs     = USART1,
     .max_baud = 4500000UL,
     .clk_id   = RCC_USART1,
-    .irq_num  = NVIC_USART1
+    .irq_num  = USART1_IRQn
 };
 
 usart_dev *USART1_dev = &usart1;
 
 /** USART2 device */
 static usart_dev usart2 = {
-    .regs     = USART2_BASE,
+    .regs     = USART2,
     .max_baud = 2250000UL,
     .clk_id   = RCC_USART2,
-    .irq_num  = NVIC_USART2
+    .irq_num  = USART2_IRQn
 };
 
 usart_dev *USART2_dev = &usart2;
 
 /** USART3 device */
 static usart_dev usart3 = {
-    .regs     = USART3_BASE,
+    .regs     = USART3,
     .max_baud = 2250000UL,
     .clk_id   = RCC_USART3,
-    .irq_num  = NVIC_USART3
+    .irq_num  = USART3_IRQn
 };
 
 usart_dev *USART3_dev = &usart3;
 
 /** UART4 device */
 static usart_dev uart4 = {
-    .regs     = UART4_BASE,
+    .regs     = UART4,
     .max_baud = 2250000UL,
     .clk_id   = RCC_UART4,
-    .irq_num  = NVIC_UART4
+    .irq_num  = UART4_IRQn
 };
 
 usart_dev *UART4_dev = &uart4;
 
 /** UART5 device */
 static usart_dev uart5 = {
-    .regs     = UART5_BASE,
+    .regs     = UART5,
     .max_baud = 2250000UL,
     .clk_id   = RCC_UART5,
-    .irq_num  = NVIC_UART5
+    .irq_num  = UART5_IRQn
 };
 
 usart_dev *UART5_dev = &uart5;
 
 /** USART6 device */
 static usart_dev usart6 = {
-    .regs     = USART6_BASE,
+    .regs     = USART6,
     .max_baud = 2250000UL,
     .clk_id   = RCC_USART6,
-    .irq_num  = NVIC_USART6
+    .irq_num  = USART6_IRQn
 };
 
 usart_dev *USART6_dev = &usart6;
 
 /** UART7 device */
 static usart_dev uart7 = {
-    .regs     = UART7_BASE,
+    .regs     = UART7,
     .max_baud = 2250000UL,
     .clk_id   = RCC_UART7,
-    .irq_num  = NVIC_UART7
+    .irq_num  = UART7_IRQn
 };
 
 usart_dev *UART7_dev = &uart7;
 
 /** UART8 device */
 static usart_dev uart8 = {
-    .regs     = UART8_BASE,
+    .regs     = UART8,
     .max_baud = 2250000UL,
     .clk_id   = RCC_UART8,
-    .irq_num  = NVIC_UART8
+    .irq_num  = UART8_IRQn
 };
 
 usart_dev *UART8_dev = &uart8;
@@ -169,7 +169,7 @@ void usart_set_baud_rate(usart_dev *dev, uint32 baud) {
  * @see usart_set_baud_rate()
  */
 void usart_enable(usart_dev *dev) {
-    usart_reg_map *regs = dev->regs;
+    USART_TypeDef *regs = dev->regs;
     regs->CR1 = USART_CR1_TE | USART_CR1_RE | USART_CR1_RXNEIE;
     regs->CR1 |= USART_CR1_UE;
 }
@@ -181,7 +181,7 @@ void usart_enable(usart_dev *dev) {
  * @param dev Serial port.
  */
 void usart_tx_irq_enable(usart_dev *dev) {
-    bb_peri_set_bit(&dev->regs->CR1, USART_CR1_TXEIE_BIT, 1);
+    bb_peri_set_bit(&dev->regs->CR1, USART_CR1_TXEIE_Pos, 1);
 }
 
 /**
@@ -190,7 +190,7 @@ void usart_tx_irq_enable(usart_dev *dev) {
  * @param dev Serial port.
  */
 void usart_tx_irq_disable(usart_dev *dev) {
-    bb_peri_set_bit(&dev->regs->CR1, USART_CR1_TXEIE_BIT, 0);
+    bb_peri_set_bit(&dev->regs->CR1, USART_CR1_TXEIE_Pos, 0);
 }
 
 /**
@@ -199,7 +199,7 @@ void usart_tx_irq_disable(usart_dev *dev) {
  */
 void usart_disable(usart_dev *dev) {
     /* FIXME this misbehaves if you try to use PWM on TX afterwards */
-    usart_reg_map *regs = dev->regs;
+    USART_TypeDef *regs = dev->regs;
 
     // flush output buffer
     while(usart_data_pending(dev) > 0)
@@ -247,7 +247,7 @@ uint32 usart_tx(usart_dev *dev, const uint8 *buf, uint32 len) {
     }
 
 #else
-    usart_reg_map *regs = dev->regs;
+    USART_TypeDef *regs = dev->regs;
     while ((regs->SR & USART_SR_TXE) && (txed < len)) {
         regs->DR = buf[txed++];
     }

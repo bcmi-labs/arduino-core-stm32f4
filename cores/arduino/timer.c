@@ -51,7 +51,7 @@
 
 /** Timer 1 device (advanced) */
 static timer_dev timer1 = {
-    .regs         = { .adv = TIMER1_BASE },
+    .regs         = { .adv = TIM1 },
     .clk_id       = RCC_TIMER1,
     .type         = TIMER_ADVANCED,
     .handlers     = { [NR_ADV_HANDLERS - 1] = 0 },
@@ -61,7 +61,7 @@ timer_dev *TIMER1 = &timer1;
 
 /** Timer 2 device (general-purpose) */
 static timer_dev timer2 = {
-    .regs         = { .gen = TIMER2_BASE },
+    .regs         = { .gen = TIM2 },
     .clk_id       = RCC_TIMER2,
     .type         = TIMER_GENERAL,
     .handlers     = { [NR_GEN_HANDLERS - 1] = 0 },
@@ -71,7 +71,7 @@ timer_dev *TIMER2 = &timer2;
 
 /** Timer 3 device (general-purpose) */
 static timer_dev timer3 = {
-    .regs         = { .gen = TIMER3_BASE },
+    .regs         = { .gen = TIM3 },
     .clk_id       = RCC_TIMER3,
     .type         = TIMER_GENERAL,
     .handlers     = { [NR_GEN_HANDLERS - 1] = 0 },
@@ -81,7 +81,7 @@ timer_dev *TIMER3 = &timer3;
 
 /** Timer 4 device (general-purpose) */
 static timer_dev timer4 = {
-    .regs         = { .gen = TIMER4_BASE },
+    .regs         = { .gen = TIM4 },
     .clk_id       = RCC_TIMER4,
     .type         = TIMER_GENERAL,
     .handlers     = { [NR_GEN_HANDLERS - 1] = 0 },
@@ -91,7 +91,7 @@ timer_dev *TIMER4 = &timer4;
 
 /** Timer 5 device (general-purpose) */
 static timer_dev timer5 = {
-    .regs         = { .gen = TIMER5_BASE },
+    .regs         = { .gen = TIM5 },
     .clk_id       = RCC_TIMER5,
     .type         = TIMER_GENERAL,
     .handlers     = { [NR_GEN_HANDLERS - 1] = 0 },
@@ -101,7 +101,7 @@ timer_dev *TIMER5 = &timer5;
 
 /** Timer 6 device (basic) */     // Used for USB Serial
 static timer_dev timer6 = {
-    .regs         = { .bas = TIMER6_BASE },
+    .regs         = { .bas = TIM6 },
     .clk_id       = RCC_TIMER6,
     .type         = TIMER_BASIC,
     .handlers     = { [NR_BAS_HANDLERS - 1] = 0 },
@@ -111,7 +111,7 @@ timer_dev *TIMER6 = &timer6;
 
 /** Timer 7 device (basic) */
 static timer_dev timer7 = {
-    .regs         = { .bas = TIMER7_BASE },
+    .regs         = { .bas = TIM7 },
     .clk_id       = RCC_TIMER7,
     .type         = TIMER_BASIC,
     .handlers     = { [NR_BAS_HANDLERS - 1] = 0 },
@@ -121,7 +121,7 @@ timer_dev *TIMER7 = &timer7;
 
 /** Timer 8 device (advanced) */
 static timer_dev timer8 = {
-    .regs         = { .adv = TIMER8_BASE },
+    .regs         = { .adv = TIM8 },
     .clk_id       = RCC_TIMER8,
     .type         = TIMER_ADVANCED,
     .handlers     = { [NR_ADV_HANDLERS - 1] = 0 },
@@ -131,7 +131,7 @@ timer_dev *TIMER8 = &timer8;
 
 /** Timer 9 device (advanced) */
 static timer_dev timer9 = {
-    .regs         = { .adv = TIMER9_BASE },
+    .regs         = { .adv = TIM9 },
     .clk_id       = RCC_TIMER9,
     .type         = TIMER_GENERAL,
     .handlers     = { [NR_GEN_HANDLERS - 1] = 0 },
@@ -141,7 +141,7 @@ timer_dev *TIMER9 = &timer9;
 
 /** Timer 10 device (advanced) */
 static timer_dev timer10 = {
-    .regs         = { .adv = TIMER10_BASE },
+    .regs         = { .adv = TIM10 },
     .clk_id       = RCC_TIMER10,
     .type         = TIMER_GENERAL,
     .handlers     = { [NR_GEN_HANDLERS - 1] = 0 },
@@ -151,7 +151,7 @@ timer_dev *TIMER10 = &timer10;
 
 /** Timer 11 device (advanced) */
 static timer_dev timer11 = {
-    .regs         = { .adv = TIMER11_BASE },
+    .regs         = { .adv = TIM11 },
     .clk_id       = RCC_TIMER11,
     .type         = TIMER_GENERAL,
     .handlers     = { [NR_GEN_HANDLERS - 1] = 0 },
@@ -161,7 +161,7 @@ timer_dev *TIMER11 = &timer11;
 
 /** Timer 12 device (advanced) */
 static timer_dev timer12 = {
-    .regs         = { .adv = TIMER12_BASE },
+    .regs         = { .adv = TIM12 },
     .clk_id       = RCC_TIMER12,
     .type         = TIMER_GENERAL,
     .handlers     = { [NR_GEN_HANDLERS - 1] = 0 },
@@ -171,7 +171,7 @@ timer_dev *TIMER12 = &timer12;
 
 /** Timer 13 device (advanced) */
 static timer_dev timer13 = {
-    .regs         = { .adv = TIMER13_BASE },
+    .regs         = { .adv = TIM13 },
     .clk_id       = RCC_TIMER13,
     .type         = TIMER_GENERAL,
     .handlers     = { [NR_GEN_HANDLERS - 1] = 0 },
@@ -181,7 +181,7 @@ timer_dev *TIMER13 = &timer13;
 
 /** Timer 14 device (advanced) */
 static timer_dev timer14 = {
-    .regs         = { .adv = TIMER14_BASE },
+    .regs         = { .adv = TIM14 },
     .clk_id       = RCC_TIMER14,
     .type         = TIMER_GENERAL,
     .handlers     = { [NR_GEN_HANDLERS - 1] = 0 },
@@ -562,7 +562,7 @@ void __irq_tim14_cc(void) {
 static inline void dispatch_single_irq(timer_dev *dev,
                                        timer_interrupt_id iid,
                                        uint32 irq_mask) {
-    timer_bas_reg_map *regs = (dev->regs).bas;
+    TIM_TypeDef *regs = (dev->regs).bas;
     void (*handler)(void) = dev->handlers[iid];
     if (handler) {
         handler();
@@ -590,7 +590,7 @@ static inline void dispatch_adv_up(timer_dev *dev) {
 }
 
 static inline void dispatch_adv_trg_com(timer_dev *dev) {
-    timer_adv_reg_map *regs = (dev->regs).adv;
+    TIM_TypeDef *regs = (dev->regs).adv;
     uint32 dsr = regs->DIER & regs->SR;
     void (**hs)(void) = dev->handlers;
     uint32 handled = 0; /* Logical OR of SR interrupt flags we end up
@@ -605,7 +605,7 @@ static inline void dispatch_adv_trg_com(timer_dev *dev) {
 }
 
 static inline void dispatch_adv_cc(timer_dev *dev) {
-    timer_adv_reg_map *regs = (dev->regs).adv;
+    TIM_TypeDef *regs = (dev->regs).adv;
     uint32 dsr = regs->DIER & regs->SR;
     void (**hs)(void) = dev->handlers;
     uint32 handled = 0;
@@ -619,7 +619,7 @@ static inline void dispatch_adv_cc(timer_dev *dev) {
 }
 
 static inline void dispatch_general(timer_dev *dev) {
-    timer_gen_reg_map *regs = (dev->regs).gen;
+    TIM_TypeDef *regs = (dev->regs).gen;
     uint32 dsr = regs->DIER & regs->SR;
     void (**hs)(void) = dev->handlers;
     uint32 handled = 0;
@@ -674,20 +674,20 @@ static void enable_advanced_irq(timer_dev *dev, timer_interrupt_id id) {
 
     switch (id) {
     case TIMER_UPDATE_INTERRUPT:
-        nvic_irq_enable(is_timer1 ? NVIC_TIMER1_UP : NVIC_TIMER8_UP);
+        nvic_irq_enable(is_timer1 ? TIM1_UP_TIM10_IRQn : TIM8_UP_TIM13_IRQn);
         break;
     case TIMER_CC1_INTERRUPT:
     case TIMER_CC2_INTERRUPT:
     case TIMER_CC3_INTERRUPT:
     case TIMER_CC4_INTERRUPT:
-        nvic_irq_enable(is_timer1 ? NVIC_TIMER1_CC : NVIC_TIMER8_CC);
+        nvic_irq_enable(is_timer1 ? TIM1_CC_IRQn : TIM8_CC_IRQn);
         break;
     case TIMER_COM_INTERRUPT:
     case TIMER_TRG_INTERRUPT:
-        nvic_irq_enable(is_timer1 ? NVIC_TIMER1_TRG_COM : NVIC_TIMER8_TRG_COM);
+        nvic_irq_enable(is_timer1 ? TIM1_TRG_COM_TIM11_IRQn : TIM8_TRG_COM_TIM14_IRQn);
         break;
     case TIMER_BREAK_INTERRUPT:
-        nvic_irq_enable(is_timer1 ? NVIC_TIMER1_BRK : NVIC_TIMER8_BRK);
+        nvic_irq_enable(is_timer1 ? TIM1_BRK_TIM9_IRQn : TIM8_BRK_TIM12_IRQn);
         break;
     }
 }
@@ -695,40 +695,40 @@ static void enable_advanced_irq(timer_dev *dev, timer_interrupt_id id) {
 static void enable_nonmuxed_irq(timer_dev *dev) {
     switch (dev->clk_id) {
     case RCC_TIMER2:
-        nvic_irq_enable(NVIC_TIMER2);
+        nvic_irq_enable(TIM2_IRQn);
         break;
     case RCC_TIMER3:
-        nvic_irq_enable(NVIC_TIMER3);
+        nvic_irq_enable(TIM3_IRQn);
         break;
     case RCC_TIMER4:
-        nvic_irq_enable(NVIC_TIMER4);
+        nvic_irq_enable(TIM4_IRQn);
         break;
     case RCC_TIMER5:
-        nvic_irq_enable(NVIC_TIMER5);
+        nvic_irq_enable(TIM5_IRQn);
         break;
     case RCC_TIMER6:
-        nvic_irq_enable(NVIC_TIMER6);
+        nvic_irq_enable(TIM6_DAC_IRQn);
         break;
     case RCC_TIMER7:
-        nvic_irq_enable(NVIC_TIMER7);
+        nvic_irq_enable(TIM7_IRQn);
         break;
     case RCC_TIMER9:
-        nvic_irq_enable(NVIC_TIMER1_BRK);
+        nvic_irq_enable(TIM1_BRK_TIM9_IRQn);
         break;
     case RCC_TIMER10:
-        nvic_irq_enable(NVIC_TIMER1_UP);
+        nvic_irq_enable(TIM1_UP_TIM10_IRQn);
         break;
     case RCC_TIMER11:
-        nvic_irq_enable(NVIC_TIMER1_TRG_COM);
+        nvic_irq_enable(TIM1_TRG_COM_TIM11_IRQn);
         break;
     case RCC_TIMER12:
-        nvic_irq_enable(NVIC_TIMER8_BRK);
+        nvic_irq_enable(TIM8_BRK_TIM12_IRQn);
         break;
     case RCC_TIMER13:
-        nvic_irq_enable(NVIC_TIMER8_UP);
+        nvic_irq_enable(TIM8_UP_TIM13_IRQn);
         break;
     case RCC_TIMER14:
-        nvic_irq_enable(NVIC_TIMER8_TRG_COM);
+        nvic_irq_enable(TIM8_TRG_COM_TIM14_IRQn);
         break;
     default:
         ASSERT_FAULT(0);

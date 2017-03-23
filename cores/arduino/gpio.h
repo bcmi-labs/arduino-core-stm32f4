@@ -50,22 +50,6 @@ extern "C"{
  * GPIO register maps and devices
  */
 
-/** GPIO register map type */
-typedef struct gpio_reg_map {
-    __io uint32 MODER;    /*!< GPIO port mode register,               Address offset: 0x00      */
-    __io uint32 OTYPER;   /*!< GPIO port output type register,        Address offset: 0x04      */
-    __io uint32 OSPEEDR;  /*!< GPIO port output speed register,       Address offset: 0x08      */
-    __io uint32 PUPDR;    /*!< GPIO port pull-up/pull-down register,  Address offset: 0x0C      */
-    __io uint32 IDR;      /*!< GPIO port input data register,         Address offset: 0x10      */
-    __io uint32 ODR;      /*!< GPIO port output data register,        Address offset: 0x14      */
-    __io uint16 BSRRL;    /*!< GPIO port bit set/reset low register,  Address offset: 0x18      */
-    __io uint16 BSRRH;    /*!< GPIO port bit set/reset high register, Address offset: 0x1A      */
-    __io uint32 LCKR;     /*!< GPIO port configuration lock register, Address offset: 0x1C      */
-    __io uint32 AFR[2];   /*!< GPIO alternate function registers,     Address offset: 0x24-0x28 */
-} gpio_reg_map;
-
-
-
 /**
  * @brief External interrupt line port selector.
  *
@@ -88,7 +72,7 @@ typedef enum afio_exti_port {
 
 /** GPIO device type */
 typedef struct gpio_dev {
-    gpio_reg_map *regs;       /**< Register map */
+    GPIO_TypeDef *regs;       /**< Register map */
     rcc_clk_id clk_id;        /**< RCC clock information */
     afio_exti_port exti_port; /**< AFIO external interrupt port value */
 } gpio_dev;
@@ -116,27 +100,13 @@ extern gpio_dev* const GPIOJ_dev;
 extern gpio_dev gpiok;
 extern gpio_dev* const GPIOK_dev;
 
-/** GPIO port register map base pointer */
-#define GPIOA_BASE                      ((struct gpio_reg_map*)0x40020000)
-#define GPIOB_BASE                      ((struct gpio_reg_map*)0x40020400)
-#define GPIOC_BASE                      ((struct gpio_reg_map*)0x40020800)
-#define GPIOD_BASE                      ((struct gpio_reg_map*)0x40020C00)
-#define GPIOE_BASE                      ((struct gpio_reg_map*)0x40021000)
-#define GPIOF_BASE                      ((struct gpio_reg_map*)0x40021400)
-#define GPIOG_BASE                      ((struct gpio_reg_map*)0x40021800)
-#define GPIOH_BASE                      ((struct gpio_reg_map*)0x40021C00)
-#define GPIOI_BASE                      ((struct gpio_reg_map*)0x40022000)
-#define GPIOJ_BASE                      ((struct gpio_reg_map*)0x40022400)
-#define GPIOK_BASE                      ((struct gpio_reg_map*)0x40022800)
 
 /*
  * GPIO register bit definitions
  */
 
-#define GPIO_MODE_INPUT                 0
 #define GPIO_MODE_OUTPUT                1
 #define GPIO_MODE_AF                    2
-#define GPIO_MODE_ANALOG                3
 
 #define GPIO_PUPD_INPUT_FLOATING        (0 << 2)
 #define GPIO_PUPD_INPUT_PU              (1 << 2)
@@ -151,187 +121,6 @@ extern gpio_dev* const GPIOK_dev;
 #define GPIO_OTYPE_OD                   (1 << 6)
 
 // IO port register definition
-
-// Offset definition
-#define MODER_offset        0x00
-#define OTYPER_offset       0x04
-#define OSPEEDR_offset      0x08
-#define PUPDR_offset        0x0C
-#define IDR_offset          0x10
-#define ODR_offset          0x14
-#define BSRR_offset         0x18
-#define LCKR_offset         0x1C
-#define AFRL_offset         0x20
-#define AFRH_offset         0x24
-
-/*
-MODER
-00: Input (reset state)
-01: General purpose output mode
-10: Alternate function mode
-11: Analog mode
-
-OTYPER
-0: Output push-pull (reset state)
-1: Output open-drain
-
-OSPEEDR
-00: 2 MHz Low speed
-01: 25 MHz Medium speed
-10: 50 MHz Fast speed
-11: 100 MHz High speed on 30 pF (80 MHz Output max speed on 15 pF)
-
-PUPDR
-00: No pull-up, pull-down
-01: Pull-up
-10: Pull-down
-
-AFRL 4 bit AF00-AF15
-AFRH 4 bit AF00-AF15
-*/
-
-// GPIOA
-
-#define GPIOA_MODER     (uint32_t)GPIOA_BASE+(uint32_t)MODER_offset
-#define GPIOA_OTYPER    (uint32_t)GPIOA_BASE+(uint32_t)OTYPER_offset
-#define GPIOA_OSPEEDR   (uint32_t)GPIOA_BASE+(uint32_t)OSPEEDR_offset
-#define GPIOA_PUPDR     (uint32_t)GPIOA_BASE+(uint32_t)PUPDR_offset
-#define GPIOA_IDR       (uint32_t)GPIOA_BASE+(uint32_t)IDR_offset
-#define GPIOA_ODR       (uint32_t)GPIOA_BASE+(uint32_t)ODR_offset
-#define GPIOA_BSRR      (uint32_t)GPIOA_BASE+(uint32_t)BSRR_offset
-#define GPIOA_LCKR      (uint32_t)GPIOA_BASE+(uint32_t)LCKR_offset
-#define GPIOA_AFRL      (uint32_t)GPIOA_BASE+(uint32_t)AFRL_offset
-#define GPIOA_AFRH      (uint32_t)GPIOA_BASE+(uint32_t)AFRH_offset
-
-// GPIOB
-
-#define GPIOB_MODER     (uint32_t)GPIOB_BASE+(uint32_t)MODER_offset
-#define GPIOB_OTYPER    (uint32_t)GPIOB_BASE+(uint32_t)OTYPER_offset
-#define GPIOB_OSPEEDR   (uint32_t)GPIOB_BASE+(uint32_t)OSPEEDR_offset
-#define GPIOB_PUPDR     (uint32_t)GPIOB_BASE+(uint32_t)PUPDR_offset
-#define GPIOB_IDR       (uint32_t)GPIOB_BASE+(uint32_t)IDR_offset
-#define GPIOB_ODR       (uint32_t)GPIOB_BASE+(uint32_t)ODR_offset
-#define GPIOB_BSRR      (uint32_t)GPIOB_BASE+(uint32_t)BSRR_offset
-#define GPIOB_LCKR      (uint32_t)GPIOB_BASE+(uint32_t)LCKR_offset
-#define GPIOB_AFRL      (uint32_t)GPIOB_BASE+(uint32_t)AFRL_offset
-#define GPIOB_AFRH      (uint32_t)GPIOB_BASE+(uint32_t)AFRH_offset
-
-// GPIOC
-
-#define GPIOC_MODER     (uint32_t)GPIOC_BASE+(uint32_t)MODER_offset
-#define GPIOC_OTYPER    (uint32_t)GPIOC_BASE+(uint32_t)OTYPER_offset
-#define GPIOC_OSPEEDR   (uint32_t)GPIOC_BASE+(uint32_t)OSPEEDR_offset
-#define GPIOC_PUPDR     (uint32_t)GPIOC_BASE+(uint32_t)PUPDR_offset
-#define GPIOC_IDR       (uint32_t)GPIOC_BASE+(uint32_t)IDR_offset
-#define GPIOC_ODR       (uint32_t)GPIOC_BASE+(uint32_t)ODR_offset
-#define GPIOC_BSRR      (uint32_t)GPIOC_BASE+(uint32_t)BSRR_offset
-#define GPIOC_LCKR      (uint32_t)GPIOC_BASE+(uint32_t)LCKR_offset
-#define GPIOC_AFRL      (uint32_t)GPIOC_BASE+(uint32_t)AFRL_offset
-#define GPIOC_AFRH      (uint32_t)GPIOC_BASE+(uint32_t)AFRH_offset
-
-// GPIOD
-
-#define GPIOD_MODER     (uint32_t)GPIOD_BASE+(uint32_t)MODER_offset
-#define GPIOD_OTYPER    (uint32_t)GPIOD_BASE+(uint32_t)OTYPER_offset
-#define GPIOD_OSPEEDR   (uint32_t)GPIOD_BASE+(uint32_t)OSPEEDR_offset
-#define GPIOD_PUPDR     (uint32_t)GPIOD_BASE+(uint32_t)PUPDR_offset
-#define GPIOD_IDR       (uint32_t)GPIOD_BASE+(uint32_t)IDR_offset
-#define GPIOD_ODR       (uint32_t)GPIOD_BASE+(uint32_t)ODR_offset
-#define GPIOD_BSRR      (uint32_t)GPIOD_BASE+(uint32_t)BSRR_offset
-#define GPIOD_LCKR      (uint32_t)GPIOD_BASE+(uint32_t)LCKR_offset
-#define GPIOD_AFRL      (uint32_t)GPIOD_BASE+(uint32_t)AFRL_offset
-#define GPIOD_AFRH      (uint32_t)GPIOD_BASE+(uint32_t)AFRH_offset
-
-// GPIOE
-
-#define GPIOE_MODER     (uint32_t)GPIOE_BASE+(uint32_t)MODER_offset
-#define GPIOE_OTYPER    (uint32_t)GPIOE_BASE+(uint32_t)OTYPER_offset
-#define GPIOE_OSPEEDR   (uint32_t)GPIOE_BASE+(uint32_t)OSPEEDR_offset
-#define GPIOE_PUPDR     (uint32_t)GPIOE_BASE+(uint32_t)PUPDR_offset
-#define GPIOE_IDR       (uint32_t)GPIOE_BASE+(uint32_t)IDR_offset
-#define GPIOE_ODR       (uint32_t)GPIOE_BASE+(uint32_t)ODR_offset
-#define GPIOE_BSRR      (uint32_t)GPIOE_BASE+(uint32_t)BSRR_offset
-#define GPIOE_LCKR      (uint32_t)GPIOE_BASE+(uint32_t)LCKR_offset
-#define GPIOE_AFRL      (uint32_t)GPIOE_BASE+(uint32_t)AFRL_offset
-#define GPIOE_AFRH      (uint32_t)GPIOE_BASE+(uint32_t)AFRH_offset
-
-// GPIOF
-
-#define GPIOF_MODER     (uint32_t)GPIOF_BASE+(uint32_t)MODER_offset
-#define GPIOF_OTYPER    (uint32_t)GPIOF_BASE+(uint32_t)OTYPER_offset
-#define GPIOF_OSPEEDR   (uint32_t)GPIOF_BASE+(uint32_t)OSPEEDR_offset
-#define GPIOF_PUPDR     (uint32_t)GPIOF_BASE+(uint32_t)PUPDR_offset
-#define GPIOF_IDR       (uint32_t)GPIOF_BASE+(uint32_t)IDR_offset
-#define GPIOF_ODR       (uint32_t)GPIOF_BASE+(uint32_t)ODR_offset
-#define GPIOF_BSRR      (uint32_t)GPIOF_BASE+(uint32_t)BSRR_offset
-#define GPIOF_LCKR      (uint32_t)GPIOF_BASE+(uint32_t)LCKR_offset
-#define GPIOF_AFRL      (uint32_t)GPIOF_BASE+(uint32_t)AFRL_offset
-#define GPIOF_AFRH      (uint32_t)GPIOF_BASE+(uint32_t)AFRH_offset
-
-// GPIOG
-
-#define GPIOG_MODER     (uint32_t)GPIOG_BASE+(uint32_t)MODER_offset
-#define GPIOG_OTYPER    (uint32_t)GPIOG_BASE+(uint32_t)OTYPER_offset
-#define GPIOG_OSPEEDR   (uint32_t)GPIOG_BASE+(uint32_t)OSPEEDR_offset
-#define GPIOG_PUPDR     (uint32_t)GPIOG_BASE+(uint32_t)PUPDR_offset
-#define GPIOG_IDR       (uint32_t)GPIOG_BASE+(uint32_t)IDR_offset
-#define GPIOG_ODR       (uint32_t)GPIOG_BASE+(uint32_t)ODR_offset
-#define GPIOG_BSRR      (uint32_t)GPIOG_BASE+(uint32_t)BSRR_offset
-#define GPIOG_LCKR      (uint32_t)GPIOG_BASE+(uint32_t)LCKR_offset
-#define GPIOG_AFRL      (uint32_t)GPIOG_BASE+(uint32_t)AFRL_offset
-#define GPIOG_AFRH      (uint32_t)GPIOG_BASE+(uint32_t)AFRH_offset
-
-// GPIOH
-
-#define GPIOH_MODER     (uint32_t)GPIOH_BASE+(uint32_t)MODER_offset
-#define GPIOH_OTYPER    (uint32_t)GPIOH_BASE+(uint32_t)OTYPER_offset
-#define GPIOH_OSPEEDR   (uint32_t)GPIOH_BASE+(uint32_t)OSPEEDR_offset
-#define GPIOH_PUPDR     (uint32_t)GPIOH_BASE+(uint32_t)PUPDR_offset
-#define GPIOH_IDR       (uint32_t)GPIOH_BASE+(uint32_t)IDR_offset
-#define GPIOH_ODR       (uint32_t)GPIOH_BASE+(uint32_t)ODR_offset
-#define GPIOH_BSRR      (uint32_t)GPIOH_BASE+(uint32_t)BSRR_offset
-#define GPIOH_LCKR      (uint32_t)GPIOH_BASE+(uint32_t)LCKR_offset
-#define GPIOH_AFRL      (uint32_t)GPIOH_BASE+(uint32_t)AFRL_offset
-#define GPIOH_AFRH      (uint32_t)GPIOH_BASE+(uint32_t)AFRH_offset
-
-// GPIOI
-
-#define GPIOI_MODER     (uint32_t)GPIOI_BASE+(uint32_t)MODER_offset
-#define GPIOI_OTYPER    (uint32_t)GPIOI_BASE+(uint32_t)OTYPER_offset
-#define GPIOI_OSPEEDR   (uint32_t)GPIOI_BASE+(uint32_t)OSPEEDR_offset
-#define GPIOI_PUPDR     (uint32_t)GPIOI_BASE+(uint32_t)PUPDR_offset
-#define GPIOI_IDR       (uint32_t)GPIOI_BASE+(uint32_t)IDR_offset
-#define GPIOI_ODR       (uint32_t)GPIOI_BASE+(uint32_t)ODR_offset
-#define GPIOI_BSRR      (uint32_t)GPIOI_BASE+(uint32_t)BSRR_offset
-#define GPIOI_LCKR      (uint32_t)GPIOI_BASE+(uint32_t)LCKR_offset
-#define GPIOI_AFRL      (uint32_t)GPIOI_BASE+(uint32_t)AFRL_offset
-#define GPIOI_AFRH      (uint32_t)GPIOI_BASE+(uint32_t)AFRH_offset
-
-// GPIOJ
-
-#define GPIOJ_MODER     (uint32_t)GPIOJ_BASE+(uint32_t)MODER_offset
-#define GPIOJ_OTYPER    (uint32_t)GPIOJ_BASE+(uint32_t)OTYPER_offset
-#define GPIOJ_OSPEEDR   (uint32_t)GPIOJ_BASE+(uint32_t)OSPEEDR_offset
-#define GPIOJ_PUPDR     (uint32_t)GPIOJ_BASE+(uint32_t)PUPDR_offset
-#define GPIOJ_IDR       (uint32_t)GPIOJ_BASE+(uint32_t)IDR_offset
-#define GPIOJ_ODR       (uint32_t)GPIOJ_BASE+(uint32_t)ODR_offset
-#define GPIOJ_BSRR      (uint32_t)GPIOJ_BASE+(uint32_t)BSRR_offset
-#define GPIOJ_LCKR      (uint32_t)GPIOJ_BASE+(uint32_t)LCKR_offset
-#define GPIOJ_AFRL      (uint32_t)GPIOJ_BASE+(uint32_t)AFRL_offset
-#define GPIOJ_AFRH      (uint32_t)GPIOJ_BASE+(uint32_t)AFRH_offset
-
-// GPIOK
-
-#define GPIOK_MODER     (uint32_t)GPIOK_BASE+(uint32_t)MODER_offset
-#define GPIOK_OTYPER    (uint32_t)GPIOK_BASE+(uint32_t)OTYPER_offset
-#define GPIOK_OSPEEDR   (uint32_t)GPIOK_BASE+(uint32_t)OSPEEDR_offset
-#define GPIOK_PUPDR     (uint32_t)GPIOK_BASE+(uint32_t)PUPDR_offset
-#define GPIOK_IDR       (uint32_t)GPIOK_BASE+(uint32_t)IDR_offset
-#define GPIOK_ODR       (uint32_t)GPIOK_BASE+(uint32_t)ODR_offset
-#define GPIOK_BSRR      (uint32_t)GPIOK_BASE+(uint32_t)BSRR_offset
-#define GPIOK_LCKR      (uint32_t)GPIOK_BASE+(uint32_t)LCKR_offset
-#define GPIOK_AFRL      (uint32_t)GPIOK_BASE+(uint32_t)AFRL_offset
-#define GPIOK_AFRH      (uint32_t)GPIOK_BASE+(uint32_t)AFRH_offset
 
 /**
  * @brief GPIO Pin modes.
@@ -389,9 +178,9 @@ static inline afio_exti_port gpio_exti_port(gpio_dev *dev) {
  */
 static inline void gpio_write_bit(gpio_dev *dev, uint8 pin, uint8 val) {
     if (val) {
-        dev->regs->BSRRL = BIT(pin);
+        dev->regs->BSRR = BIT(pin);
     } else {
-        dev->regs->BSRRH = BIT(pin);
+        dev->regs->BSRR = (uint32_t)BIT(pin)<<16;
     }
 }
 
@@ -416,24 +205,6 @@ static inline uint32 gpio_read_bit(gpio_dev *dev, uint8 pin) {
 static inline void gpio_toggle_bit(gpio_dev *dev, uint8 pin) {
     dev->regs->ODR = dev->regs->ODR ^ BIT(pin);
 }
-
-/*
- * AFIO register map
- */
-
-/** AFIO register map */
-typedef struct syscfg_reg_map {
-    __io uint32 MEMRM;    /**< memory remap register  */
-    __io uint32 PMC;      /**< peripheral mode configuration register */
-    __io uint32 EXTICR1;  /**< External interrupt configuration register 1. */
-    __io uint32 EXTICR2;  /**< External interrupt configuration register 2. */
-    __io uint32 EXTICR3;  /**< External interrupt configuration register 3. */
-    __io uint32 EXTICR4;  /**< External interrupt configuration register 4. */
-    __io uint32 CMPCR;    /**< Compensation cell control register */
-} syscfg_reg_map;
-
-/** AFIO register map base pointer. */
-#define SYSCFG_BASE                       ((struct syscfg_reg_map *)0x40013800)
 
 /*
  * AFIO register bit definitions

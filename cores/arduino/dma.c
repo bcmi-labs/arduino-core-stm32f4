@@ -38,17 +38,21 @@
 #include "bitband.h"
 #include "util.h"
 
-/** DMA controller register map base pointers */
-#define DMA1_BASE                       ((struct dma_reg_map*)0x40026000)
-#define DMA2_BASE                       ((struct dma_reg_map*)0x40026400)
-
 /*
  * Devices
  */
 
 /** DMA1 device */
 static dma_dev dma1 = {
-    .regs     = DMA1_BASE,
+    .regs     = DMA1,
+    .streams  = { (DMA_Stream_TypeDef*)DMA1_Stream0_BASE,
+                  (DMA_Stream_TypeDef*)DMA1_Stream1_BASE,
+                  (DMA_Stream_TypeDef*)DMA1_Stream2_BASE,
+                  (DMA_Stream_TypeDef*)DMA1_Stream3_BASE,
+                  (DMA_Stream_TypeDef*)DMA1_Stream4_BASE,
+                  (DMA_Stream_TypeDef*)DMA1_Stream5_BASE,
+                  (DMA_Stream_TypeDef*)DMA1_Stream6_BASE,
+                  (DMA_Stream_TypeDef*)DMA1_Stream7_BASE},
     .clk_id   = RCC_DMA1,
     .handlers = {{ .handler = NULL, .irq_line = 11 },
                  { .handler = NULL, .irq_line = 12 },
@@ -64,7 +68,16 @@ dma_dev *DMA1_dev = &dma1;
 
 /** DMA2 device */
 static dma_dev dma2 = {
-    .regs     = DMA2_BASE,
+    .regs     = DMA2,
+    .streams  = { (DMA_Stream_TypeDef*)DMA2_Stream0_BASE,
+                  (DMA_Stream_TypeDef*)DMA2_Stream1_BASE,
+                  (DMA_Stream_TypeDef*)DMA2_Stream2_BASE,
+                  (DMA_Stream_TypeDef*)DMA2_Stream3_BASE,
+                  (DMA_Stream_TypeDef*)DMA2_Stream4_BASE,
+                  (DMA_Stream_TypeDef*)DMA2_Stream5_BASE,
+                  (DMA_Stream_TypeDef*)DMA2_Stream6_BASE,
+                  (DMA_Stream_TypeDef*)DMA2_Stream7_BASE},
+
     .clk_id   = RCC_DMA2,
     .handlers = {{ .handler = NULL, .irq_line = 56 },
                  { .handler = NULL, .irq_line = 57 },

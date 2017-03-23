@@ -78,7 +78,7 @@ void HardwareSerial::begin(uint32 baud)
         gpio_set_af_mode(USART1_RX_GPIO_DEV, USART1_RX_GPIO_PIN, USART1_RX_AF);
 
         // enable USART1 clock
-        *((uint32_t*)(RCC_APB2ENR)) |= (1 <<  RCC_APB2ENR_USART1EN_BIT);
+        __HAL_RCC_USART1_CLK_ENABLE();
 
     }
 
@@ -95,7 +95,7 @@ void HardwareSerial::begin(uint32 baud)
         gpio_set_af_mode(USART2_RX_GPIO_DEV, USART2_RX_GPIO_PIN, USART2_RX_AF);
 
         // enable USART2 clock
-        *((uint32_t*)(RCC_APB1ENR)) |= (1 << RCC_APB1ENR_USART2EN_BIT);
+        __HAL_RCC_USART2_CLK_ENABLE();
     }
 
     else if (usart_device == USART3_dev)
@@ -110,7 +110,7 @@ void HardwareSerial::begin(uint32 baud)
         gpio_set_af_mode(USART3_RX_GPIO_DEV, USART3_RX_GPIO_PIN, USART3_RX_AF);
 
         // enable USART3 clock
-        *((uint32_t*)(RCC_APB1ENR)) |= (1 << RCC_APB1ENR_USART3EN_BIT);
+        __HAL_RCC_USART3_CLK_ENABLE();
     }
 
     else if (usart_device == UART4_dev)
@@ -126,7 +126,7 @@ void HardwareSerial::begin(uint32 baud)
         gpio_set_af_mode(UART4_RX_GPIO_DEV, UART4_RX_GPIO_PIN, UART4_RX_AF);
 
         // enable UART4 clock
-        *((uint32_t*)(RCC_APB1ENR)) |= (1 << RCC_APB1ENR_UART4EN_BIT);
+        __HAL_RCC_UART4_CLK_ENABLE();
     }
 
     else if (usart_device == UART5_dev) // Arduino OTTO not use this device
@@ -142,7 +142,7 @@ void HardwareSerial::begin(uint32 baud)
         gpio_set_af_mode(UART5_RX_GPIO_DEV, UART5_RX_GPIO_PIN, UART5_RX_AF);
 
         // enable UART5 clock
-        *((uint32_t*)(RCC_APB1ENR)) |= (1 << RCC_APB1ENR_UART5EN_BIT);
+        __HAL_RCC_UART5_CLK_ENABLE();
     }
 
     else if (usart_device == USART6_dev)
@@ -158,7 +158,7 @@ void HardwareSerial::begin(uint32 baud)
         gpio_set_af_mode(USART6_RX_GPIO_DEV, USART6_RX_GPIO_PIN, USART6_RX_AF);
 
         // enable USART6 clock
-        *((uint32_t*)(RCC_APB2ENR)) |= (1 << RCC_APB2ENR_USART6EN_BIT);
+        __HAL_RCC_USART6_CLK_ENABLE();
     }
 
     else if (usart_device == UART7_dev) // Arduino OTTO not use this device
@@ -174,7 +174,7 @@ void HardwareSerial::begin(uint32 baud)
         gpio_set_af_mode(UART7_RX_GPIO_DEV, UART7_RX_GPIO_PIN, UART7_RX_AF);
 
         // enable UART7 clock
-        *((uint32_t*)(RCC_APB1ENR)) |= (1 << RCC_APB1ENR_UART7EN_BIT);
+        __HAL_RCC_UART7_CLK_ENABLE();
     }
 
     else if (usart_device == UART8_dev) // Arduino OTTO not use this device
@@ -190,7 +190,7 @@ void HardwareSerial::begin(uint32 baud)
         gpio_set_af_mode(UART8_RX_GPIO_DEV, UART8_RX_GPIO_PIN, UART8_RX_AF);
 
         // enable UART8 clock
-        *((uint32_t*)(RCC_APB1ENR)) |= (1 << RCC_APB1ENR_UART8EN_BIT);
+        __HAL_RCC_UART8_CLK_ENABLE();
     }
 
 #if 0
