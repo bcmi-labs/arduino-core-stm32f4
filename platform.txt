@@ -89,13 +89,22 @@ recipe.size.regex.data=^(?:\.data|\.bss|\.noinit)\s+([0-9]+).*
 # DFU Util
 # --------
 
-tools.dfu-util.path={runtime.tools.dfu-util-0.8.0-stm32-arduino2.path}
-tools.dfu-util.cmd=dfu-util
-tools.dfu-util.cmd.windows=dfu-util.cmd
+#tools.dfu-util.path={runtime.tools.dfu-util-0.9.0-arduino1.path}
+#tools.dfu-util.cmd=dfu-util
+#tools.dfu-util.cmd.windows=dfu-util.cmd
 
-tools.dfu-util.upload.params.verbose=-v
-tools.dfu-util.upload.params.quiet=
-tools.dfu-util.upload.pattern="{path}/{cmd}" "{path}" {upload.usbID} {upload.altID} {upload.mem_start} "{build.path}/{build.project_name}.bin" "{serial.port}"
+#tools.dfu-util.upload.params.verbose=-v
+#tools.dfu-util.upload.params.quiet=
+#tools.dfu-util.upload.pattern="{path}/{cmd}" "{path}" {upload.usbID} {upload.altID} {upload.mem_start} "{build.path}/{build.project_name}.bin" "{serial.port}"
+
+#
+# arduinoSTM32load
+# ----------------
+tools.arduinoSTM32load.path={runtime.tools.arduinoSTM32load-1.0.0.path}
+tools.arduinoSTM32load.cmd=arduinoSTM32load
+tools.arduinoSTM32load.upload.params.verbose=-v
+tools.arduinoSTM32load.upload.params.quiet=
+tools.arduinoSTM32load.upload.pattern="{path}/{cmd}" -dfu "{runtime.tools.dfu-util-0.9.0-arduino1.path}" -bin "{build.path}/{build.project_name}.bin" -port="{serial.port}" "{upload.params.verbose}"
 
 #
 # USB Flags
