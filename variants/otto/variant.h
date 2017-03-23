@@ -157,7 +157,7 @@
 
 // DAC PIN Definition
 #define DAC0 		     D66
-#define DAC1 	    	 D67
+#define DAC11 	    	 D67
 
 // LEDs PIN Definition
 #define LED_L		     D13

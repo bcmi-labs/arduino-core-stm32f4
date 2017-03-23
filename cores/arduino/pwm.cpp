@@ -49,17 +49,17 @@ extern uint16 MaxRes_val= 255;
 
 void analogWrite(uint8 pin, uint16 passed_val)
 {
-	if ((pin == DAC0) | (pin == DAC1))
+	if ((pin == DAC0) | (pin == DAC11))
 	{
         uint16 duty_cycle = passed_val;
 		if ((!ADC0_Status) && (pin == DAC0)) setDac(pin);
-		if ((!ADC1_Status) && (pin == DAC1)) setDac(pin);
+		if ((!ADC1_Status) && (pin == DAC11)) setDac(pin);
 
 
 
 		if (pin == DAC0) dac_write_channel(DAC_dev,1,duty_cycle);
 
-		if (pin == DAC1) dac_write_channel(DAC_dev,2,duty_cycle);
+		if (pin == DAC11) dac_write_channel(DAC_dev,2,duty_cycle);
 	}
 	else
 	{
@@ -98,7 +98,7 @@ void setDac (uint8 pin)
                     dac_init(DAC_dev, DAC_CH1);
                 }
             }
-            if (pin == DAC1)
+            if (pin == DAC11)
             {
                 if (ADC0_Status)
                 {
