@@ -45,7 +45,6 @@ extern "C"{
 #define OUTPUT 0x1
 #define INPUT_PULLUP 0x2
 #define OUTPUT_OPENDRAIN 0x3
-#define INPUT_PULLUP 0x4
 #define INPUT_PULLDOWN 0x5
 #define INPUT_FLOAT 0x6
 #define OUTPUT_DAC 0x7
