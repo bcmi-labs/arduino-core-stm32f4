@@ -20,7 +20,7 @@
 #include <SD.h>
 #include <Audio.h>
 
-const char recFile[] = "test.wav";
+const char recFile[] = "record.wav";
 #define AUDIO_IN_FREQUENCY           BSP_AUDIO_FREQUENCY_48K
 #define DEFAULT_TIME_REC             30  // Recording time in second (default: 30s)
 #define REC_SAMPLE_LENGTH   (DEFAULT_TIME_REC * AUDIO_IN_FREQUENCY * DEFAULT_AUDIO_IN_CHANNEL_NBR * 2)
@@ -95,7 +95,6 @@ void loop() {
 
   delay(1000);
   SerialUSB.println("Starting AUDIO recorder");
-  delay(1000);
   status = Audio.begin(WaveFormat.SampleRate, 100, AUDIO_IN);
   if (status != 0) {
     SerialUSB.print("Error: Audio could not begin: ");
@@ -105,13 +104,11 @@ void loop() {
     SerialUSB.println("Audio begin: OK");
   }
 
-  delay(1000);
-
   // Prepare samples
   SerialUSB.println("Recording...");
   int volume = 100;
   Audio.prepare(NULL, S, volume);
-  delay(1000);
+  delay(100);
 
   // MAX Recording time reached, so stop audio interface and close file
   while ( Audio.getSampleIn() < REC_SAMPLE_LENGTH) {

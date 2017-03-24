@@ -189,7 +189,7 @@ uint32_t AudioClass::amp(uint8_t volume, AudioMode audioMode) {
 	uint32_t ret = AUDIO_OK;
 	if ((!audio_in_init) && (!audio_out_init))
 		ret = AUDIO_ERROR;
-	if ((audio_out_init) && (audioMode != AUDIO_IN))
+	if ((audio_out_init) || (audio_in_init))
 		ret = BSP_AUDIO_OUT_SetVolume(volume);
 	if ((audio_in_init) && (audioMode != AUDIO_OUT))
 		ret |= BSP_AUDIO_IN_SetVolume(volume);
