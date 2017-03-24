@@ -367,6 +367,10 @@ __default_handler:
   .globl	__irq_DMA2D_IRQHandler                     
   .set	__irq_DMA2D_IRQHandler, __default_handler
 
+  .weak	__irq_QUADSPI_IRQHandler                     
+  .globl	__irq_QUADSPI_IRQHandler                     
+  .set	__irq_QUADSPI_IRQHandler, __default_handler
+
   .weak	__irq_DSI_IRQHandler                     
   .globl	__irq_DSI_IRQHandler                     
   .set	__irq_DSI_IRQHandler, __default_handler
