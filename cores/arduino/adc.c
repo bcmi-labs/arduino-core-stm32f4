@@ -140,6 +140,7 @@ void adc_set_sample_rate(const adc_dev *dev, adc_smp_rate smp_rate) {
  */
 void adc_calibrate(const adc_dev *dev) {
     // do nothing
+    UNUSED(dev);
 }
 
 /**

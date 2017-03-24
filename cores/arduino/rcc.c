@@ -274,7 +274,10 @@ void SetupClock()
 void rcc_clk_init(rcc_sysclk_src sysclk_src,
                   rcc_pllsrc pll_src,
                   rcc_pll_multiplier pll_mul) {
-	  SetupClock();
+  UNUSED(sysclk_src);
+  UNUSED(pll_src);
+  UNUSED(pll_mul);
+  SetupClock();
 }
 
 #define PLL_M      8
@@ -295,6 +298,9 @@ void rcc_clk_init2(rcc_sysclk_src sysclk_src,
 /******************************************************************************/
   uint32 StartUpCounter = 0, HSEStatus = 0;
   RCC_TypeDef *pRCC = RCC;
+  UNUSED(sysclk_src);
+  UNUSED(pll_src);
+  UNUSED(pll_mul);
 
   /* Enable HSE */
   pRCC->CR |= RCC_CR_HSEON;
@@ -495,5 +501,8 @@ void rcc_set_prescaler(rcc_prescaler prescaler, uint32 divider) {
     cfgr &= ~masks[prescaler];
     cfgr |= divider;
     RCC->CFGR = cfgr;
+#else
+  UNUSED(prescaler);
+  UNUSED(divider);
 #endif
 }

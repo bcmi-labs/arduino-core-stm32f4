@@ -33,6 +33,7 @@ uint8_t Sd2Card::init(void) {
 }
 
 uint8_t Sd2Card::init(uint8_t cspin) {
+	UNUSED(cspin);
 	if (BSP_SD_CSInit() == MSD_OK) {
 		BSP_SD_GetCardInfo(&_SdCardInfo);
 		return TRUE;

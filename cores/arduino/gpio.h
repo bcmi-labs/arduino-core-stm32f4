@@ -474,6 +474,7 @@ typedef enum afio_debug_cfg {
  */
 static inline void afio_cfg_debug_ports(afio_debug_cfg config) {
   // do nothing
+  UNUSED(config);
 }
 
 #ifdef __cplusplus

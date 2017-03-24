@@ -120,8 +120,8 @@ uint32_t AudioClass::end(uint32_t Option) {
   * @retval None
   */
 void AudioClass::prepare(int16_t *buffer, int S, int volume) {
-    uint16_t *ubuffer = (uint16_t*) buffer;
-
+    UNUSED(buffer);
+    UNUSED(S);
     if (volume >= 100)
         volume = 100;
     if (volume <= 0)
@@ -136,7 +136,6 @@ void AudioClass::prepare(int16_t *buffer, int S, int volume) {
   * @retval Number of bytes written
   */
 size_t AudioClass::write(const uint32_t *data, size_t size) {
-	int i;
 	if (!audio_out_init) return 0;
 
 	if (size > (bufferOutSize / 2))
