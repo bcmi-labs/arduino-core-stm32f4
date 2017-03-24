@@ -140,7 +140,7 @@ size_t AudioClass::write(const uint32_t *data, size_t size) {
 	if (!audio_out_init) return 0;
 
 	if (size > (bufferOutSize / 2))
-		return size;
+		return 0;
 
     /* Not running yet, need to fill-in full FIFO */
 	if (running == NULL) {
