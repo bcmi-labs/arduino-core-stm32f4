@@ -49,7 +49,6 @@ void loop() {
   WAVE_FormatTypeDef WaveFormat;
   const int S = 1024; // Number of samples to read in block
   uint32_t buffer[S];
-  int duration;
   delay(1000);        // delay for console
 
   File myFile = SD.open(recFile);
@@ -68,7 +67,7 @@ void loop() {
   delay(1000);
   SerialUSB.println("Starting Playback");
   delay(1000);
-  Audio.begin(WaveFormat.SampleRate, 100);
+  Audio.begin(WaveFormat.SampleRate);
 
   delay(1000);
 
