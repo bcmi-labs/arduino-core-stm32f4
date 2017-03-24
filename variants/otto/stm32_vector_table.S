@@ -121,7 +121,8 @@ __stm32_vector_table:
 	.long	__irq_LTDC_IRQHandler					/* LCD-TFT LTDC 				*/
 	.long	__irq_LTDC_ER_IRQHandler				/* LCD-TFT LTDC Global Error	*/
 	.long	__irq_DMA2D_IRQHandler					/* DMA2D 						*/
-	.long	__irq_DSI_IRQHandler					/* SAI1 						*/	
+	.long	__irq_QUADSPI_IRQHandler				/* QUADSPI 						*/
+	.long	__irq_DSI_IRQHandler					/* DSI  						*/	
 
 #else
 
