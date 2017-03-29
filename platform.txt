@@ -100,11 +100,14 @@ recipe.size.regex.data=^(?:\.data|\.bss|\.noinit)\s+([0-9]+).*
 #
 # arduinoSTM32load
 # ----------------
-tools.arduinoSTM32load.path={runtime.tools.arduinoSTM32load-1.0.0.path}
+tools.arduinoSTM32load.path={runtime.tools.arduinoSTM32load-2.0.0.path}
 tools.arduinoSTM32load.cmd=arduinoSTM32load
 tools.arduinoSTM32load.upload.params.verbose=-v
 tools.arduinoSTM32load.upload.params.quiet=
 tools.arduinoSTM32load.upload.pattern="{path}/{cmd}" -dfu "{runtime.tools.dfu-util-0.9.0-arduino1.path}" -bin "{build.path}/{build.project_name}.bin" -port="{serial.port}" "{upload.params.verbose}"
+
+tools.arduinoSTM32load.upload.network_pattern="{runtime.tools.wifilink_mcuota-1.0.0.path}/wifilink_mcuota" -f "{build.path}/{build.project_name}.hex" -i "{serial.port}"
+
 
 #
 # USB Flags
