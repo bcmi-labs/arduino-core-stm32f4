@@ -20,33 +20,15 @@ http://forum.arduino.org/index.php?board=98.0
 
 If you find a bug you can submit an issue here on github:
 
-https://github.com/arduino/Arduino-core-stm32f4/issues
+https://github.com/arduino-org/arduino-core-stm32f4/issues
 
 Before posting a new issue, please check if the same problem has been already reported by someone else
 to avoid duplicates.
 
 ## Contributions
 
-Contributions are always welcome. The preferred way to receive code cotribution is by submitting a
+Contributions are always welcome. The preferred way to receive code contribution is by submitting a
 Pull Request on github.
-
-## Hourly builds
-
-This repository is under a Continuous Integration system that every hour checks if there are updates and
-builds a release for testing (the so called "Hourly builds").
-
-The hourly builds are available through Boards Manager. If you want to install them:
-  1. Open the **Preferences** of the Arduino IDE.
-  2. Add this URL `http://downloads.arduino.cc/Hourly/STM32F4/package_stm32f4-hourly-build_index.json` in the **Additional Boards Manager URLs** field, and click OK.
-  3. Open the **Boards Manager** (menu Tools->Board->Board Manager...)
-  4. Install **Arduino STM32F4 core - Hourly build**
-  5. Select one of the boards under **STM32F4 Hourly build XX** in Tools->Board menu
-  6. Compile/Upload as usual
-
-If you already installed an hourly build and you want to update it with the latest:
-  1. Open the **Boards Manager** (menu Tools->Board->Board Manager...)
-  2. Remove **Arduino SAMD core - Hourly build**
-  3. Install again **Arduino SAMD core - Hourly build**, the Board Manager will download the latest build replacing the old one.
 
 ## License and credits
 
