@@ -20,16 +20,28 @@
 #include <SD.h>
 #include <Audio.h>
 
+const char recFile[] = "record.wav";
+
 void setup() {
   // initialize serial communication at 9600 bits per second:
   SerialUSB.begin(115200);
   while(!SerialUSB);
-
-  /* Test begin() method */
+  SerialUSB.print("Detecting SD");
+  int counter = 0;
   while (SD.begin(SD_DETECT_PIN) != TRUE)
   {
-    delay(10);
+    SerialUSB.print(".");
+    delay(500);
+    if (counter == 10)
+    {
+      SerialUSB.println(".");
+      SerialUSB.println("SD Card not detected!");
+      SerialUSB.print("Detecting SD");
+      counter = 0;
+    }
+    counter++;
   }
+  SerialUSB.println("...done.");
 }
 
 void loop() {
@@ -40,19 +52,21 @@ void loop() {
   int duration;
   delay(1000);        // delay for console
 
-  File myFile = SD.open("test.wav");
+  File myFile = SD.open(recFile);
   if (!myFile.available()) {
     // if the file didn't open, print an error and stop
-    SerialUSB.println("error opening test.wav");
+    SerialUSB.print("error opening ");
+    SerialUSB.println(recFile);
     while (true);
   } else {
-    SerialUSB.println("test.wav open OK");
+    SerialUSB.println(recFile);
+    SerialUSB.println(" open OK");
   }
 
   myFile.read((void*) &WaveFormat, sizeof(WaveFormat));
 
   delay(1000);
-  SerialUSB.println("STARTUP AUDIO\r\n");
+  SerialUSB.println("Starting Playback");
   delay(1000);
   Audio.begin(WaveFormat.SampleRate, 100);
 

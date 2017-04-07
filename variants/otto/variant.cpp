@@ -140,9 +140,6 @@ extern const stm32_pin_info PIN_MAP[GPIO_PINS] = {
     {GPIOJ_dev,  3,   NULL,     0,    AFx,   NULL,      ADCx}, // PJ3:  D77 / LCD_BL   -       -                                 -               -
 // AUDIO SELECTION PIN (D78)
     {GPIOD_dev,  7,   NULL,     0,    AFx,   NULL,      ADCx}, // PD7:  D78 / AUDIO_SEL-       -                                 -               -
-// I2C (D79 - D80)
-    {GPIOH_dev,  4,   NULL,     0,    AFx,   NULL,      ADCx}, // PH4:  D79            -       -                                 -               -
-    {GPIOH_dev,  5,   NULL,     0,    AFx,   NULL,      ADCx}, // PH5:  D80            -       -                                 -               -
 };
 
 extern const uint8 boardPWMPins[BOARD_NR_PWM_PINS] __FLASH__ = {

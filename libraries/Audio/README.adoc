@@ -2,8 +2,10 @@
 
 The Audio library enables an Arduino OTTO board to play back .wav files from a storage device like an SD card. It is an adaptation of library supported on DUE board.
 
-For more information about this library please visit us at
+For more information about this library for DUE and OTTO common methods, please visit us at
 http://arduino.cc/en/Reference/Audio
+for Otto specific implementation please visit
+http://www.arduino.org/learning/reference/Audio
 
 == License ==
 

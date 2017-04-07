@@ -66,8 +66,8 @@ public:
 
 
   char *_name = NULL; //file or dir name
-  FIL _fil;
-  DIR _dir;
+  FIL _fil = {}; // init all fields to 0
+  DIR _dir = {}; // init all fields to 0
 
 };
 

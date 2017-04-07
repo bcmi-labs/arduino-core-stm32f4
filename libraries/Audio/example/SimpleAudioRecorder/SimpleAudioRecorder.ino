@@ -8,6 +8,7 @@
  * Only 48kHz supported for now
 
  Original by Frederic Pillon November 09, 2016
+ Modified by Francesco Alessi March 15 2017
 
  This example code is in the public domain
 
@@ -19,7 +20,7 @@
 #include <SD.h>
 #include <Audio.h>
 
-const char recFile[] = "record.wav";
+const char recFile[] = "test.wav";
 #define AUDIO_IN_FREQUENCY           BSP_AUDIO_FREQUENCY_48K
 #define DEFAULT_TIME_REC             30  // Recording time in second (default: 30s)
 #define REC_SAMPLE_LENGTH   (DEFAULT_TIME_REC * AUDIO_IN_FREQUENCY * DEFAULT_AUDIO_IN_CHANNEL_NBR * 2)
@@ -29,11 +30,22 @@ void setup() {
   // initialize SerialUSB communication at 115200 bits per second:
   SerialUSB.begin(115200);
   while(!SerialUSB);
-
+  SerialUSB.print("Detecting SD");
+  int counter = 0;
   while (SD.begin(SD_DETECT_PIN) != TRUE)
   {
-    delay(10);
+    SerialUSB.print(".");
+    delay(500);
+    if (counter == 10)
+    {
+      SerialUSB.println(".");
+      SerialUSB.println("SD Card not detected!");
+      SerialUSB.print("Detecting SD");
+      counter = 0;
+    }
+    counter++;
   }
+  SerialUSB.println("...done.");
 }
 
 void loop() {
@@ -43,10 +55,22 @@ void loop() {
   const int S = 1024; // Number of samples to read in block
   uint32_t byteswritten = 0;
   uint32_t count = 0;
-  delay(4000);        // delay for console
+  delay(1000);
+  // removing old file
+  while(SD.exists(recFile) == TRUE)
+  {
+    SerialUSB.print("Removing file ");
+    SerialUSB.print(recFile);
+    SerialUSB.print("...");
+    SD.remove(recFile);
+    SerialUSB.println("done");
+  }
+
 
   File myFile = SD.open(recFile, FILE_WRITE);
+
   if (!SD.exists(recFile)) {
+
     // If the file didn't open, print an error and stop
     SerialUSB.print("Error: failed to create ");
     SerialUSB.println(recFile);
@@ -70,7 +94,7 @@ void loop() {
   }
 
   delay(1000);
-  SerialUSB.println("Start AUDIO record");
+  SerialUSB.println("Starting AUDIO recorder");
   delay(1000);
   status = Audio.begin(WaveFormat.SampleRate, 100, AUDIO_IN);
   if (status != 0) {
@@ -84,6 +108,7 @@ void loop() {
   delay(1000);
 
   // Prepare samples
+  SerialUSB.println("Recording...");
   int volume = 100;
   Audio.prepare(NULL, S, volume);
   delay(1000);

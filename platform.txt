@@ -1,4 +1,3 @@
-
 # Arduino STM32F4 Core and platform
 # ------------------------------
 #
@@ -6,7 +5,7 @@
 # https://github.com/arduino/Arduino/wiki/Arduino-IDE-1.5---3rd-party-Hardware-specification
 
 name=Arduino STM32F4 (32-bits ARM Cortex-M4) Boards
-version=1.0.0
+version=1.0.1
 
 # STM32F4 compiler variables
 # ------------------------
@@ -70,7 +69,7 @@ recipe.S.o.pattern="{compiler.path}{compiler.c.cmd}" {compiler.S.flags} -mcpu={b
 recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} {compiler.ar.extra_flags} "{archive_file_path}" "{object_file}"
 
 ## Combine gc-sections, archives, and objects
-recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" {compiler.c.elf.flags} -mcpu={build.mcu} "-T{build.variant.path}/{build.ldscript}" "-Wl,-Map,{build.path}/{build.project_name}.map" {compiler.c.elf.extra_flags} -o "{build.path}/{build.project_name}.elf" "-L{build.path}" -lm -lgcc -mthumb -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl,--warn-section-align -Wl,--warn-unresolved-symbols -Wl,--start-group "{build.path}/core/syscalls.c.o" {object_files} -Wl,--whole-archive  "{build.variant.path}/{build.variant_system_lib}" -Wl,--no-whole-archive "{build.path}/{archive_file}" -Wl,--end-group
+recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" {compiler.c.elf.flags} -mcpu={build.mcu} "-T{build.variant.path}/{build.ldscript}" "-Wl,-Map,{build.path}/{build.project_name}.map" {compiler.c.elf.extra_flags} -o "{build.path}/{build.project_name}.elf" "-L{build.path}" -mthumb -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl,--warn-section-align -Wl,--warn-unresolved-symbols -Wl,--start-group {object_files} -Wl,--whole-archive  "{build.variant.path}/{build.variant_system_lib}" -Wl,--no-whole-archive "{build.path}/{archive_file}" -Wl,--end-group -lm -lgcc
 
 ## Create eeprom
 recipe.objcopy.eep.pattern=
@@ -90,13 +89,25 @@ recipe.size.regex.data=^(?:\.data|\.bss|\.noinit)\s+([0-9]+).*
 # DFU Util
 # --------
 
-tools.dfu-util.path={runtime.tools.dfu-util-0.8.0-stm32-arduino1.path}
-tools.dfu-util.cmd=dfu-util
-tools.dfu-util.cmd.windows=dfu-util.cmd
+#tools.dfu-util.path={runtime.tools.dfu-util-0.9.0-arduino1.path}
+#tools.dfu-util.cmd=dfu-util
+#tools.dfu-util.cmd.windows=dfu-util.cmd
 
-tools.dfu-util.upload.params.verbose=-v
-tools.dfu-util.upload.params.quiet=
-tools.dfu-util.upload.pattern="{path}/{cmd}" "{path}" {upload.usbID} {upload.altID} {upload.mem_start} "{build.path}/{build.project_name}.bin"
+#tools.dfu-util.upload.params.verbose=-v
+#tools.dfu-util.upload.params.quiet=
+#tools.dfu-util.upload.pattern="{path}/{cmd}" "{path}" {upload.usbID} {upload.altID} {upload.mem_start} "{build.path}/{build.project_name}.bin" "{serial.port}"
+
+#
+# arduinoSTM32load
+# ----------------
+tools.arduinoSTM32load.path={runtime.tools.arduinoSTM32load-2.0.0.path}
+tools.arduinoSTM32load.cmd=arduinoSTM32load
+tools.arduinoSTM32load.upload.params.verbose=-v
+tools.arduinoSTM32load.upload.params.quiet=
+tools.arduinoSTM32load.upload.pattern="{path}/{cmd}" -dfu "{runtime.tools.dfu-util-0.9.0-arduino1.path}" -bin "{build.path}/{build.project_name}.bin" -port="{serial.port}" "{upload.params.verbose}"
+
+tools.arduinoSTM32load.upload.network_pattern="{runtime.tools.wifilink_mcuota-1.0.0.path}/wifilink_mcuota" -f "{build.path}/{build.project_name}.hex" -i "{serial.port}"
+
 
 #
 # USB Flags

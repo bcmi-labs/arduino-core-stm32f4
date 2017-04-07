@@ -164,10 +164,10 @@
 #define LED_BUILTIN  D13
 
 // CAN PIN
-#define CANRX		     D68
-#define CANTX		     D69
-// #define CANRX1	D
-// #define CANTX1	D
+#define CANTX		     D68
+#define CANRX		     D69
+#define CANTX1	     D51
+#define CANRX1	     D53
 
 // SPI PIN
 #define MISO 		     D72
@@ -180,10 +180,10 @@
 #define SS1   	     D10
 
 // I2C PIN
-#define SCL 		     D70
-#define SDA 		     D71
-#define SDA1		     D20
-#define SCL1 		     D21
+#define SCL 		     D71
+#define SDA 		     D70
+#define SCL1		     D20
+#define SDA1 		     D21
 
 // SERIAL PORT PIN
 #define RX 			     D0

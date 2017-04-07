@@ -106,7 +106,7 @@ size_t USBSerial::write(uint8_t ch) {
   if(((UserTxBufPtrIn + 1) % APP_TX_DATA_SIZE) == UserTxBufPtrOut)
   {
     // Buffer full!!! Force a flush to not loose data and go on
-    flush();
+    CDC_flush();
   }
   UserTxBufferFS[UserTxBufPtrIn] = ch;
   UserTxBufPtrIn = ((UserTxBufPtrIn + 1) % APP_TX_DATA_SIZE);
@@ -117,36 +117,56 @@ size_t USBSerial::write(uint8_t ch) {
 }
 
 int USBSerial::available(void) {
-    return ((APP_RX_DATA_SIZE + (UserRxBufPtrIn - UserRxBufPtrOut)) % APP_RX_DATA_SIZE);
+  int ret;
+
+  CDC_disable_TIM_Interrupt();
+  ret = ((APP_RX_DATA_SIZE + (UserRxBufPtrIn - UserRxBufPtrOut)) % APP_RX_DATA_SIZE);
+  CDC_enable_TIM_Interrupt();
+
+  return ret;
 }
 
 int USBSerial::read(void) {
-    if(UserRxBufPtrOut == UserRxBufPtrIn)
-    {
-      return -1;
+  /* UserTxBufPtrOut can be modified by TIM ISR, so in order to be sure that the */
+  /* value that we read is correct, we need to disable TIM Interrupt.            */
+  CDC_disable_TIM_Interrupt();
+  if(UserRxBufPtrOut == UserRxBufPtrIn)
+  {
+    CDC_enable_TIM_Interrupt();
+    return -1;
   } else
-    {
-      unsigned char c = UserRxBufferFS[UserRxBufPtrOut];
+  {
+    unsigned char c = UserRxBufferFS[UserRxBufPtrOut];
     UserRxBufPtrOut = ((UserRxBufPtrOut + 1) % APP_RX_DATA_SIZE);
+    CDC_enable_TIM_Interrupt();
     return c;
-    }
+  }
 }
 
 int USBSerial::peek(void)
 {
-    if(UserRxBufPtrOut == UserRxBufPtrIn)
-    {
-      return -1;
+  /* UserTxBufPtrOut can be modified by TIM ISR, so in order to be sure that the */
+  /* value that we read is correct, we need to disable TIM Interrupt.            */
+  CDC_disable_TIM_Interrupt();
+  if(UserRxBufPtrOut == UserRxBufPtrIn)
+  {
+    CDC_enable_TIM_Interrupt();
+    return -1;
   } else
-    {
-      unsigned char c = UserRxBufferFS[UserRxBufPtrOut];
+  {
+    unsigned char c = UserRxBufferFS[UserRxBufPtrOut];
+    CDC_enable_TIM_Interrupt();
     return c;
-    }
+  }
 }
 
 void USBSerial::flush(void)
 {
+  /* UserTxBufPtrOut can be modified by TIM ISR, so in order to be sure that the */
+  /* value that we read is correct, we need to disable TIM Interrupt.            */
+  CDC_disable_TIM_Interrupt();
   CDC_flush();
+  CDC_enable_TIM_Interrupt();
 
 #if 0
   /* Flush EP1 for data IN */

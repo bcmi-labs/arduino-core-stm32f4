@@ -54,12 +54,6 @@
   * @{
   */
 /* USER CODE BEGIN PRIVATE TYPES  */
-//uint8_t buffer[32];
-//<<<<<<< HEAD
-//=======
-int enterDFU = 0;
-//extern uint8_t *Rbuffer;
-//>>>>>>> USB-CDC
 /* USER CODE END PRIVATE TYPES */
 /**
   * @}
@@ -113,13 +107,20 @@ __IO uint32_t SLP;
 __IO uint32_t GetRxCount;
 __IO uint32_t lineState = 0;
 uint8_t cptlineState = 0;
+volatile uint32_t USB_received = 0;
+uint8_t USBBuffer[64];
+uint8_t USBPackSize;
 
 /* Default configuration: 115200, 8N1 */
-uint8_t lineSetup[] = {0x00, 0x00, 0x20, 0x1c, 0x00, 0x00, 0x08};
+uint8_t lineSetup[] = {0x00, 0xc2, 0x01, 0x00, 0x00, 0x00, 0x08};
 
-#define CDC_POLLING_INTERVAL             5 /* in ms. The max is 65 and the min is 1 */
+#define CDC_POLLING_INTERVAL             1 /* in ms. The max is 65 and the min is 1 */
 
 TIM_HandleTypeDef  TimHandle;
+
+volatile uint8_t dfu_request = 0;
+/* For a bug in some Linux 64 bit PC we need to delay the reset of the CPU of 500ms seconds */
+int counter_dfu_reset = 500; /* the unit is equal to CDC_POLLING_INTERVAL that is 1ms by default */
 
 static void TIM_Config(void);
 
@@ -182,28 +183,10 @@ static int8_t CDC_Init_FS(void)
   /*##-4- Start the TIM Base generation in interrupt mode ####################*/
   /* Start Channel1 */
   HAL_TIM_Base_Start_IT(&TimHandle);
-
-//  GPIO_InitTypeDef  gpio_init_structure;
-//  //hUsbDevice_0 = &hUsbDeviceFS;
 //  /* USER CODE BEGIN 3 */
 //  /* Set Application Buffers */
   USBD_CDC_SetTxBuffer(&hUsbDeviceFS, UserTxBufferFS, 1);
   USBD_CDC_SetRxBuffer(&hUsbDeviceFS, StackRxBufferFS);
-//
-
-//
-//  __HAL_RCC_GPIOK_CLK_ENABLE();
-//
-//    gpio_init_structure.Pin   = GPIO_PIN_3;
-//    gpio_init_structure.Mode  = GPIO_MODE_OUTPUT_PP;
-//    gpio_init_structure.Pull  = GPIO_PULLUP;
-//    gpio_init_structure.Speed = GPIO_SPEED_HIGH;
-//
-//    HAL_GPIO_Init(GPIOK, &gpio_init_structure);
-//
-
-//    /* By default, turn off LED by setting a high level on corresponding GPIO */
-//    HAL_GPIO_WritePin(GPIOK, GPIO_PIN_3, GPIO_PIN_SET);
 
   return (USBD_OK);
   /* USER CODE END 3 */
@@ -276,9 +259,7 @@ static int8_t CDC_Control_FS  (uint8_t cmd, uint8_t* pbuf, uint16_t length)
     memcpy(lineSetup, pbuf, 7);
 
     if(*((uint32_t*)pbuf) == 1200){
-      /* Set magic number in SRAM so application enters DFU after reset */
-      *((unsigned int*)0x2004FFF0) = 0xb311a21a;
-      NVIC_SystemReset();
+      dfu_request = 1;
     }
 
     break;
@@ -323,38 +304,13 @@ static int8_t CDC_Control_FS  (uint8_t cmd, uint8_t* pbuf, uint16_t length)
 
 static int8_t CDC_Receive_FS (uint8_t* Buf, uint32_t *Len)
 {
-
-  //USBD_CDC_SetTxBuffer(&hUsbDeviceFS, UserTxBufferFS, 1);
-
-
-//    USBD_CDC_SetTxBuffer(&hUsbDeviceFS, Buf, *Len);
-//    USBD_CDC_TransmitPacket(&hUsbDeviceFS);
-
-//  /* Transmit after reception data */
-//  if(USBD_CDC_TransmitPacket(&hUsbDeviceFS) == USBD_FAIL)
-//  {
-//    GPIOK->ODR ^= GPIO_PIN_3;
-//  }
-
-//  GPIOK->ODR ^= GPIO_PIN_3;
-  //while(1);
-  //USBD_CDC_TransmitPacket(&hUsbDevice_0);
   /* USER CODE BEGIN 6 */
   /* Initiate next USB packet transfer once a packet is received */
+  USBPackSize = *Len;
+  memcpy(USBBuffer, Buf, USBPackSize);
 
-  if(UserRxBufPtrIn + (*Len) > APP_RX_DATA_SIZE)
-  {
-    memcpy(&UserRxBufferFS[UserRxBufPtrIn], &Buf[0], (APP_RX_DATA_SIZE - UserRxBufPtrIn));
-  memcpy(&UserRxBufferFS[0], &Buf[(APP_RX_DATA_SIZE - UserRxBufPtrIn)], ((*Len) - (APP_RX_DATA_SIZE - UserRxBufPtrIn)));
-  UserRxBufPtrIn = ((UserRxBufPtrIn + (*Len)) % APP_RX_DATA_SIZE);
-  } else
-  {
-    memcpy(&UserRxBufferFS[UserRxBufPtrIn], Buf, (*Len));
-  UserRxBufPtrIn = ((UserRxBufPtrIn + (*Len)) % APP_RX_DATA_SIZE);
-  }
+  USB_received = 1;
 
-  //USBD_CDC_SetRxBuffer(&hUsbDeviceFS, Rbuffer);
-  USBD_CDC_ReceivePacket(&hUsbDeviceFS);
   return (USBD_OK);
   /* USER CODE END 6 */
 }
@@ -385,8 +341,6 @@ void CDC_flush(void)
 {
   uint8_t status;
 
-  HAL_TIM_Base_Stop_IT(&TimHandle);
-
   if(UserTxBufPtrOut != UserTxBufPtrIn)
   {
     if(UserTxBufPtrOut > UserTxBufPtrIn) /* Roll-back */
@@ -397,7 +351,10 @@ void CDC_flush(void)
 
       USBD_CDC_SetTxBuffer(&hUsbDeviceFS, (uint8_t*)&StackTxBufferFS[0], (APP_TX_DATA_SIZE - UserTxBufPtrOut + UserTxBufPtrIn));
 
-      status = USBD_CDC_TransmitPacket(&hUsbDeviceFS);
+      do
+      {
+        status = USBD_CDC_TransmitPacket(&hUsbDeviceFS);
+      } while(status == USBD_BUSY);
 
       if(status == USBD_OK)
       {
@@ -408,7 +365,10 @@ void CDC_flush(void)
     {
       USBD_CDC_SetTxBuffer(&hUsbDeviceFS, (uint8_t*)&UserTxBufferFS[UserTxBufPtrOut], (UserTxBufPtrIn - UserTxBufPtrOut));
 
-      status = USBD_CDC_TransmitPacket(&hUsbDeviceFS);
+      do
+      {
+        status = USBD_CDC_TransmitPacket(&hUsbDeviceFS);
+      } while(status == USBD_BUSY);
 
       if(status == USBD_OK)
       {
@@ -416,18 +376,16 @@ void CDC_flush(void)
       }
     }
   }
-
-  HAL_TIM_Base_Start_IT(&TimHandle);
 }
 
 void CDC_disable_TIM_Interrupt(void)
 {
-  HAL_TIM_Base_Stop_IT(&TimHandle);
+  HAL_NVIC_DisableIRQ(TIM6_DAC_IRQn);
 }
 
 void CDC_enable_TIM_Interrupt(void)
 {
-  HAL_TIM_Base_Start_IT(&TimHandle);
+  HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
 }
 
 static void TIM_Config(void)
@@ -468,6 +426,39 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   uint8_t status;
 
+  if(dfu_request)
+  {
+    counter_dfu_reset--;
+    if(counter_dfu_reset == 0)
+    {
+      dfu_request = 0;
+      /* Set magic number in SRAM so application enters DFU after reset */
+      *((unsigned int*)0x2004FFF0) = 0xb311a21a;
+      NVIC_SystemReset();
+    }
+  }
+
+  if(USB_received)
+  {
+    USB_received = 0;
+
+    if((USBPackSize > 0))
+    {
+      if(UserRxBufPtrIn + USBPackSize > APP_RX_DATA_SIZE)
+      {
+        memcpy(&UserRxBufferFS[UserRxBufPtrIn], &USBBuffer[0], (APP_RX_DATA_SIZE - UserRxBufPtrIn));
+        memcpy(&UserRxBufferFS[0], &USBBuffer[(APP_RX_DATA_SIZE - UserRxBufPtrIn)], (USBPackSize - (APP_RX_DATA_SIZE - UserRxBufPtrIn)));
+        UserRxBufPtrIn = ((UserRxBufPtrIn + USBPackSize) % APP_RX_DATA_SIZE);
+      } else
+      {
+        memcpy(&UserRxBufferFS[UserRxBufPtrIn], USBBuffer, USBPackSize);
+        UserRxBufPtrIn = ((UserRxBufPtrIn + USBPackSize) % APP_RX_DATA_SIZE);
+      }
+    }
+
+    USBD_CDC_ReceivePacket(&hUsbDeviceFS);
+  }
+
   if(UserTxBufPtrOut != UserTxBufPtrIn)
   {
     if(UserTxBufPtrOut > UserTxBufPtrIn) /* Roll-back */
@@ -477,8 +468,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
       memcpy((uint8_t*)&StackTxBufferFS[APP_TX_DATA_SIZE - UserTxBufPtrOut], (uint8_t*)&UserTxBufferFS[0], UserTxBufPtrIn);
 
       USBD_CDC_SetTxBuffer(&hUsbDeviceFS, (uint8_t*)&StackTxBufferFS[0], (APP_TX_DATA_SIZE - UserTxBufPtrOut + UserTxBufPtrIn));
-
-      status = USBD_CDC_TransmitPacket(&hUsbDeviceFS);
+      do
+      {
+        status = USBD_CDC_TransmitPacket(&hUsbDeviceFS);
+      } while(status == USBD_BUSY);
 
       if(status == USBD_OK)
       {
@@ -489,7 +482,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     {
       USBD_CDC_SetTxBuffer(&hUsbDeviceFS, (uint8_t*)&UserTxBufferFS[UserTxBufPtrOut], (UserTxBufPtrIn - UserTxBufPtrOut));
 
-      status = USBD_CDC_TransmitPacket(&hUsbDeviceFS);
+      do
+      {
+        status = USBD_CDC_TransmitPacket(&hUsbDeviceFS);
+      } while(status == USBD_BUSY);
 
       if(status == USBD_OK)
       {

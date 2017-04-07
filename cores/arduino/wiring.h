@@ -48,7 +48,8 @@
 #include "pwm.h"
 #include "interrupts.h"
 #include "wiring_debug.h"
-#include "wiring_math.h"
+#include "WMath.h"
+
 #include "wiring_time.h"
 #include <wiring_constants.h>
 #include "SPI.h"
