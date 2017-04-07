@@ -1,4 +1,5 @@
-- Core:
+## 1.0.1 - 2017-04-07
+###### Core:
   - Fixed USB CDC issue if the chunk is greater than 64 bytes
   - Fixed I2C Pin definition
   - Fixed CAN-BUS pin definition
@@ -8,11 +9,14 @@
     - Is possible to use the standard 0.4.9 tool using 230400bps upload speed.
   - Fixed IRQ vector Table for DSI and QUAD SPI
 
-- Library:
-  - Audio:
-    - added amp()
-    - Updated README.adoc
+###### library
+- Audio:
+  - added amp()
+  - Updated README.adoc
 
-- Miscellany:
+###### Miscellany:
   - Added ChangeLog.txt
   - Code Cleanup
+
+## 1.0.0 - 2017-03-14
+First release
