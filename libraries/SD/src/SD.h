@@ -66,8 +66,54 @@ public:
 
 
   char *_name = NULL; //file or dir name
-  FIL _fil = {}; // init all fields to 0
-  DIR _dir = {}; // init all fields to 0
+  FIL _fil = {
+#if !_FS_TINY
+  { {0} }, //buf
+#endif
+  NULL, //	*fs
+  0, // id
+  0, // flag
+  0, //	err
+  0, //	fptr
+  0, // fsize
+  0, //	sclust
+  0, //	clust
+  0, //	dsect
+#if !_FS_READONLY
+  0, //	dir_sect
+  NULL, //*dir_ptr
+#endif
+#if _USE_FASTSEEK
+  NULL, // *cltbl
+#endif
+#if _FS_LOCK
+  0, //	lockid
+#endif
+  }; // init all fields
+
+  DIR _dir = {
+#if !_FS_TINY
+  { {0} }, //buf
+#endif
+  NULL, //	*fs
+  0, // id
+  0, // index
+  0, // sclust
+  0, // clust
+  0, // sect
+  NULL, // *dir
+  NULL, // *fn
+#if _FS_LOCK
+  0, //	lockid
+#endif
+#if _USE_LFN
+  NULL, // lfn
+  0, //	lfn_idx
+#endif
+#if _USE_FIND
+  NULL, // pat
+#endif
+  }; // init all fields
 
 };
 

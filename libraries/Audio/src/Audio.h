@@ -38,7 +38,7 @@ public:
     int getHalf(void);
     int getLast(void);
 
-	virtual size_t write(uint8_t c)                         { /* not implemented */ };
+	virtual size_t write(uint8_t c)                         { UNUSED(c); return 0;/* not implemented */ };
 	virtual size_t write(const uint8_t *data, size_t size)  { return write(reinterpret_cast<const uint32_t*>(data), size/4) * 4; };
 	virtual size_t write(const uint16_t *data, size_t size) { return write(reinterpret_cast<const uint32_t*>(data), size/2) * 2; };
 	virtual size_t write(const int16_t *data, size_t size)  { return write(reinterpret_cast<const uint32_t*>(data), size/2) * 2; };

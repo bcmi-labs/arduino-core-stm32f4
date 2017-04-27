@@ -445,6 +445,7 @@ void BSP_AUDIO_OUT_DeInit(void)
   */
 void HAL_SAI_TxCpltCallback(SAI_HandleTypeDef *hsai)
 {
+  UNUSED(hsai);
   /* Manage the remaining file size and new address offset: This function
      should be coded by user (its prototype is already declared in stm32469i_eval_audio.h) */
   BSP_AUDIO_OUT_TransferComplete_CallBack();
@@ -456,6 +457,7 @@ void HAL_SAI_TxCpltCallback(SAI_HandleTypeDef *hsai)
   */
 void HAL_SAI_TxHalfCpltCallback(SAI_HandleTypeDef *hsai)
 {
+  UNUSED(hsai);
   /* Manage the remaining file size and new address offset: This function
      should be coded by user (its prototype is already declared in stm32469i_eval_audio.h) */
   BSP_AUDIO_OUT_HalfTransfer_CallBack();
@@ -467,6 +469,7 @@ void HAL_SAI_TxHalfCpltCallback(SAI_HandleTypeDef *hsai)
   */
 void HAL_SAI_ErrorCallback(SAI_HandleTypeDef *hsai)
 {
+  UNUSED(hsai);
   HAL_SAI_StateTypeDef audio_out_state;
   HAL_SAI_StateTypeDef audio_in_state;
 
@@ -515,7 +518,7 @@ __weak void BSP_AUDIO_OUT_MspInit(SAI_HandleTypeDef *hsai, void *Params)
 {
   static DMA_HandleTypeDef hdma_sai_tx;
   GPIO_InitTypeDef  gpio_init_structure;
-
+  UNUSED(Params);
   /* Enable SAI clock */
   AUDIO_SAIx_CLK_ENABLE();
 
@@ -592,7 +595,7 @@ __HAL_RCC_GPIOE_CLK_ENABLE();
 __weak void BSP_AUDIO_OUT_MspDeInit(SAI_HandleTypeDef *hsai, void *Params)
 {
   GPIO_InitTypeDef  gpio_init_structure;
-
+  UNUSED(Params);
   /* SAI DMA IRQ Channel deactivation */
   HAL_NVIC_DisableIRQ(AUDIO_SAIx_DMAx_IRQ);
 
@@ -630,6 +633,8 @@ __weak void BSP_AUDIO_OUT_MspDeInit(SAI_HandleTypeDef *hsai, void *Params)
 __weak void BSP_AUDIO_OUT_ClockConfig(SAI_HandleTypeDef *hsai, uint32_t AudioFreq, void *Params)
 {
   RCC_PeriphCLKInitTypeDef rcc_ex_clk_init_struct;
+  UNUSED(hsai);
+  UNUSED(Params);
   HAL_RCCEx_GetPeriphCLKConfig(&rcc_ex_clk_init_struct);
   /* Set the PLL configuration according to the audio frequency */
   if((AudioFreq == AUDIO_FREQUENCY_11K) || (AudioFreq == AUDIO_FREQUENCY_22K) || (AudioFreq == AUDIO_FREQUENCY_44K))
@@ -943,6 +948,7 @@ void BSP_AUDIO_IN_DeInit(void)
   */
 void HAL_SAI_RxCpltCallback(SAI_HandleTypeDef *hsai)
 {
+  UNUSED(hsai);
   /* Call the record update function to get the next buffer to fill and its size (size is ignored) */
   BSP_AUDIO_IN_TransferComplete_CallBack();
 }
@@ -954,6 +960,7 @@ void HAL_SAI_RxCpltCallback(SAI_HandleTypeDef *hsai)
   */
 void HAL_SAI_RxHalfCpltCallback(SAI_HandleTypeDef *hsai)
 {
+  UNUSED(hsai);
   /* Manage the remaining file size and new address offset: This function
      should be coded by user (its prototype is already declared in stm32f723e_discovery_audio.h) */
   BSP_AUDIO_IN_HalfTransfer_CallBack();
@@ -998,6 +1005,7 @@ __weak void BSP_AUDIO_IN_MspInit(SAI_HandleTypeDef *hsai, void *Params)
 {
   static DMA_HandleTypeDef hdma_sai_rx;
   GPIO_InitTypeDef  gpio_init_structure;
+  UNUSED(Params);
 
   /* Enable SAI clock */
   AUDIO_IN_SAIx_CLK_ENABLE();
@@ -1077,6 +1085,7 @@ __weak void BSP_AUDIO_IN_MspDeInit(SAI_HandleTypeDef *hsai, void *Params)
   GPIO_InitTypeDef  gpio_init_structure;
 
   static DMA_HandleTypeDef hdma_sai_rx;
+  UNUSED(Params);
 
   /* SAI IN DMA IRQ Channel deactivation */
   HAL_NVIC_DisableIRQ(AUDIO_IN_SAIx_DMAx_IRQ);
@@ -1112,7 +1121,8 @@ __weak void BSP_AUDIO_IN_MspDeInit(SAI_HandleTypeDef *hsai, void *Params)
 __weak void BSP_AUDIO_IN_ClockConfig(SAI_HandleTypeDef *hsai, uint32_t AudioFreq, void *Params)
 {
   RCC_PeriphCLKInitTypeDef rcc_ex_clk_init_struct;
-
+  UNUSED(hsai);
+  UNUSED(Params);
   HAL_RCCEx_GetPeriphCLKConfig(&rcc_ex_clk_init_struct);
 
   /* Set the PLL configuration according to the audio frequency */

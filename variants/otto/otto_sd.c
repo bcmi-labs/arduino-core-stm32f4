@@ -362,7 +362,8 @@ uint8_t BSP_SD_Erase(uint64_t StartAddr, uint64_t EndAddr)
 __weak void BSP_SD_MspInit(SD_HandleTypeDef *hsd, void *Params)
 {
   GPIO_InitTypeDef gpio_init_structure;
-
+  UNUSED(hsd);
+  UNUSED(Params);
   /* Enable SDIO clock */
   __HAL_RCC_SDIO_CLK_ENABLE();
 
@@ -395,7 +396,8 @@ __weak void BSP_SD_MspInit(SD_HandleTypeDef *hsd, void *Params)
 __weak void BSP_SD_Detect_MspInit(SD_HandleTypeDef *hsd, void *Params)
 {
   GPIO_InitTypeDef  gpio_init_structure;
-
+  UNUSED(hsd);
+  UNUSED(Params);
   SD_DETECT_GPIO_CLK_ENABLE();
 
   /* GPIO configuration in input for uSD_Detect signal */
@@ -413,6 +415,8 @@ __weak void BSP_SD_Detect_MspInit(SD_HandleTypeDef *hsd, void *Params)
   */
 __weak void BSP_SD_MspDeInit(SD_HandleTypeDef *hsd, void *Params)
 {
+	UNUSED(hsd);
+	UNUSED(Params);
     /* Disable NVIC for SDIO interrupts */
     HAL_NVIC_DisableIRQ(SDIO_IRQn);
 

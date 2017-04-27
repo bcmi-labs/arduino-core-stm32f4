@@ -42,7 +42,7 @@
  * @brief Turn on the hardware prefetcher.
  */
 void flash_enable_prefetch(void) {
-    *bb_perip(&FLASH_BASE->ACR, FLASH_ACR_PRFTBE_BIT) = 1;
+    __HAL_FLASH_PREFETCH_BUFFER_ENABLE();
 }
 
 /**
@@ -56,10 +56,10 @@ void flash_enable_prefetch(void) {
  *                    FLASH_WAIT_STATE_2).
  */
 void flash_set_latency(uint32 wait_states) {
-    uint32 val = FLASH_BASE->ACR;
+    uint32 val = FLASH->ACR;
 
     val &= ~FLASH_ACR_LATENCY;
     val |= wait_states;
 
-    FLASH_BASE->ACR = val;
+    FLASH->ACR = val;
 }

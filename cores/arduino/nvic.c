@@ -44,12 +44,12 @@
  * @param priority Priority to set, 0 being highest priority and 15
  *                 being lowest.
  */
-void nvic_irq_set_priority(nvic_irq_num irqn, uint8 priority) {
+void nvic_irq_set_priority(IRQn_Type irqn, uint8 priority) {
     if (irqn < 0) {
         /* This interrupt is in the system handler block  */
-        SCB_BASE->SHP[((uint32)irqn & 0xF) - 4] = (priority & 0xF) << 4;
+        SCB->SHP[((uint32)irqn & 0xF) - 4] = (priority & 0xF) << 4;
     } else {
-        NVIC_BASE->IP[irqn] = (priority & 0xF) << 4;
+        NVIC->IP[irqn] = (priority & 0xF) << 4;
     }
 }
 
@@ -70,16 +70,16 @@ void nvic_init(uint32 vector_table_address, uint32 offset) {
      * possible.
      */
     for (i = 0; i < STM32_NR_INTERRUPTS; i++) {
-        nvic_irq_set_priority((nvic_irq_num)i, 0xF);
+        nvic_irq_set_priority((IRQn_Type)i, 0xF);
     }
 
     /* Lower systick interrupt priority to lowest level */
-    nvic_irq_set_priority(NVIC_SYSTICK, 0xF);
+    nvic_irq_set_priority(SysTick_IRQn, 0xF);
 }
 
 /**
  * Reset the vector table address.
  */
 void nvic_set_vector_table(uint32 addr, uint32 offset) {
-    SCB_BASE->VTOR = addr | (offset & 0x1FFFFF80);
+    SCB->VTOR = addr | (offset & 0x1FFFFF80);
 }

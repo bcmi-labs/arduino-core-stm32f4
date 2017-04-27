@@ -53,102 +53,6 @@ extern "C"{
  * Register maps and devices
  */
 
-/** Advanced control timer register map type */
-typedef struct timer_adv_reg_map {
-    __io uint32 CR1;            /**< Control register 1 */
-    __io uint32 CR2;            /**< Control register 2 */
-    __io uint32 SMCR;           /**< Slave mode control register */
-    __io uint32 DIER;           /**< DMA/Interrupt enable register */
-    __io uint32 SR;             /**< Status register */
-    __io uint32 EGR;            /**< Event generation register  */
-    __io uint32 CCMR1;          /**< Capture/compare mode register 1 */
-    __io uint32 CCMR2;          /**< Capture/compare mode register 2 */
-    __io uint32 CCER;           /**< Capture/compare enable register */
-    __io uint32 CNT;            /**< Counter */
-    __io uint32 PSC;            /**< Prescaler */
-    __io uint32 ARR;            /**< Auto-reload register */
-    __io uint32 RCR;            /**< Repetition counter register */
-    __io uint32 CCR1;           /**< Capture/compare register 1 */
-    __io uint32 CCR2;           /**< Capture/compare register 2 */
-    __io uint32 CCR3;           /**< Capture/compare register 3 */
-    __io uint32 CCR4;           /**< Capture/compare register 4 */
-    __io uint32 BDTR;           /**< Break and dead-time register */
-    __io uint32 DCR;            /**< DMA control register */
-    __io uint32 DMAR;           /**< DMA address for full transfer */
-    __io uint32 OR;             /**< Option Register */
-} timer_adv_reg_map;
-
-/** General purpose timer register map type */
-typedef struct timer_gen_reg_map {
-    __io uint32 CR1;            /**< Control register 1 */
-    __io uint32 CR2;            /**< Control register 2 */
-    __io uint32 SMCR;           /**< Slave mode control register */
-    __io uint32 DIER;           /**< DMA/Interrupt enable register */
-    __io uint32 SR;             /**< Status register */
-    __io uint32 EGR;            /**< Event generation register  */
-    __io uint32 CCMR1;          /**< Capture/compare mode register 1 */
-    __io uint32 CCMR2;          /**< Capture/compare mode register 2 */
-    __io uint32 CCER;           /**< Capture/compare enable register */
-    __io uint32 CNT;            /**< Counter */
-    __io uint32 PSC;            /**< Prescaler */
-    __io uint32 ARR;            /**< Auto-reload register */
-    const uint32 RESERVED1;     /**< Reserved */
-    __io uint32 CCR1;           /**< Capture/compare register 1 */
-    __io uint32 CCR2;           /**< Capture/compare register 2 */
-    __io uint32 CCR3;           /**< Capture/compare register 3 */
-    __io uint32 CCR4;           /**< Capture/compare register 4 */
-    const uint32 RESERVED2;     /**< Reserved */
-    __io uint32 DCR;            /**< DMA control register */
-    __io uint32 DMAR;           /**< DMA address for full transfer */
-    __io uint32 OR;             /**< Option Register */
-} timer_gen_reg_map;
-
-/** Basic timer register map type */
-typedef struct timer_bas_reg_map {
-    __io uint32 CR1;            /**< Control register 1 */
-    __io uint32 CR2;            /**< Control register 2 */
-    const uint32 RESERVED1;     /**< Reserved */
-    __io uint32 DIER;           /**< DMA/Interrupt enable register */
-    __io uint32 SR;             /**< Status register */
-    __io uint32 EGR;            /**< Event generation register  */
-    const uint32 RESERVED2;     /**< Reserved */
-    const uint32 RESERVED3;     /**< Reserved */
-    const uint32 RESERVED4;     /**< Reserved */
-    __io uint32 CNT;            /**< Counter */
-    __io uint32 PSC;            /**< Prescaler */
-    __io uint32 ARR;            /**< Auto-reload register */
-} timer_bas_reg_map;
-
-/** Timer 1 register map base pointer */
-#define TIMER1_BASE        ((struct timer_adv_reg_map*)0x40010000)
-/** Timer 2 register map base pointer */
-#define TIMER2_BASE        ((struct timer_gen_reg_map*)0x40000000)
-/** Timer 3 register map base pointer */
-#define TIMER3_BASE        ((struct timer_gen_reg_map*)0x40000400)
-/** Timer 4 register map base pointer */
-#define TIMER4_BASE        ((struct timer_gen_reg_map*)0x40000800)
-/** Timer 5 register map base pointer */
-#define TIMER5_BASE        ((struct timer_gen_reg_map*)0x40000C00)
-/** Timer 6 register map base pointer */
-#define TIMER6_BASE        ((struct timer_bas_reg_map*)0x40001000)
-/** Timer 7 register map base pointer */
-#define TIMER7_BASE        ((struct timer_bas_reg_map*)0x40001400)
-/** Timer 8 register map base pointer */
-#define TIMER8_BASE        ((struct timer_adv_reg_map*)0x40010400)
-/** Timer 9 register map base pointer */
-#define TIMER9_BASE        ((struct timer_adv_reg_map*)0x40014000)
-/** Timer 10 register map base pointer */
-#define TIMER10_BASE       ((struct timer_adv_reg_map*)0x40014400)
-/** Timer 11 register map base pointer */
-#define TIMER11_BASE       ((struct timer_adv_reg_map*)0x40014800)
-/** Timer 12 register map base pointer */
-#define TIMER12_BASE       ((struct timer_adv_reg_map*)0x40001800)
-/** Timer 13 register map base pointer */
-#define TIMER13_BASE       ((struct timer_adv_reg_map*)0x40001C00)
-/** Timer 14 register map base pointer */
-#define TIMER14_BASE       ((struct timer_adv_reg_map*)0x40002000)
-
-
 /*
  * Timer devices
  */
@@ -160,9 +64,9 @@ typedef struct timer_bas_reg_map {
  * the timer's type.
  */
 typedef union timer_reg_map {
-    timer_adv_reg_map *adv;     /**< Advanced register map */
-    timer_gen_reg_map *gen;     /**< General purpose register map */
-    timer_bas_reg_map *bas;     /**< Basic register map */
+    TIM_TypeDef *adv;     /**< Advanced register map */
+    TIM_TypeDef *gen;     /**< General purpose register map */
+    TIM_TypeDef *bas;     /**< Basic register map */
 } timer_reg_map;
 
 /**
@@ -725,7 +629,7 @@ static inline void timer_set_reload(timer_dev *dev, uint16 arr) {
 static inline uint16 timer_get_compare(timer_dev *dev, uint8 channel) {
     if(channel > 4)
         channel -= 4;
-    __io uint32 *ccr = &(dev->regs).gen->CCR1 + (channel - 1);
+    __io uint32_t *ccr = &(dev->regs).gen->CCR1 + (channel - 1);
     return *ccr;
 }
 
@@ -740,7 +644,7 @@ static inline void timer_set_compare (timer_dev *dev,
     uint16 value) {
     if(channel > 4)
         channel -= 4;
-    __io uint32 *ccr = &(dev->regs).gen->CCR1 + (channel - 1);
+    __io uint32_t *ccr = &(dev->regs).gen->CCR1 + (channel - 1);
     *ccr = value;
 }
 
@@ -1057,7 +961,7 @@ static inline void timer_oc_set_mode(timer_dev *dev,
     //uint8 bit1 = (channel >> 1) & 1;  // original
     uint8 bit1 = ((channel-1) >> 1) & 1;  // fixed
     /* channel == 1,2 -> CCMR1; channel == 3,4 -> CCMR2 */
-    __io uint32 *ccmr = &(dev->regs).gen->CCMR1 + bit1;
+    __io uint32_t *ccmr = &(dev->regs).gen->CCMR1 + bit1;
     /* channel == 1,3 -> shift = 0, channel == 2,4 -> shift = 8 */
     uint8 shift = 8 * (1 - bit0);
 

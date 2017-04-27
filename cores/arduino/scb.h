@@ -63,7 +63,4 @@ typedef struct scb_reg_map {
     __io uint32 ISAR[5]; /**< ISA Feature Register */
 } scb_reg_map;
 
-/** System control block register map base pointer */
-#define SCB_BASE                        ((struct scb_reg_map*)0xE000ED00)
-
 #endif

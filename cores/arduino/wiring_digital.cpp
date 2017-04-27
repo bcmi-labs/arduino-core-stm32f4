@@ -114,6 +114,7 @@ void togglePin(uint8 pin)
 
 uint32_t pulseIn( uint8 pin, uint32_t state, uint32_t timeout )
 {
+    UNUSED(timeout);
     while(digitalRead(pin) == state);
     while(digitalRead(pin) == !state);
     uint32_t start_time = micros();

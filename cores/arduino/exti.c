@@ -55,22 +55,22 @@ typedef struct exti_channel {
 } exti_channel;
 
 static exti_channel exti_channels[] = {
-    { .handler = NULL, .irq_line = NVIC_EXTI0      },  // EXTI0
-    { .handler = NULL, .irq_line = NVIC_EXTI1      },  // EXTI1
-    { .handler = NULL, .irq_line = NVIC_EXTI2      },  // EXTI2
-    { .handler = NULL, .irq_line = NVIC_EXTI3      },  // EXTI3
-    { .handler = NULL, .irq_line = NVIC_EXTI4      },  // EXTI4
-    { .handler = NULL, .irq_line = NVIC_EXTI_9_5   },  // EXTI5
-    { .handler = NULL, .irq_line = NVIC_EXTI_9_5   },  // EXTI6
-    { .handler = NULL, .irq_line = NVIC_EXTI_9_5   },  // EXTI7
-    { .handler = NULL, .irq_line = NVIC_EXTI_9_5   },  // EXTI8
-    { .handler = NULL, .irq_line = NVIC_EXTI_9_5   },  // EXTI9
-    { .handler = NULL, .irq_line = NVIC_EXTI_15_10 },  // EXTI10
-    { .handler = NULL, .irq_line = NVIC_EXTI_15_10 },  // EXTI11
-    { .handler = NULL, .irq_line = NVIC_EXTI_15_10 },  // EXTI12
-    { .handler = NULL, .irq_line = NVIC_EXTI_15_10 },  // EXTI13
-    { .handler = NULL, .irq_line = NVIC_EXTI_15_10 },  // EXTI14
-    { .handler = NULL, .irq_line = NVIC_EXTI_15_10 },  // EXTI15
+    { .handler = NULL, .irq_line = EXTI0_IRQn      },  // EXTI0
+    { .handler = NULL, .irq_line = EXTI1_IRQn      },  // EXTI1
+    { .handler = NULL, .irq_line = EXTI2_IRQn      },  // EXTI2
+    { .handler = NULL, .irq_line = EXTI3_IRQn      },  // EXTI3
+    { .handler = NULL, .irq_line = EXTI4_IRQn      },  // EXTI4
+    { .handler = NULL, .irq_line = EXTI9_5_IRQn   },  // EXTI5
+    { .handler = NULL, .irq_line = EXTI9_5_IRQn   },  // EXTI6
+    { .handler = NULL, .irq_line = EXTI9_5_IRQn   },  // EXTI7
+    { .handler = NULL, .irq_line = EXTI9_5_IRQn   },  // EXTI8
+    { .handler = NULL, .irq_line = EXTI9_5_IRQn   },  // EXTI9
+    { .handler = NULL, .irq_line = EXTI15_10_IRQn },  // EXTI10
+    { .handler = NULL, .irq_line = EXTI15_10_IRQn },  // EXTI11
+    { .handler = NULL, .irq_line = EXTI15_10_IRQn },  // EXTI12
+    { .handler = NULL, .irq_line = EXTI15_10_IRQn },  // EXTI13
+    { .handler = NULL, .irq_line = EXTI15_10_IRQn },  // EXTI14
+    { .handler = NULL, .irq_line = EXTI15_10_IRQn },  // EXTI15
 };
 
 /*
@@ -110,14 +110,14 @@ void exti_attach_interrupt(afio_exti_num num,
     /* Set trigger mode */
     switch (mode) {
     case EXTI_RISING:
-        bb_peri_set_bit(&EXTI_BASE->RTSR, num, 1);
+        bb_peri_set_bit(&EXTI->RTSR, num, 1);
         break;
     case EXTI_FALLING:
-        bb_peri_set_bit(&EXTI_BASE->FTSR, num, 1);
+        bb_peri_set_bit(&EXTI->FTSR, num, 1);
         break;
     case EXTI_RISING_FALLING:
-        bb_peri_set_bit(&EXTI_BASE->RTSR, num, 1);
-        bb_peri_set_bit(&EXTI_BASE->FTSR, num, 1);
+        bb_peri_set_bit(&EXTI->RTSR, num, 1);
+        bb_peri_set_bit(&EXTI->FTSR, num, 1);
         break;
     }
 
@@ -125,7 +125,7 @@ void exti_attach_interrupt(afio_exti_num num,
     afio_exti_select(num, port);
 
     /* Unmask external interrupt request */
-    bb_peri_set_bit(&EXTI_BASE->IMR, num, 1);
+    bb_peri_set_bit(&EXTI->IMR, num, 1);
 
     /* Enable the interrupt line */
     nvic_irq_enable(exti_channels[num].irq_line);
@@ -144,11 +144,11 @@ void exti_detach_interrupt(afio_exti_num num) {
     #endif
 
     /* First, mask the interrupt request */
-    bb_peri_set_bit(&EXTI_BASE->IMR, num, 0);
+    bb_peri_set_bit(&EXTI->IMR, num, 0);
 
     /* Then, clear the trigger selection registers */
-    bb_peri_set_bit(&EXTI_BASE->FTSR, num, 0);
-    bb_peri_set_bit(&EXTI_BASE->RTSR, num, 0);
+    bb_peri_set_bit(&EXTI->FTSR, num, 0);
+    bb_peri_set_bit(&EXTI->RTSR, num, 0);
 
     /* Finally, unregister the user's handler */
     exti_channels[num].handler = NULL;
@@ -200,7 +200,7 @@ void __irq_exti15_10(void) {
  * compensate, this function NOPs for 2 cycles after clearing the
  * pending bits to ensure it takes effect. */
 static inline void clear_pending_msk(uint32 exti_msk) {
-    EXTI_BASE->PR = exti_msk;
+    EXTI->PR = exti_msk;
     asm volatile("nop");
     asm volatile("nop");
 }
@@ -220,7 +220,7 @@ static inline void dispatch_single_exti(uint32 exti) {
 
 /* Dispatch routine for EXTIs which share an IRQ. */
 static inline void dispatch_extis(uint32 start, uint32 stop) {
-    uint32 pr = EXTI_BASE->PR;
+    uint32 pr = EXTI->PR;
     uint32 handled_msk = 0;
     uint32 exti;
 

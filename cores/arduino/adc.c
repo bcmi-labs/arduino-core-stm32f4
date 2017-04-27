@@ -48,7 +48,7 @@
 
 /* ADC1 device. */
 static adc_dev adc1 = {
-    .regs   = ADC1_BASE,
+    .regs   = ADC1,
     .clk_id = RCC_ADC1
 };
 
@@ -56,7 +56,7 @@ const adc_dev *ADC1_dev = &adc1;
 
 /* ADC2 device. */
 static adc_dev adc2 = {
-    .regs   = ADC2_BASE,
+    .regs   = ADC2,
     .clk_id = RCC_ADC2
 };
 
@@ -64,7 +64,7 @@ const adc_dev *ADC2_dev = &adc2;
 
 /* ADC3 device. */
 adc_dev adc3 = {
-    .regs   = ADC3_BASE,
+    .regs   = ADC3,
     .clk_id = RCC_ADC3
 };
 
@@ -140,6 +140,7 @@ void adc_set_sample_rate(const adc_dev *dev, adc_smp_rate smp_rate) {
  */
 void adc_calibrate(const adc_dev *dev) {
     // do nothing
+    UNUSED(dev);
 }
 
 /**
@@ -150,7 +151,7 @@ void adc_calibrate(const adc_dev *dev) {
  * @return conversion result
  */
 uint16 adc_read(const adc_dev *dev, uint8 channel) {
-    adc_reg_map *regs = dev->regs;
+    ADC_TypeDef *regs = dev->regs;
 
     adc_set_reg_seqlen(dev, 1);
 
@@ -165,7 +166,7 @@ void setupADC() {
 
     uint32 tmpreg1 = 0;
 
-    tmpreg1 = ADC_COMMON->CCR;
+    tmpreg1 = ADC->CCR;
 
 	/* Clear MULTI, DELAY, DMA and ADCPRE bits */
     #define CR_CLEAR_MASK  ((uint32)0xFFFC30E0)
@@ -184,5 +185,5 @@ void setupADC() {
 	tmpreg1 |= ADC_Mode_Independent | ADC_Prescaler_Div2 | ADC_DMAAccessMode_Disabled | ADC_TwoSamplingDelay_5Cycles;
 
 	/* Write to ADC CCR */
-	ADC_COMMON->CCR = tmpreg1;
+	ADC->CCR = tmpreg1;
 }

@@ -149,7 +149,7 @@ static void I2Cx_Init(void)
   * @param  Reg: Register address
   * @param  Value: Data to be written
   */
-static void I2Cx_Write(uint8_t Addr, uint8_t Reg, uint8_t Value)
+static void __attribute__((unused)) I2Cx_Write(uint8_t Addr, uint8_t Reg, uint8_t Value)
 {
   HAL_StatusTypeDef status = HAL_OK;
 
@@ -175,7 +175,7 @@ static void I2Cx_Write(uint8_t Addr, uint8_t Reg, uint8_t Value)
   * @param  Reg: Register address
   * @retval Read data
   */
-static uint8_t I2Cx_Read(uint8_t Addr, uint8_t Reg)
+static uint8_t __attribute__((unused)) I2Cx_Read(uint8_t Addr, uint8_t Reg)
 {
   HAL_StatusTypeDef status = HAL_OK;
   uint8_t Value = 0;
@@ -272,7 +272,7 @@ static HAL_StatusTypeDef I2Cx_WriteMultiple(uint8_t Addr,
   * @param  Trials: Number of trials
   * @retval HAL status
   */
-static HAL_StatusTypeDef I2Cx_IsDeviceReady(uint16_t DevAddress, uint32_t Trials)
+static HAL_StatusTypeDef __attribute__((unused)) I2Cx_IsDeviceReady(uint16_t DevAddress, uint32_t Trials)
 {
   return (HAL_I2C_IsDeviceReady(&heval_I2c, DevAddress, Trials, 1000));
 }
@@ -284,6 +284,7 @@ static HAL_StatusTypeDef I2Cx_IsDeviceReady(uint16_t DevAddress, uint32_t Trials
   */
 static void I2Cx_Error(uint8_t Addr)
 {
+  UNUSED(Addr);
   /* De-initialize the I2C comunication bus */
   HAL_I2C_DeInit(&heval_I2c);
 

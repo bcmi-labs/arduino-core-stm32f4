@@ -47,7 +47,7 @@
  */
 /* DAC device */
 dac_dev dac = {
-    .regs = DAC_BASE,
+    .regs = DAC,
 };
 const dac_dev *DAC_dev = &dac;
 
