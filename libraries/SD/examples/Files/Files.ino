@@ -14,10 +14,10 @@ File myFile;
 
 void setup()
 {
-  // Open serial communications and wait for port to open:
-  SerialUSB.begin(9600);
+  // Open SerialUSB communications and wait for port to open:
+  SerialUSB.begin(115200);
   while (!SerialUSB) {
-    ; // wait for serial port to connect. Needed for Leonardo only
+    ; // wait for SerialUSB port to connect. Needed for Leonardo only
   }
 
 
@@ -59,6 +59,7 @@ void setup()
   else {
     SerialUSB.println("example.txt doesn't exist.");
   }
+  SerialUSB.println("###### End of the SD tests ######");
 }
 
 void loop()
