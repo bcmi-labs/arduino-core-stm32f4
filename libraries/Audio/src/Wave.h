@@ -1,3 +1,6 @@
+/*
+ *  Created by Frederic Pillon <frederic.pillon@st.com>
+ */
 #ifndef WAVE_H
 #define WAVE_H
 

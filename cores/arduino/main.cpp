@@ -40,6 +40,9 @@ int main( void )
 #if defined(USBCON)
 	usbd_interface_init();
 #endif
+	// Set MIC Connected to CODEC
+	pinMode(MIC_SEL, OUTPUT);
+	digitalWrite(MIC_SEL, CODEC);
 
 	setup();
 

@@ -1,6 +1,8 @@
 /*
  * Copyright (c) 2012 by Cristian Maglie <c.maglie@arduino.cc>
- * Audio library for Arduino Due.
+ * Audio library.
+ *
+ * Modified by Frederic Pillon <frederic.pillon@st.com>
  *
  * This file is free software; you can redistribute it and/or modify
  * it under the terms of either the GNU General Public License version 2
@@ -9,7 +11,7 @@
  */
 
 #include "Audio.h"
-#include "otto_audio_inout.h"
+//#include "bsp_audio_inout.h"
 
 AudioClass Audio;
 
