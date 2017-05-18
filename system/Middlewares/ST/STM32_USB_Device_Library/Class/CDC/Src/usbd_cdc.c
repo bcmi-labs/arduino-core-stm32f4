@@ -661,12 +661,12 @@ static uint8_t  USBD_CDC_Setup (USBD_HandleTypeDef *pdev,
   * @param  epnum: endpoint number
   * @retval status
   */
-static uint8_t USBD_CDC_DataIn (USBD_HandleTypeDef *pdev, uint8_t epnum)
+static uint8_t  USBD_CDC_DataIn (USBD_HandleTypeDef *pdev, uint8_t epnum)
 {
-  USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef*) pdev->pClassData;
+  USBD_CDC_HandleTypeDef   *hcdc = (USBD_CDC_HandleTypeDef*) pdev->pClassData;
   PCD_HandleTypeDef *hpcd = pdev->pData;
   USB_OTG_EPTypeDef *ep;
-
+  
   if(pdev->pClassData != NULL)
   {
     ep = &hpcd->IN_ep[epnum];
@@ -674,13 +674,14 @@ static uint8_t USBD_CDC_DataIn (USBD_HandleTypeDef *pdev, uint8_t epnum)
     {
       /* Send ZLP */
       USBD_LL_Transmit (pdev, epnum, NULL, 0);
-    } else
-    {
-      hcdc->TxState = 0;
     }
-
+    else
+    {
+    hcdc->TxState = 0;
+    }
     return USBD_OK;
-  } else
+  }
+  else
   {
     return USBD_FAIL;
   }
