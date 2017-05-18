@@ -16,18 +16,27 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _WIRING_MATH_
-#define _WIRING_MATH_
+#ifndef _WIRING_SHIFT_
+#define _WIRING_SHIFT_
 
-extern long random( long ) ;
-extern long random( long, long ) ;
-extern void randomSeed( uint32_t dwSeed ) ;
-extern long map( long, long, long, long, long ) ;
+#ifdef __cplusplus
+ extern "C" {
+#endif
 
-extern uint16_t makeWord( uint16_t w ) ;
-extern uint16_t makeWord( uint8_t h, uint8_t l ) ;
+/*
+ * \brief
+ */
+extern uint32_t shiftIn( uint32_t ulDataPin, uint32_t ulClockPin, uint32_t ulBitOrder ) ;
 
-#define word(...) makeWord(__VA_ARGS__)
+
+/*
+ * \brief
+ */
+extern void shiftOut( uint32_t ulDataPin, uint32_t ulClockPin, uint32_t ulBitOrder, uint32_t ulVal ) ;
 
 
-#endif /* _WIRING_MATH_ */
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* _WIRING_SHIFT_ */

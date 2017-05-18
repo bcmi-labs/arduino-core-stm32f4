@@ -1,57 +1,37 @@
-/******************************************************************************
- * The MIT License
- *
- * Copyright (c) 2010 Perry Hung.
- *
- * Permission is hereby granted, free of charge, to any person
- * obtaining a copy of this software and associated documentation
- * files (the "Software"), to deal in the Software without
- * restriction, including without limitation the rights to use, copy,
- * modify, merge, publish, distribute, sublicense, and/or sell copies
- * of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
- * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
- * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- *****************************************************************************/
+/*
+  Copyright (c) 2011 Arduino.  All right reserved.
 
-/**
- *  @brief Arduino-compatible ADC implementation.
- */
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either
+  version 2.1 of the License, or (at your option) any later version.
 
- /*
-  * Arduino srl - www.arduino.org
-  * 2016 Jun 9: Edited Francesco Alessi (alfran) - francesco@arduino.org
-  */
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  See the GNU Lesser General Public License for more details.
 
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
 
 #ifndef _WIRING_CONSTANTS_
 #define _WIRING_CONSTANTS_
 
 #ifdef __cplusplus
 extern "C"{
-#endif
+#endif // __cplusplus
+
+#include <stdbool.h>
+
+#define HIGH 0x1
+#define LOW  0x0
 
 #define INPUT 0x0
 #define OUTPUT 0x1
 #define INPUT_PULLUP 0x2
-#define OUTPUT_OPENDRAIN 0x3
-#define INPUT_PULLUP 0x4
-#define INPUT_PULLDOWN 0x5
-#define INPUT_FLOAT 0x6
-#define OUTPUT_DAC 0x7
-
-#define true 0x1
-#define false 0x0
+#define INPUT_PULLDOWN 0x3
 
 #define PI 3.1415926535897932384626433832795
 #define HALF_PI 1.5707963267948966192313216916398
@@ -63,16 +43,62 @@ extern "C"{
 #define SERIAL  0x0
 #define DISPLAY 0x1
 
-
-typedef unsigned short word;
-
 enum BitOrder {
 	LSBFIRST = 0,
 	MSBFIRST = 1
 };
 
-#ifdef __cplusplus
-}
-#endif
+//      LOW 0
+//      HIGH 1
+#define CHANGE 2
+#define FALLING 3
+#define RISING 4
 
-#endif
+#define DEFAULT 1
+#define EXTERNAL 0
+
+// undefine stdlib's abs if encountered
+#ifdef abs
+#undef abs
+#endif // abs
+
+#ifndef min
+#define min(a,b) ((a)<(b)?(a):(b))
+#endif // min
+
+#ifndef max
+#define max(a,b) ((a)>(b)?(a):(b))
+#endif // max
+
+#define abs(x) ((x)>0?(x):-(x))
+#define constrain(amt,low,high) ((amt)<(low)?(low):((amt)>(high)?(high):(amt)))
+#define round(x)     ((x)>=0?(long)((x)+0.5):(long)((x)-0.5))
+#define radians(deg) ((deg)*DEG_TO_RAD)
+#define degrees(rad) ((rad)*RAD_TO_DEG)
+#define sq(x) ((x)*(x))
+
+#define interrupts() __enable_irq()
+#define noInterrupts() __disable_irq()
+
+#define lowByte(w) ((uint8_t) ((w) & 0xff))
+#define highByte(w) ((uint8_t) ((w) >> 8))
+
+#define bitRead(value, bit) (((value) >> (bit)) & 0x01)
+#define bitSet(value, bit) ((value) |= (1UL << (bit)))
+#define bitClear(value, bit) ((value) &= ~(1UL << (bit)))
+#define bitWrite(value, bit, bitvalue) (bitvalue ? bitSet(value, bit) : bitClear(value, bit))
+
+typedef unsigned int word;
+
+#define bit(b) (1UL << (b))
+
+
+typedef bool boolean ;
+
+typedef uint8_t byte ;
+
+#ifdef __cplusplus
+} // extern "C"
+#endif // __cplusplus
+
+#endif /* _WIRING_CONSTANTS_ */
