@@ -1,213 +1,204 @@
-/******************************************************************************
- * The MIT License
- *
- * Copyright (c) 2011 LeafLabs, LLC.
- *
- * Permission is hereby granted, free of charge, to any person
- * obtaining a copy of this software and associated documentation
- * files (the "Software"), to deal in the Software without
- * restriction, including without limitation the rights to use, copy,
- * modify, merge, publish, distribute, sublicense, and/or sell copies
- * of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
- * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
- * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
-*****************************************************************************/
+/*
+  Copyright (c) 2011 Arduino.  All right reserved.
 
- /**
- * @file   aeroquad32.h
- * @author Marti Bolivar <mbolivar@leaflabs.com>
- * @brief  Private include file for Maple Native in boards.h
- *
- * See maple.h for more information on these definitions.
- */
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either
+  version 2.1 of the License, or (at your option) any later version.
 
- /*
- * 2016 May 31 first release for:
- * Adruino OTTO serial ports interface definitions
- *
- * Arduino srl
- *
- * Francesco Alessi (alfran) - francesco@arduino.org
- */
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  See the GNU Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
 
 #ifndef _VARIANT_ARDUINO_STM32_
 #define _VARIANT_ARDUINO_STM32_
 
-#ifndef _OTTO_H_
-#define _OTTO_H_
+/*----------------------------------------------------------------------------
+ *        Definitions
+ *----------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------
+ *        Headers
+ *----------------------------------------------------------------------------*/
+
+#include "Arduino.h"
+
+#ifdef __cplusplus
+extern "C"{
+#endif // __cplusplus
+
+/**
+ * Libc porting layers
+ */
+#if defined (  __GNUC__  ) /* GCC CS3 */
+#    include <syscalls.h> /** RedHat Newlib minimal stub */
+#endif
+
+/*----------------------------------------------------------------------------
+ *        Pins
+ *----------------------------------------------------------------------------*/
+#include "PeripheralPins.h"
+
+extern const PinName digital_arduino[];
+
+enum {
+  D0,  D1,  D2,  D3,  D4,  D5,  D6,  D7,  D8,  D9,
+  D10, D11, D12, D13, D14, D15, D16, D17, D18, D19,
+  D20, D21, D22, D23, D24, D25, D26, D27, D28, D29,
+  D30, D31, D32, D33, D34, D35, D36, D37, D38, D39,
+  D40, D41, D42, D43, D44, D45, D46, D47, D48, D49,
+  D50, D51, D52, D53, D54, D55, D56, D57, D58, D59,
+  D60, D61, D62, D63, D64, D65, D66, D67, D68, D69,
+  D70, D71, D72, D73, D74, D75, D76, D77, D78,
+  DEND
+};
+
+enum {
+  A_START_AFTER = D53,
+  A0,  A1,  A2,  A3,  A4,  A5,  A6,  A7,  A8,  A9,
+  A10, A11, A12, A13,
+  AEND
+};
+
+#define MAX_ANALOG_IOS          (sizeof(PinMap_ADC)/sizeof(PinMap))
+#define MAX_DIGITAL_IOS         DEND
+#define NUM_DIGITAL_PINS        MAX_DIGITAL_IOS
+#define NUM_ANALOG_INPUTS       (AEND - A0)
+
+// Convert a digital pin number Dxx to a PinName Pxy
+#define digitalToPinName(p)     ((p < NUM_DIGITAL_PINS) ? digital_arduino[p] : (STM_VALID_PINNAME(p))? (PinName)p : NC)
+// Convert an analog pin number Axx to a PinName Pxy
+#define analogToPinName(p)      ((p < NUM_ANALOG_INPUTS) ? digitalToPinName(p+A0) : digitalToPinName(p))
+// Convert an analog pin number to a digital pin number
+#define analogToDigital(p)      ((p < NUM_ANALOG_INPUTS) ? (p+A0) : p)
+// Convert a PinName Pxy to a pin number
+uint32_t pinNametoPinNumber(PinName p);
+
+#define digitalPinToPort(p)     ( get_GPIO_Port(digitalToPinName(p)) )
+#define digitalPinToBitMask(p)  ( STM_GPIO_PIN(digitalToPinName(p)) )
+
+//ADC resolution is 12bits
+#define ADC_RESOLUTION          12
+#define DACC_RESOLUTION         12
+
+//PWR resolution
+#define PWM_RESOLUTION          8
+#define PWM_FREQUENCY           1000
+#define PWM_MAX_DUTY_CYCLE      255
+
+//On-board LED pin number
+#define LED_BUILTIN             D13
+#define LED_L                   LED_BUILTIN
 
 
-#define digitalPinToPort(P)        ( PIN_MAP[P].gpio_device )
-#define digitalPinToBitMask(P)     ( BIT(PIN_MAP[P].gpio_bit) )
-#define portOutputRegister(port)   ( &(port->regs->ODR) )
-#define portInputRegister(port)    ( &(port->regs->IDR) )
-#define portSetRegister(pin)		   ( &(PIN_MAP[pin].gpio_device->regs->BSRR) )
-#define portClearRegister(pin)		 ( &(PIN_MAP[pin].gpio_device->regs->BRR) )
-#define portConfigRegister(pin)		 ( &(PIN_MAP[pin].gpio_device->regs->CRL) )
+//SPI definitions
+//define 16 channels. As many channel as digital IOs
+#define SPI_CHANNELS_NUM        16
 
-#include "stm32f4xx_hal.h"
+//default chip salect pin
+#define BOARD_SPI_DEFAULT_SS    D10
 
-#define Port2Pin(port, bit) ((port-'A')*16+bit)
-#define CYCLES_PER_MICROSECOND  180
-
-#undef  STM32_PCLK1
-#undef  STM32_PCLK2
-#define STM32_PCLK1             (CYCLES_PER_MICROSECOND*1000000/4)
-#define STM32_PCLK2             (CYCLES_PER_MICROSECOND*1000000/2)
-
-#define SYSTICK_RELOAD_VAL      (CYCLES_PER_MICROSECOND*1000-1)
-
-// PINs definition
-
-// USART1 - NOT USED
-#define USART1_TX_GPIO_DEV	GPIOB_dev
-#define USART1_TX_GPIO_PIN 	6
-#define USART1_TX_AF		    7
-#define USART1_RX_GPIO_DEV 	GPIOB_dev
-#define USART1_RX_GPIO_PIN 	7
-#define USART1_RX_AF		    7
-
-// USART2 - Serial2
-#define USART2_TX_GPIO_DEV	GPIOD_dev
-#define USART2_TX_GPIO_PIN 	5
-#define USART2_TX_AF		    7
-#define USART2_RX_GPIO_DEV 	GPIOD_dev
-#define USART2_RX_GPIO_PIN 	6
-#define USART2_RX_AF		    7
-
-// USART3 - Serial1 / SerialWiFi
-#define USART3_TX_GPIO_DEV	GPIOB_dev
-#define USART3_TX_GPIO_PIN 	10
-#define USART3_TX_AF		    7
-#define USART3_RX_GPIO_DEV 	GPIOB_dev
-#define USART3_RX_GPIO_PIN 	11
-#define USART3_RX_AF		    7
-
-// UART4 - Serial
-#define UART4_TX_GPIO_DEV	  GPIOA_dev
-#define UART4_TX_GPIO_PIN 	0
-#define UART4_TX_AF			    8
-#define UART4_RX_GPIO_DEV 	GPIOA_dev
-#define UART4_RX_GPIO_PIN 	1
-#define UART4_RX_AF			    8
-
-// UART5 - NOT USED
-#define UART5_TX_GPIO_DEV	  GPIOD_dev
-#define UART5_TX_GPIO_PIN 	2
-#define UART5_TX_AF			    8
-#define UART5_RX_GPIO_DEV 	GPIOC_dev
-#define UART5_RX_GPIO_PIN 	12
-#define UART5_RX_AF			    8
-
-// USART6 - Serial3
-#define USART6_TX_GPIO_DEV	GPIOG_dev
-#define USART6_TX_GPIO_PIN 	14
-#define USART6_TX_AF		    8
-#define USART6_RX_GPIO_DEV 	GPIOG_dev
-#define USART6_RX_GPIO_PIN 	9
-#define USART6_RX_AF		    8
-
-// UART7 - NOT USED
-#define UART7_TX_GPIO_DEV	  GPIOF_dev
-#define UART7_TX_GPIO_PIN 	7
-#define UART7_TX_AF			    8
-#define UART7_RX_GPIO_DEV 	GPIOF_dev
-#define UART7_RX_GPIO_PIN 	6
-#define UART7_RX_AF			    8
-
-// UART8 - NOT USED
-#define UART8_TX_GPIO_DEV	  GPIOE_dev
-#define UART8_TX_GPIO_PIN 	0
-#define UART8_TX_AF			    8
-#define UART8_RX_GPIO_DEV 	GPIOE_dev
-#define UART8_RX_GPIO_PIN 	1
-#define UART8_RX_AF			    8
-
-#define GPIO_PINS      		 165
-#define BOARD_NR_PWM_PINS   26
-#define BOARD_NR_ADC_PINS   14
-#define BOARD_NR_USED_PINS  80
-
-// Analog PIN Definition
-#define A0 			     D54
-#define A1			     D55
-#define A2			     D56
-#define A3			     D57
-#define A4			     D58
-#define A5           D59
-#define A6			     D60
-#define A7			     D61
-#define A8			     D62
-#define A9			     D63
-#define A10			     D64
-#define A11			     D65
-#define A12			     D66
-#define A13			     D67
-
-// DAC PIN Definition
-#define DAC0 		     D66
-#define DAC1 	    	 D67
-
-// LEDs PIN Definition
-#define LED_L		     D13
-#define LED_BUILTIN  D13
-
-// CAN PIN
-#define CANTX		     D68
-#define CANRX		     D69
-#define CANTX1	     D51
-#define CANRX1	     D53
+//In case SPI CS channel is not used we define a default one
+#define BOARD_SPI_OWN_SS        SPI_CHANNELS_NUM
 
 // SPI PIN
-#define MISO 		     D72
-#define SCK 		     D73
-#define MOSI 		     D74
-#define SS    	     D23
-#define MISO1 	     D12
-#define SCK1  	     D13
-#define MOSI1 	     D11
-#define SS1   	     D10
+#define MISO                    D12 //D72
+#define SCK                     D13 //D73
+#define SCLK                    SCK
+#define MOSI                    D11 //D74
+#define SS                      D10 //D23
+#define MISO1                   D12
+#define SCK1                    D13
+#define MOSI1                   D11
+#define SS1                     D10
+
+// DAC PIN Definition
+#define DAC_0                    D66
+#define DAC_1                    D67
+
+// CAN PIN
+#define CANRX                   D69
+#define CANTX                   D68
 
 // I2C PIN
-#define SCL 		     D71
-#define SDA 		     D70
-#define SCL1		     D20
-#define SDA1 		     D21
+#define SCL                     D71
+#define SDA                     D70
+#define SDA1                    D20
+#define SCL1                    D21
+
+//Timer Definitions
+//Do not use timer used by PWM pins when possible. See PinMap_PWM.
+#define TIMER_TONE              TIM2
+#define TIMER_UART_EMULATED     TIM7
+
+//Do not use basic timer: OC is required
+#define TIMER_SERVO             TIM2  //TODO: advanced-control timers don't work
+
+#define DEBUG_UART              ((USART_TypeDef *) USART6)
 
 // SERIAL PORT PIN
-#define RX 			     D0
-#define TX 			     D1
-#define RX1 		     D19
-#define TX1 		     D18
-#define RX2 		     D17
-#define TX2 		     D16
-#define RX3 		     D15
-#define TX3 		     D14
+#define RX                      D0
+#define TX                      D1
+#define RX1                     D19
+#define TX1                     D18
+#define RX2                     D17
+#define TX2                     D16
+#define RX3                     D15
+#define TX3                     D14
 
 // WIFI POWER PIN
-#define WIFI_PWR	   D75
+#define WIFI_PWR                D75
 
 // USB POWER PIN
-#define USB_PWR		   D76
+#define USB_PWR                 D76
 
 // LCD CONTROL
-#define LCD_BL   	   D77
+#define LCD_BL                  D77
 
 // MIC SEL
-#define MIC_SEL  	   D78
-#define CODEC     	   0
-#define MCU       	   1
+#define MIC_SEL                 D78
+#define CODEC                   0
+#define MCU                     1
 
+//Enable Firmata
+#define STM32 1
+
+#ifdef __cplusplus
+} // extern "C"
 #endif
+/*----------------------------------------------------------------------------
+ *        Arduino objects - C++ only
+ *----------------------------------------------------------------------------*/
+
+#ifdef __cplusplus
+extern HardwareSerial Serial;
+extern HardwareSerial Serial1;
+extern HardwareSerial Serial2;
+extern HardwareSerial Serial3;
+
+// These serial port names are intended to allow libraries and architecture-neutral
+// sketches to automatically default to the correct port name for a particular type
+// of use.  For example, a GPS module would normally connect to SERIAL_PORT_HARDWARE_OPEN,
+// the first hardware serial port whose RX/TX pins are not dedicated to another use.
+//
+// SERIAL_PORT_MONITOR        Port which normally prints to the Arduino Serial Monitor
+//
+// SERIAL_PORT_USBVIRTUAL     Port which is USB virtual serial
+//
+// SERIAL_PORT_LINUXBRIDGE    Port which connects to a Linux system via Bridge library
+//
+// SERIAL_PORT_HARDWARE       Hardware serial port, physical RX & TX pins.
+//
+// SERIAL_PORT_HARDWARE_OPEN  Hardware serial ports which are open for use.  Their RX & TX
+//                            pins are NOT connected to anything by default.
+#define SERIAL_PORT_MONITOR   Serial3
+#define SERIAL_PORT_HARDWARE  Serial3
 #endif
+
+#endif /* _VARIANT_ARDUINO_STM32_ */
