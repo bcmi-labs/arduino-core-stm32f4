@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2011 Arduino.  All right reserved.
+  Copyright (c) 2014 Arduino.  All right reserved.
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -16,18 +16,21 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _WIRING_MATH_
-#define _WIRING_MATH_
+#include <stdlib.h>
 
-extern long random( long ) ;
-extern long random( long, long ) ;
-extern void randomSeed( uint32_t dwSeed ) ;
-extern long map( long, long, long, long, long ) ;
+void *operator new(size_t size) {
+  return malloc(size);
+}
 
-extern uint16_t makeWord( uint16_t w ) ;
-extern uint16_t makeWord( uint8_t h, uint8_t l ) ;
+void *operator new[](size_t size) {
+  return malloc(size);
+}
 
-#define word(...) makeWord(__VA_ARGS__)
+void operator delete(void * ptr) {
+  free(ptr);
+}
 
+void operator delete[](void * ptr) {
+  free(ptr);
+}
 
-#endif /* _WIRING_MATH_ */

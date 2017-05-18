@@ -16,18 +16,28 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _WIRING_MATH_
-#define _WIRING_MATH_
+#include "RingBuffer.h"
+#include <string.h>
 
-extern long random( long ) ;
-extern long random( long, long ) ;
-extern void randomSeed( uint32_t dwSeed ) ;
-extern long map( long, long, long, long, long ) ;
+RingBuffer::RingBuffer( void )
+{
+    memset( (void *)_aucBuffer, 0, SERIAL_BUFFER_SIZE ) ;
+    _iHead=0 ;
+    _iTail=0 ;
+}
 
-extern uint16_t makeWord( uint16_t w ) ;
-extern uint16_t makeWord( uint8_t h, uint8_t l ) ;
+void RingBuffer::store_char( uint8_t c )
+{
+  int i = (uint32_t)(_iHead + 1) % SERIAL_BUFFER_SIZE ;
 
-#define word(...) makeWord(__VA_ARGS__)
+  // if we should be storing the received character into the location
+  // just before the tail (meaning that the head would advance to the
+  // current location of the tail), we're about to overflow the buffer
+  // and so we don't write the character or advance the head.
+  if ( i != _iTail )
+  {
+    _aucBuffer[_iHead] = c ;
+    _iHead = i ;
+  }
+}
 
-
-#endif /* _WIRING_MATH_ */

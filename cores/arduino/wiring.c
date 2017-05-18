@@ -8,7 +8,7 @@
 
   This library is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
   See the GNU Lesser General Public License for more details.
 
   You should have received a copy of the GNU Lesser General Public
@@ -16,31 +16,49 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _WIRING_TONE_
-#define _WIRING_TONE_
+#include "Arduino.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/*
- * \brief Generate a tone to a pin.
- *
- * \param _pin
- * \param frequency Tone frequency (in hertz)
- * \param duration  Tone duration (in milliseconds)
- */
-extern void tone(uint8_t _pin, unsigned int frequency, unsigned long duration = 0);
+uint32_t millis( void )
+{
+  // todo: ensure no interrupts
+  return GetCurrentMilli() ;
+}
 
-/*
- * \brief Stop tone generation on pin.
+// Interrupt-compatible version of micros
+uint32_t micros( void )
+{
+ return GetCurrentMicro();
+}
+
+void delay( uint32_t ms )
+{
+  if (ms == 0)
+      return;
+  uint32_t start = GetCurrentMilli();
+  do {
+      yield();
+  } while (GetCurrentMilli() - start < ms);
+}
+
+#if defined ( __ICCARM__ ) /* IAR Ewarm 5.41+ */
+extern signed int putchar( signed int c ) ;
+/**
+ * \brief
  *
- * \param _pin
+ * \param c  Character to output.
+ *
+ * \return The character that was output.
  */
-extern void noTone(uint8_t _pin);
+extern WEAK signed int putchar( signed int c )
+{
+    return c ;
+}
+#endif /* __ICCARM__ */
 
 #ifdef __cplusplus
 }
 #endif
-
-#endif /* _WIRING_TONE_ */

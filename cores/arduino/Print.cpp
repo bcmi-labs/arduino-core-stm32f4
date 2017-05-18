@@ -17,6 +17,7 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  
  Modified 23 November 2006 by David A. Mellis
+ Modified 03 August 2015 by Chuck Todd
  */
 
 #include <stdlib.h>
@@ -24,6 +25,7 @@
 #include <string.h>
 #include <math.h>
 #include "Arduino.h"
+
 #include "Print.h"
 
 // Public Methods //////////////////////////////////////////////////////////////
@@ -33,7 +35,8 @@ size_t Print::write(const uint8_t *buffer, size_t size)
 {
   size_t n = 0;
   while (size--) {
-    n += write(*buffer++);
+    if (write(*buffer++)) n++;
+    else break;
   }
   return n;
 }
@@ -114,7 +117,7 @@ size_t Print::print(const Printable& x)
 
 size_t Print::println(void)
 {
-   return write("\r\n");
+  return write("\r\n");
 }
 
 size_t Print::println(const String &s)
@@ -252,3 +255,56 @@ size_t Print::printFloat(double number, uint8_t digits)
   
   return n;
 }
+
+#ifdef SUPPORT_LONGLONG
+
+void Print::println(int64_t n, uint8_t base)
+{
+  print(n, base);
+  println();
+}
+
+void Print::print(int64_t n, uint8_t base)
+{
+  if (n < 0)
+  {
+    print((char)'-');
+    n = -n;
+  }
+  if (base < 2) base = 2;
+  print((uint64_t)n, base);
+}
+
+void Print::println(uint64_t n, uint8_t base)
+{
+  print(n, base);
+  println();
+}
+
+void Print::print(uint64_t n, uint8_t base)
+{
+  if (base < 2) base = 2;
+  printLLNumber(n, base);
+}
+
+void Print::printLLNumber(uint64_t n, uint8_t base)
+{
+  unsigned char buf[16 * sizeof(long)];
+  unsigned int i = 0;
+
+  if (n == 0)
+  {
+    print((char)'0');
+	return;
+  }
+
+  while (n > 0)
+  {
+    buf[i++] = n % base;
+    n /= base;
+  }
+
+  for (; i > 0; i--)
+    print((char) (buf[i - 1] < 10 ? '0' + buf[i - 1] : 'A' + buf[i - 1] - 10));
+}
+#endif

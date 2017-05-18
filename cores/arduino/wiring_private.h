@@ -16,18 +16,27 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _WIRING_MATH_
-#define _WIRING_MATH_
+#ifndef WiringPrivate_h
+#define WiringPrivate_h
 
-extern long random( long ) ;
-extern long random( long, long ) ;
-extern void randomSeed( uint32_t dwSeed ) ;
-extern long map( long, long, long, long, long ) ;
+#include <stdint.h>
+#include <stdio.h>
+#include <stdarg.h>
 
-extern uint16_t makeWord( uint16_t w ) ;
-extern uint16_t makeWord( uint8_t h, uint8_t l ) ;
+#ifdef __cplusplus
+extern "C"{
+#endif
 
-#define word(...) makeWord(__VA_ARGS__)
+// Includes ST CMSIS
+#include <chip.h>
 
+#include "wiring_constants.h"
 
-#endif /* _WIRING_MATH_ */
+#ifdef __cplusplus
+} // extern "C"
+
+#include "HardwareSerial.h"
+
+#endif
+
+#endif

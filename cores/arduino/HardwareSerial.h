@@ -1,94 +1,124 @@
-/******************************************************************************
- * The MIT License
- *
- * Copyright (c) 2010 Perry Hung.
- *
- * Permission is hereby granted, free of charge, to any person
- * obtaining a copy of this software and associated documentation
- * files (the "Software"), to deal in the Software without
- * restriction, including without limitation the rights to use, copy,
- * modify, merge, publish, distribute, sublicense, and/or sell copies
- * of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
- * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
- * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- *****************************************************************************/
+/*
+  HardwareSerial.h - Hardware serial library for Wiring
+  Copyright (c) 2006 Nicholas Zambetti.  All right reserved.
 
-/**
- * @file HardwareSerial.h
- * @brief Wirish serial port interface.
- */
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either
+  version 2.1 of the License, or (at your option) any later version.
 
- /*
- * Arduino srl - www.arduino.org
- * 2016 Jun 9: Edited Francesco Alessi (alfran) - francesco@arduino.org
- */
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Lesser General Public License for more details.
 
-#ifndef _HARDWARESERIAL_H_
-#define _HARDWARESERIAL_H_
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-#include "types.h"
-#include "usart.h"
+  Modified 28 September 2010 by Mark Sproul
+  Modified 14 August 2012 by Alarus
+  Modified 3 December 2013 by Matthijs Kooijman
+*/
+
+#ifndef HardwareSerial_h
+#define HardwareSerial_h
+
+#include <inttypes.h>
 
 #include "Stream.h"
 
-/*
- * IMPORTANT:
- *
- * This class documented "by hand" (i.e., not using Doxygen) in the
- * leaflabs-docs/ repository.
- *
- * If you alter the public HardwareSerial interface, you MUST update
- * the documentation accordingly.
- */
+// Define constants and variables for buffering incoming serial data.  We're
+// using a ring buffer (I think), in which head is the index of the location
+// to which to write the next incoming character and tail is the index of the
+// location from which to read.
+// NOTE: a "power of 2" buffer size is reccomended to dramatically
+//       optimize all the modulo operations for ring buffers.
+// WARNING: When buffer sizes are increased to > 256, the buffer index
+// variables are automatically increased in size, but the extra
+// atomicity guards needed for that are not implemented. This will
+// often work, but occasionally a race condition can occur that makes
+// Serial behave erratically. See https://github.com/arduino/Arduino/issues/2405
+#if !defined(SERIAL_TX_BUFFER_SIZE)
+#define SERIAL_TX_BUFFER_SIZE 64
+#endif
+#if !defined(SERIAL_RX_BUFFER_SIZE)
+#define SERIAL_RX_BUFFER_SIZE 64
+#endif
+#if (SERIAL_TX_BUFFER_SIZE>256)
+typedef uint16_t tx_buffer_index_t;
+#else
+typedef uint8_t tx_buffer_index_t;
+#endif
+#if  (SERIAL_RX_BUFFER_SIZE>256)
+typedef uint16_t rx_buffer_index_t;
+#else
+typedef uint8_t rx_buffer_index_t;
+#endif
 
-class HardwareSerial : public Stream {
-public:
-    HardwareSerial(usart_dev *usart_device);
+// Define config for Serial.begin(baud, config);
+#define SERIAL_5N1 0x00
+#define SERIAL_6N1 0x02
+#define SERIAL_7N1 0x04
+#define SERIAL_8N1 0x06
+#define SERIAL_5N2 0x08
+#define SERIAL_6N2 0x0A
+#define SERIAL_7N2 0x0C
+#define SERIAL_8N2 0x0E
+#define SERIAL_5E1 0x20
+#define SERIAL_6E1 0x22
+#define SERIAL_7E1 0x24
+#define SERIAL_8E1 0x26
+#define SERIAL_5E2 0x28
+#define SERIAL_6E2 0x2A
+#define SERIAL_7E2 0x2C
+#define SERIAL_8E2 0x2E
+#define SERIAL_5O1 0x30
+#define SERIAL_6O1 0x32
+#define SERIAL_7O1 0x34
+#define SERIAL_8O1 0x36
+#define SERIAL_5O2 0x38
+#define SERIAL_6O2 0x3A
+#define SERIAL_7O2 0x3C
+#define SERIAL_8O2 0x3E
 
-    /* Set up/tear down */
-    void begin(uint32 baud);
-    void end(void);
+class HardwareSerial : public Stream
+{
+  protected:
+    // Has any byte been written to the UART since begin()
+    bool _written;
 
-    /* I/O */
+    // Don't put any members after these buffers, since only the first
+    // 32 bytes of this struct can be accessed quickly using the ldd
+    // instruction.
+    unsigned char _rx_buffer[SERIAL_RX_BUFFER_SIZE];
+    unsigned char _tx_buffer[SERIAL_TX_BUFFER_SIZE];
+
+    serial_t _serial;
+
+  public:
+    HardwareSerial(PinName _rx, PinName _tx);
+    void begin(unsigned long baud) { begin(baud, SERIAL_8N1); }
+    void begin(unsigned long, uint8_t);
+    void end();
     virtual int available(void);
     virtual int peek(void);
-    virtual void flush(void);
-    uint32 pending(void);
     virtual int read(void);
-    virtual size_t write(unsigned char);
-    using Print::write;
-    operator bool() { return true; };
-    int txPin(void) { return this->tx_pin; }
-    int rxPin(void) { return this->rx_pin; }
+    int availableForWrite(void);
+    virtual void flush(void);
+    virtual size_t write(uint8_t);
+    inline size_t write(unsigned long n) { return write((uint8_t)n); }
+    inline size_t write(long n) { return write((uint8_t)n); }
+    inline size_t write(unsigned int n) { return write((uint8_t)n); }
+    inline size_t write(int n) { return write((uint8_t)n); }
+    using Print::write; // pull in write(str) and write(buf, size) from Print
+    operator bool() { return true; }
 
-
-private:
-    usart_dev *usart_device;
-    uint8 tx_pin;
-    uint8 rx_pin;
+    // Interrupt handlers
+    static void _rx_complete_irq(serial_t* obj);
+    static int _tx_complete_irq(serial_t* obj);
 };
 
-extern HardwareSerial Serial;//Serial0;
-extern HardwareSerial Serial1;
-extern HardwareSerial Serial2;
-extern HardwareSerial Serial3;
-extern HardwareSerial Serial4;
-extern HardwareSerial Serial5;
-extern HardwareSerial Serial6;
-extern HardwareSerial Serial7;
-extern HardwareSerial Serial8;
-extern HardwareSerial SerialWiFi;
+extern void serialEventRun(void) __attribute__((weak));
 
-extern HardwareSerial &SerialDebug;
 #endif

@@ -16,18 +16,27 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _WIRING_MATH_
-#define _WIRING_MATH_
+#ifndef _RING_BUFFER_
+#define _RING_BUFFER_
 
-extern long random( long ) ;
-extern long random( long, long ) ;
-extern void randomSeed( uint32_t dwSeed ) ;
-extern long map( long, long, long, long, long ) ;
+#include <stdint.h>
 
-extern uint16_t makeWord( uint16_t w ) ;
-extern uint16_t makeWord( uint8_t h, uint8_t l ) ;
+// Define constants and variables for buffering incoming serial data.  We're
+// using a ring buffer, in which head is the index of the location
+// to which to write the next incoming character and tail is the index of the
+// location from which to read.
+#define SERIAL_BUFFER_SIZE 128
 
-#define word(...) makeWord(__VA_ARGS__)
+class RingBuffer
+{
+  public:
+    volatile uint8_t _aucBuffer[SERIAL_BUFFER_SIZE] ;
+    volatile int _iHead ;
+    volatile int _iTail ;
 
+  public:
+    RingBuffer( void ) ;
+    void store_char( uint8_t c ) ;
+} ;
 
-#endif /* _WIRING_MATH_ */
+#endif /* _RING_BUFFER_ */

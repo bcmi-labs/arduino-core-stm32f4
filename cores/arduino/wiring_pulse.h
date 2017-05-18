@@ -16,18 +16,25 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _WIRING_MATH_
-#define _WIRING_MATH_
+#ifndef _WIRING_PULSE_
+#define _WIRING_PULSE_
 
-extern long random( long ) ;
-extern long random( long, long ) ;
-extern void randomSeed( uint32_t dwSeed ) ;
-extern long map( long, long, long, long, long ) ;
+#ifdef __cplusplus
+ extern "C" {
+#endif
 
-extern uint16_t makeWord( uint16_t w ) ;
-extern uint16_t makeWord( uint8_t h, uint8_t l ) ;
+unsigned long countPulseASM(const volatile uint32_t *port, uint32_t bit, uint32_t stateMask, unsigned long maxloops);
+/*
+ * \brief Measures the length (in microseconds) of a pulse on the pin; state is HIGH
+ * or LOW, the type of pulse to measure.  Works on pulses from 2-3 microseconds
+ * to 3 minutes in length, but must be called at least a few dozen microseconds
+ * before the start of the pulse.
+ */
+extern uint32_t pulseIn( uint32_t ulPin, uint32_t ulState, uint32_t ulTimeout = 1000000L ) ;
+extern uint32_t pulseInLong( uint8_t pin, uint8_t state, unsigned long timeout = 1000000L ) ;
 
-#define word(...) makeWord(__VA_ARGS__)
+#ifdef __cplusplus
+}
+#endif
 
-
-#endif /* _WIRING_MATH_ */
+#endif /* _WIRING_PULSE_ */
