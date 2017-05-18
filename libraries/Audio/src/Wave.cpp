@@ -1,3 +1,6 @@
+/*
+ *  Created by Frederic Pillon <frederic.pillon@st.com>
+ */
 #include "Wave.h"
 
 /*******************************************************************************
