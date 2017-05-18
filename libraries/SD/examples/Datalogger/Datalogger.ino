@@ -5,19 +5,21 @@
  to an SD card using the SD library.
 
  The circuit:
- * analog sensors on analog ins 0, 1, and 2
+ * analog sensors on analog ins A0, A1, and A2
  * SD card
 
  */
 
 #include <SD.h>
 
+uint32_t A[] = { A0, A1, A2};
+
 void setup()
 {
-  // Open serial communications and wait for port to open:
-  SerialUSB.begin(9600);
+  // Open SerialUSB communications and wait for port to open:
+  SerialUSB.begin(115200);
   while (!SerialUSB) {
-    ; // wait for serial port to connect. Needed for Leonardo only
+    ; // wait for SerialUSB port to connect. Needed for Leonardo only
   }
 
   SerialUSB.print("Initializing SD card...");
@@ -37,7 +39,7 @@ void loop()
 
   // read three sensors and append to the string:
   for (int analogPin = 0; analogPin < 3; analogPin++) {
-    int sensor = analogRead(analogPin);
+    int sensor = analogRead(A[analogPin]);
     dataString += String(sensor);
     if (analogPin < 2) {
       dataString += ",";
@@ -53,7 +55,7 @@ void loop()
     dataFile.seek(dataFile.size());
     dataFile.println(dataString);
     dataFile.close();
-    // print to the serial port too:
+    // print to the SerialUSB port too:
     SerialUSB.println(dataString);
   }
   // if the file isn't open, pop up an error:

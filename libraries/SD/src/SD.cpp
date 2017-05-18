@@ -15,7 +15,7 @@
 
    * Including `SD.h` automatically creates a global
      `SD` object which can be interacted with in a similar
-     manner to other standard global objects like `Serial` and `Ethernet`.
+     manner to other standard global objects like `SerialUSB` and `Ethernet`.
 
    * Boilerplate initialisation code is contained in one method named
      `begin` and no further objects need to be created in order to access
@@ -54,7 +54,7 @@ extern "C" {
   #include <stdlib.h>
   #include <string.h>
   #include <inttypes.h>
-  #include "stm32f4xx_hal.h"
+  #include "stm32_def.h"
 }
 #include "assert.h"
 #include "SD.h"
@@ -231,7 +231,7 @@ File::File(const char* name)
 	_dir.fs = 0;
 }
 
-/** List directory contents to Serial.
+/** List directory contents to SerialUSB.
  *
  * \param[in] flags The inclusive OR of
  *
@@ -272,24 +272,24 @@ void File::ls(uint8_t flags, uint8_t indent) {
     fn = fno.fname;
 #endif
 	//print any indent spaces
-	for (int8_t i = 0; i < indent; i++) Serial.print(' ');
-    Serial.print(fn);
+	for (int8_t i = 0; i < indent; i++) SerialUSB.print(' ');
+    SerialUSB.print(fn);
 
     if((fno.fattrib & AM_DIR) == 0)
     {
 	  // print modify date/time if requested
 	  if (flags & LS_DATE) {
-		Serial.print(' ');
+		SerialUSB.print(' ');
 		printFatDate(fno.fdate);
-		Serial.print(' ');
+		SerialUSB.print(' ');
 		printFatTime(fno.ftime);
 	  }
 	  // print size if requested
 	  if (flags & LS_SIZE) {
-	    Serial.print(' ');
-	    Serial.print(fno.fsize);
+	    SerialUSB.print(' ');
+	    SerialUSB.print(fno.fsize);
 	  }
-	  Serial.println();
+	  SerialUSB.println();
     }
 	else
 	{
@@ -303,39 +303,39 @@ void File::ls(uint8_t flags, uint8_t indent) {
 		  File filtmp = SD.open(fullPath);
 
 		  if (filtmp._name != NULL) {
-			Serial.println();
+			SerialUSB.println();
 			filtmp.ls(flags, indent+2);
 			filtmp.close();
 		  } else {
-			Serial.println(fn);
-			Serial.print("Error to open dir: ");
-			Serial.println(fn);
+			SerialUSB.println(fn);
+			SerialUSB.print("Error to open dir: ");
+			SerialUSB.println(fn);
 		  }
 		  free(fullPath);
 		} else {
-		  Serial.println();
-		  Serial.print("Error to allocate memory!");
+		  SerialUSB.println();
+		  SerialUSB.print("Error to allocate memory!");
 		}
 	  }
 	}
   }
 }
 //------------------------------------------------------------------------------
-/** %Print a directory date field to Serial.
+/** %Print a directory date field to SerialUSB.
  *
  *  Format is yyyy-mm-dd.
  *
  * \param[in] fatDate The date field from a directory entry.
  */
 void File::printFatDate(uint16_t fatDate) {
-  Serial.print(FAT_YEAR(fatDate));
-  Serial.print('-');
+  SerialUSB.print(FAT_YEAR(fatDate));
+  SerialUSB.print('-');
   printTwoDigits(FAT_MONTH(fatDate));
-  Serial.print('-');
+  SerialUSB.print('-');
   printTwoDigits(FAT_DAY(fatDate));
 }
 //------------------------------------------------------------------------------
-/** %Print a directory time field to Serial.
+/** %Print a directory time field to SerialUSB.
  *
  * Format is hh:mm:ss.
  *
@@ -343,13 +343,13 @@ void File::printFatDate(uint16_t fatDate) {
  */
 void File::printFatTime(uint16_t fatTime) {
   printTwoDigits(FAT_HOUR(fatTime));
-  Serial.print(':');
+  SerialUSB.print(':');
   printTwoDigits(FAT_MINUTE(fatTime));
-  Serial.print(':');
+  SerialUSB.print(':');
   printTwoDigits(FAT_SECOND(fatTime));
 }
 //------------------------------------------------------------------------------
-/** %Print a value as two digits to Serial.
+/** %Print a value as two digits to SerialUSB.
  *
  * \param[in] v Value to be printed, 0 <= \a v <= 99
  */
@@ -358,7 +358,7 @@ void File::printTwoDigits(uint8_t v) {
   str[0] = '0' + v/10;
   str[1] = '0' + v % 10;
   str[2] = 0;
-  Serial.print(str);
+  SerialUSB.print(str);
 }
 
 /**
