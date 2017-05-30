@@ -46,8 +46,8 @@ const PinName digital_arduino[] = {
   PB11, //D19
   PH5,  //D20
   PH4,  //D21
-  PE5,  //D22
-  PE6,  //D23
+  PJ3,  //D22
+  PG11, //D23
   PE2,  //D24
   PE4,  //D25
   PI8,  //D26
