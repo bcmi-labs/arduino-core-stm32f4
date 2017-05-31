@@ -1,6 +1,4 @@
 
-menu.upload_method=Upload method
-
 ##############################################################
 star_otto.name=Arduino Star OTTO
 
@@ -12,7 +10,7 @@ star_otto.upload.protocol=dfuse
 
 star_otto.upload.use_1200bps_touch=true
 star_otto.upload.file_type=bin
-star_otto.upload.ram.maximum_size=262144
+star_otto.upload.ram.maximum_size=323584
 star_otto.upload.flash.maximum_size=2097152
 star_otto.upload.maximum_size=2097152
 star_otto.upload.mem_start=0x08000000
@@ -34,11 +32,4 @@ star_otto.build.cmsis_lib_gcc=arm_cortexM4l_math
 #To enable CDC add also '-DUSBD_USE_CDC'
 star_otto.build.extra_flags=-DSTM32F469xx -DUSE_USB_FS -DUSBCON -DUSBD_USE_CDC {build.usb_flags} -DESP_CH_UART -DESP_CH_UART_BR={build.esp_ch_uart_br}
 
-star_otto.menu.upload_method.dfuMethod=arduinoSTM32load
-star_otto.menu.upload_method.dfuMethod.upload.protocol=dfuse
-star_otto.menu.upload_method.dfuMethod.upload.tool=arduinoSTM32load
-
-star_otto.menu.upload_method.STLinkMethod=STLink
-star_otto.menu.upload_method.STLinkMethod.upload.protocol=STLink
-star_otto.menu.upload_method.STLinkMethod.upload.tool=stlink_upload
 ##############################################################

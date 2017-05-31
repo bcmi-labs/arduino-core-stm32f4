@@ -111,11 +111,9 @@ uint8_t lineSetup[] = {0x00, 0xc2, 0x01, 0x00, 0x00, 0x00, 0x08};
 
 TIM_HandleTypeDef  TimHandle;
 
-#ifdef USE_DFU
 volatile uint8_t dfu_request = 0;
 /* For a bug in some Linux 64 bit PC we need to delay the reset of the CPU of 500ms seconds */
 int counter_dfu_reset = 500; /* the unit is equal to CDC_POLLING_INTERVAL that is 5ms by default */
-#endif // USE_DFU
 
 static void TIM_Config(void);
 
@@ -239,11 +237,9 @@ static int8_t CDC_Control_FS  (uint8_t cmd, uint8_t* pbuf, uint16_t length)
   /*******************************************************************************/
   case CDC_SET_LINE_CODING:
     memcpy(lineSetup, pbuf, 7);
-#ifdef USE_DFU
     if(*((uint32_t*)pbuf) == 1200){
       dfu_request = 1;
     }
-#endif // USE_DFU
     break;
 
   case CDC_GET_LINE_CODING:
@@ -386,7 +382,6 @@ void HAL_TIM6_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   uint8_t status;
 
-#ifdef USE_DFU
   if(dfu_request) {
     counter_dfu_reset--;
     if(counter_dfu_reset == 0) {
@@ -396,7 +391,6 @@ void HAL_TIM6_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
       NVIC_SystemReset();
     }
   }
-#endif // USE_DFU
   if(USB_received) {
     USB_received = 0;
 
