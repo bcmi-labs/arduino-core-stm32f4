@@ -99,6 +99,18 @@ recipe.size.regex=^(?:\.text|\.rodata|\.ARM.exidx)\s+([0-9]+).*
 recipe.size.regex.data=^(?:\.data|\.bss|\.noinit)\s+([0-9]+).*
 
 #
+# DFU Util
+# --------
+
+#tools.dfu-util.path={runtime.tools.dfu-util-0.9.0-arduino1.path}
+#tools.dfu-util.cmd=dfu-util
+#tools.dfu-util.cmd.windows=dfu-util.cmd
+
+#tools.dfu-util.upload.params.verbose=-v
+#tools.dfu-util.upload.params.quiet=
+#tools.dfu-util.upload.pattern="{path}/{cmd}" "{path}" {upload.usbID} {upload.altID} {upload.mem_start} "{build.path}/{build.project_name}.bin" "{serial.port}"
+
+#
 # arduinoSTM32load
 # ----------------
 tools.arduinoSTM32load.path={runtime.tools.arduinoSTM32load-2.0.0.path}
@@ -107,15 +119,4 @@ tools.arduinoSTM32load.upload.params.verbose=-v
 tools.arduinoSTM32load.upload.params.quiet=
 tools.arduinoSTM32load.upload.pattern="{path}/{cmd}" -dfu "{runtime.tools.dfu-util-0.9.0-arduino1.path}" -bin "{build.path}/{build.project_name}.bin" -port="{serial.port}" "{upload.params.verbose}"
 
-tools.arduinoSTM32load.upload.network_pattern="{runtime.tools.wifilink_mcuota-1.0.0.path}/wifilink_mcuota" -f "{build.path}/{build.project_name}.hex" -i "{serial.port}"
-
-# stlink upload
-tools.stlink_upload.cmd=stlink_upload
-tools.stlink_upload.cmd.windows=stlink_upload.bat
-tools.stlink_upload.path.windows={runtime.hardware.path}/tools/win
-tools.stlink_upload.path.macosx={runtime.hardware.path}/tools/macosx
-tools.stlink_upload.path.linux={runtime.hardware.path}/tools/linux
-tools.stlink_upload.path.linux64={runtime.hardware.path}/tools/linux64
-tools.stlink_upload.upload.params.verbose=-d
-tools.stlink_upload.upload.params.quiet=
-tools.stlink_upload.upload.pattern="{path}/{cmd}" {serial.port.file} {upload.altID} {upload.usbID} "{build.path}/{build.project_name}.bin"
+#tools.arduinoSTM32load.upload.network_pattern="{runtime.tools.wifilink_mcuota-1.0.0.path}/wifilink_mcuota" -f "{build.path}/{build.project_name}.hex" -i "{serial.port}"

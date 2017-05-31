@@ -74,6 +74,8 @@
   #define HSI_VALUE    ((uint32_t)16000000) /*!< Value of the Internal oscillator in Hz*/
 #endif /* HSI_VALUE */
 
+void enterSysROM(void);
+
 /**
   * @}
   */
@@ -167,6 +169,14 @@ const uint8_t APBPrescTable[8]  = {0, 0, 0, 0, 1, 2, 3, 4};
   */
 void SystemInit(void)
 {
+  /* Check if we are coming from a DFU enter request (see usbd_cdc_if.c)
+   * This MUST be done before any other board configuration
+   */
+  if(*((unsigned int*)0x2004FFF0) == 0xb311a21a) {
+    *((unsigned int*)0x2004FFF0) = 0;
+    enterSysROM();
+  }
+
   /* FPU settings ------------------------------------------------------------*/
   #if (__FPU_PRESENT == 1) && (__FPU_USED == 1)
     SCB->CPACR |= ((3UL << 10*2)|(3UL << 11*2));  /* set CP10 and CP11 Full Access */
