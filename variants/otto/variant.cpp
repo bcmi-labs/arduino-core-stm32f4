@@ -103,6 +103,8 @@ const PinName digital_arduino[] = {
   PK4,  //D76
   PJ3,  //D77
   PD7,  //D78
+  PH8,  //D79
+  PH7,  //D80
 };
 
 #ifdef __cplusplus
@@ -224,6 +226,12 @@ void SystemClock_Config(void)
   HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct);
 
   HAL_RCC_EnableCSS();
+
+  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_LTDC;
+  PeriphClkInitStruct.PLLSAI.PLLSAIN = 192;
+  PeriphClkInitStruct.PLLSAI.PLLSAIR = 7;
+  PeriphClkInitStruct.PLLSAIDivR = RCC_PLLSAIDIVR_2;
+  HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct);
 
   HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
 

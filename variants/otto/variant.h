@@ -55,7 +55,8 @@ enum {
   D40, D41, D42, D43, D44, D45, D46, D47, D48, D49,
   D50, D51, D52, D53, D54, D55, D56, D57, D58, D59,
   D60, D61, D62, D63, D64, D65, D66, D67, D68, D69,
-  D70, D71, D72, D73, D74, D75, D76, D77, D78,
+  D70, D71, D72, D73, D74, D75, D76, D77, D78, D79,
+  D80,
   DEND
 };
 
@@ -119,8 +120,8 @@ uint32_t pinNametoPinNumber(PinName p);
 #define SS1                     D10
 
 // DAC PIN Definition
-#define DAC_0                    D66
-#define DAC_1                    D67
+#define DAC_0                   D66
+#define DAC_1                   D67
 
 // CAN PIN
 #define CANRX                   D69
@@ -129,8 +130,10 @@ uint32_t pinNametoPinNumber(PinName p);
 // I2C PIN
 #define SCL                     D71
 #define SDA                     D70
-#define SDA1                    D20
 #define SCL1                    D21
+#define SDA1                    D20
+#define SCL2                    D80
+#define SDA2                    D79
 
 //Timer Definitions
 //Do not use timer used by PWM pins when possible. See PinMap_PWM.

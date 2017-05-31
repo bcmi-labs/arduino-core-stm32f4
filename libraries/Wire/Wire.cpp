@@ -376,4 +376,6 @@ void TwoWire::onRequest( void (*function)(void) )
 
 // Preinstantiate Objects //////////////////////////////////////////////////////
 
-TwoWire Wire = TwoWire(); //D14-D15
+TwoWire Wire = TwoWire(SDA, SCL); //D70-D71
+TwoWire Wire1 = TwoWire(SDA1, SCL1); //D20-D21
+TwoWire Wire2 = TwoWire(SDA2, SCL2); //D79-D80
