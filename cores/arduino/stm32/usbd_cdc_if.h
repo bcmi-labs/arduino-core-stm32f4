@@ -41,6 +41,7 @@
 #endif
 /* Includes ------------------------------------------------------------------*/
 #include "usbd_cdc.h"
+#include "timer.h"
 
 /** @addtogroup STM32_USB_OTG_DEVICE_LIBRARY
   * @{
@@ -94,7 +95,7 @@ uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len);
 void CDC_flush(void);
 void CDC_disable_TIM_Interrupt(void);
 void CDC_enable_TIM_Interrupt(void);
-void HAL_TIM6_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
+void TIM6_PeriodElapsedCallback(stimer_t *htim);
 
 /**
   * @}
