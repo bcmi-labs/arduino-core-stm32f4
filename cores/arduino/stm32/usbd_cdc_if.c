@@ -109,7 +109,7 @@ uint8_t lineSetup[] = {0x00, 0xc2, 0x01, 0x00, 0x00, 0x00, 0x08};
 
 #define CDC_POLLING_INTERVAL             1 /* in ms. The max is 65 and the min is 1 */
 
-TIM_HandleTypeDef  TimHandle;
+stimer_t TimHandle;
 
 volatile uint8_t dfu_request = 0;
 /* For a bug in some Linux 64 bit PC we need to delay the reset of the CPU of 500ms seconds */
@@ -162,12 +162,9 @@ USBD_CDC_ItfTypeDef USBD_Interface_fops_FS =
   */
 static int8_t CDC_Init_FS(void)
 {
-  /*##-3- Configure the TIM Base generation  #################################*/
+  /*##-3- Configure and start the TIM Base generation  #################################*/
   TIM_Config();
 
-  /*##-4- Start the TIM Base generation in interrupt mode ####################*/
-  /* Start Channel1 */
-  HAL_TIM_Base_Start_IT(&TimHandle);
   /* Set Application Buffers */
   USBD_CDC_SetTxBuffer(&hUSBD_Device_CDC, UserTxBufferFS, 1);
   USBD_CDC_SetRxBuffer(&hUSBD_Device_CDC, StackRxBufferFS);
@@ -360,25 +357,21 @@ void CDC_enable_TIM_Interrupt(void)
 static void TIM_Config(void)
 {
   /* Set TIMx instance */
-  TimHandle.Instance = TIM6;
-
+  TimHandle.timer = TIM6;
   /* Initialize TIM6 peripheral as follow:
        + Period = 10000 - 1
        + Prescaler = ((SystemCoreClock/2)/10000) - 1
        + ClockDivision = 0
        + Counter direction = Up
   */
-  TimHandle.Init.Period = (CDC_POLLING_INTERVAL*1000) - 1;
-  TimHandle.Init.Prescaler = 84-1;
-  TimHandle.Init.ClockDivision = 0;
-  TimHandle.Init.CounterMode = TIM_COUNTERMODE_UP;
+  TimerHandleInit(&TimHandle, (uint16_t)((CDC_POLLING_INTERVAL*1000) - 1), (84 - 1)); //CDC_POLLING_INTERVAL
 
-  timer_attach_interrupt_handle(&TimHandle, HAL_TIM6_PeriodElapsedCallback);
-  HAL_TIM_Base_Init(&TimHandle);
   HAL_NVIC_SetPriority(TIM6_DAC_IRQn, 6, 0);
+
+  timer_attach_interrupt_handle(&TimHandle.handle, TIM6_PeriodElapsedCallback);
 }
 
-void HAL_TIM6_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+void TIM6_PeriodElapsedCallback(stimer_t *htim)
 {
   uint8_t status;
 

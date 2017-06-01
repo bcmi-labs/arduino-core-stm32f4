@@ -409,8 +409,8 @@ void TimerHandleInit(stimer_t *obj, uint16_t period, uint16_t prescaler)
   */
 void TimerHandleDeinit(stimer_t *obj)
 {
-  HAL_TIM_Base_DeInit(&(obj->handle));
   HAL_TIM_Base_Stop_IT(&(obj->handle));
+  HAL_TIM_Base_DeInit(&(obj->handle));
 }
 
 /**
