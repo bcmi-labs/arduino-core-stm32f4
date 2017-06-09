@@ -12,8 +12,6 @@
 #include "SPI.h"
 
 
-SPIClass SPI;
-
 SPIClass::SPIClass() : g_active_id(-1)
 {
   _spi.pin_miso = digitalToPinName(MISO);
@@ -245,3 +243,6 @@ void SPIClass::attachInterrupt(void) {
 void SPIClass::detachInterrupt(void) {
 	// Should be disableInterrupt()
 }
+
+SPIClass SPI = SPIClass(MOSI, MISO, SCK, SS);
+SPIClass SPI7 = SPIClass(MOSI1, MISO1, SCK1, SS1);
