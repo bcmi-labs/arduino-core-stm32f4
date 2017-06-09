@@ -103,19 +103,20 @@ uint32_t pinNametoPinNumber(PinName p);
 #define SPI_CHANNELS_NUM        16
 
 //default chip salect pin
-#define BOARD_SPI_DEFAULT_SS    D10
+#define BOARD_SPI_DEFAULT_SS    D23
 
 //In case SPI CS channel is not used we define a default one
 #define BOARD_SPI_OWN_SS        SPI_CHANNELS_NUM
 
 // SPI PIN
-#define MISO                    D12 //D72
-#define SCK                     D13 //D73
+#define MISO                    D72
+#define SCK                     D73
 #define SCLK                    SCK
-#define MOSI                    D11 //D74
-#define SS                      D10 //D23
+#define MOSI                    D74
+#define SS                      D23
 #define MISO1                   D12
 #define SCK1                    D13
+#define SCLK1                   SCK1
 #define MOSI1                   D11
 #define SS1                     D10
 

@@ -190,5 +190,6 @@ class SPIClass {
 };
 
 extern SPIClass SPI;
+extern SPIClass SPI7;
 
 #endif
