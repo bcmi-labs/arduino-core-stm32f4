@@ -459,6 +459,8 @@ uint32_t getTimerClkFreq(TIM_TypeDef* tim)
  *   otherwise TIMxCLK = 4x PCLKx
  */
 #if defined(STM32F4xx) || defined(STM32F7xx)
+#if !defined(STM32F405xx) && !defined(STM32F415xx) &&\
+    !defined(STM32F407xx) && !defined(STM32F417xx)
   RCC_PeriphCLKInitTypeDef PeriphClkConfig = {};
   HAL_RCCEx_GetPeriphCLKConfig(&PeriphClkConfig);
 
@@ -476,6 +478,7 @@ uint32_t getTimerClkFreq(TIM_TypeDef* tim)
         break;
     }
   else
+#endif
 #endif
     switch (uwAPBxPrescaler) {
       default:
