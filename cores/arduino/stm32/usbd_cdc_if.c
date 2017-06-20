@@ -107,13 +107,13 @@ uint8_t USBPackSize;
 /* Default configuration: 115200, 8N1 */
 uint8_t lineSetup[] = {0x00, 0xc2, 0x01, 0x00, 0x00, 0x00, 0x08};
 
-#define CDC_POLLING_INTERVAL             1 /* in ms. The max is 65 and the min is 1 */
+#define CDC_POLLING_INTERVAL             2 /* in ms. The max is 65 and the min is 1 */
 
 stimer_t TimHandle;
 
 volatile uint8_t dfu_request = 0;
 /* For a bug in some Linux 64 bit PC we need to delay the reset of the CPU of 500ms seconds */
-int counter_dfu_reset = 500; /* the unit is equal to CDC_POLLING_INTERVAL that is 5ms by default */
+int counter_dfu_reset = 250; /* the unit is equal to CDC_POLLING_INTERVAL that is 2ms by default */
 
 static void TIM_Config(void);
 
@@ -309,38 +309,44 @@ void CDC_flush(void)
 {
   uint8_t status;
 
-  if(UserTxBufPtrOut != UserTxBufPtrIn)
+  if (!(((&hUSBD_Device_CDC)->dev_state != USBD_STATE_CONFIGURED) || ((&hUSBD_Device_CDC)->ep0_state == USBD_EP0_STATUS_IN)))
   {
-    if(UserTxBufPtrOut > UserTxBufPtrIn) /* Roll-back */
+    if(UserTxBufPtrOut != UserTxBufPtrIn)
     {
-      memcpy((uint8_t*)&StackTxBufferFS[0], (uint8_t*)&UserTxBufferFS[UserTxBufPtrOut], (APP_TX_DATA_SIZE - UserTxBufPtrOut));
-
-      memcpy((uint8_t*)&StackTxBufferFS[APP_TX_DATA_SIZE - UserTxBufPtrOut], (uint8_t*)&UserTxBufferFS[0], UserTxBufPtrIn);
-
-      USBD_CDC_SetTxBuffer(&hUSBD_Device_CDC, (uint8_t*)&StackTxBufferFS[0], (APP_TX_DATA_SIZE - UserTxBufPtrOut + UserTxBufPtrIn));
-
-      do {
-        status = USBD_CDC_TransmitPacket(&hUSBD_Device_CDC);
-      } while(status == USBD_BUSY);
-
-      if(status == USBD_OK)
+      if(UserTxBufPtrOut > UserTxBufPtrIn) /* Roll-back */
       {
-        UserTxBufPtrOut = UserTxBufPtrIn;
+        memcpy((uint8_t*)&StackTxBufferFS[0], (uint8_t*)&UserTxBufferFS[UserTxBufPtrOut], (APP_TX_DATA_SIZE - UserTxBufPtrOut));
+
+        memcpy((uint8_t*)&StackTxBufferFS[APP_TX_DATA_SIZE - UserTxBufPtrOut], (uint8_t*)&UserTxBufferFS[0], UserTxBufPtrIn);
+
+        USBD_CDC_SetTxBuffer(&hUSBD_Device_CDC, (uint8_t*)&StackTxBufferFS[0], (APP_TX_DATA_SIZE - UserTxBufPtrOut + UserTxBufPtrIn));
+
+        do {
+          status = USBD_CDC_TransmitPacket(&hUSBD_Device_CDC);
+        } while(status == USBD_BUSY && !(((&hUSBD_Device_CDC)->dev_state != USBD_STATE_CONFIGURED) || ((&hUSBD_Device_CDC)->ep0_state == USBD_EP0_STATUS_IN)));
+
+        if(status == USBD_OK)
+        {
+          UserTxBufPtrOut = UserTxBufPtrIn;
+        }
+      }
+      else
+      {
+        USBD_CDC_SetTxBuffer(&hUSBD_Device_CDC, (uint8_t*)&UserTxBufferFS[UserTxBufPtrOut], (UserTxBufPtrIn - UserTxBufPtrOut));
+
+	    do {
+          status = USBD_CDC_TransmitPacket(&hUSBD_Device_CDC);
+        } while(status == USBD_BUSY && !(((&hUSBD_Device_CDC)->dev_state != USBD_STATE_CONFIGURED) || ((&hUSBD_Device_CDC)->ep0_state == USBD_EP0_STATUS_IN)));
+
+        if(status == USBD_OK)
+        {
+          UserTxBufPtrOut = UserTxBufPtrIn;
+        }
       }
     }
-    else
-    {
-      USBD_CDC_SetTxBuffer(&hUSBD_Device_CDC, (uint8_t*)&UserTxBufferFS[UserTxBufPtrOut], (UserTxBufPtrIn - UserTxBufPtrOut));
-
-	  do {
-        status = USBD_CDC_TransmitPacket(&hUSBD_Device_CDC);
-      } while(status == USBD_BUSY);
-
-      if(status == USBD_OK)
-      {
-        UserTxBufPtrOut = UserTxBufPtrIn;
-      }
-    }
+  } else
+  {
+    UserTxBufPtrOut = UserTxBufPtrIn;
   }
 }
 
@@ -364,7 +370,7 @@ static void TIM_Config(void)
        + ClockDivision = 0
        + Counter direction = Up
   */
-  TimerHandleInit(&TimHandle, (uint16_t)((CDC_POLLING_INTERVAL*1000) - 1), (84 - 1)); //CDC_POLLING_INTERVAL
+  TimerHandleInit(&TimHandle, (uint16_t)((CDC_POLLING_INTERVAL*1000) - 1), ((uint32_t)(getTimerClkFreq(TIM6) / (1000000)) - 1)); //CDC_POLLING_INTERVAL
 
   HAL_NVIC_SetPriority(TIM6_DAC_IRQn, 6, 0);
 
@@ -401,33 +407,37 @@ void TIM6_PeriodElapsedCallback(stimer_t *htim)
     USBD_CDC_ReceivePacket(&hUSBD_Device_CDC);
   }
 
-  if(UserTxBufPtrOut != UserTxBufPtrIn) {
-    if(UserTxBufPtrOut > UserTxBufPtrIn) { /* Roll-back */
-      memcpy((uint8_t*)&StackTxBufferFS[0], (uint8_t*)&UserTxBufferFS[UserTxBufPtrOut], (APP_TX_DATA_SIZE - UserTxBufPtrOut));
+  if (!(((&hUSBD_Device_CDC)->dev_state != USBD_STATE_CONFIGURED) || ((&hUSBD_Device_CDC)->ep0_state == USBD_EP0_STATUS_IN))) {
+    if(UserTxBufPtrOut != UserTxBufPtrIn) {
+      if(UserTxBufPtrOut > UserTxBufPtrIn) { /* Roll-back */
+        memcpy((uint8_t*)&StackTxBufferFS[0], (uint8_t*)&UserTxBufferFS[UserTxBufPtrOut], (APP_TX_DATA_SIZE - UserTxBufPtrOut));
 
-      memcpy((uint8_t*)&StackTxBufferFS[APP_TX_DATA_SIZE - UserTxBufPtrOut], (uint8_t*)&UserTxBufferFS[0], UserTxBufPtrIn);
+        memcpy((uint8_t*)&StackTxBufferFS[APP_TX_DATA_SIZE - UserTxBufPtrOut], (uint8_t*)&UserTxBufferFS[0], UserTxBufPtrIn);
 
-      USBD_CDC_SetTxBuffer(&hUSBD_Device_CDC, (uint8_t*)&StackTxBufferFS[0], (APP_TX_DATA_SIZE - UserTxBufPtrOut + UserTxBufPtrIn));
+        USBD_CDC_SetTxBuffer(&hUSBD_Device_CDC, (uint8_t*)&StackTxBufferFS[0], (APP_TX_DATA_SIZE - UserTxBufPtrOut + UserTxBufPtrIn));
 
-      do {
-	    status = USBD_CDC_TransmitPacket(&hUSBD_Device_CDC);
-      } while(status == USBD_BUSY);
+        do {
+	      status = USBD_CDC_TransmitPacket(&hUSBD_Device_CDC);
+        } while(status == USBD_BUSY && !(((&hUSBD_Device_CDC)->dev_state != USBD_STATE_CONFIGURED) || ((&hUSBD_Device_CDC)->ep0_state == USBD_EP0_STATUS_IN)));
 
-      if(status == USBD_OK) {
-        UserTxBufPtrOut = UserTxBufPtrIn;
+        if(status == USBD_OK) {
+          UserTxBufPtrOut = UserTxBufPtrIn;
+        }
+      }
+      else {
+        USBD_CDC_SetTxBuffer(&hUSBD_Device_CDC, (uint8_t*)&UserTxBufferFS[UserTxBufPtrOut], (UserTxBufPtrIn - UserTxBufPtrOut));
+
+        do {
+          status = USBD_CDC_TransmitPacket(&hUSBD_Device_CDC);
+        } while(status == USBD_BUSY && !(((&hUSBD_Device_CDC)->dev_state != USBD_STATE_CONFIGURED) || ((&hUSBD_Device_CDC)->ep0_state == USBD_EP0_STATUS_IN)));
+
+        if(status == USBD_OK) {
+          UserTxBufPtrOut = UserTxBufPtrIn;
+        }
       }
     }
-    else {
-      USBD_CDC_SetTxBuffer(&hUSBD_Device_CDC, (uint8_t*)&UserTxBufferFS[UserTxBufPtrOut], (UserTxBufPtrIn - UserTxBufPtrOut));
-
-      do {
-        status = USBD_CDC_TransmitPacket(&hUSBD_Device_CDC);
-      } while(status == USBD_BUSY);
-
-      if(status == USBD_OK) {
-        UserTxBufPtrOut = UserTxBufPtrIn;
-      }
-    }
+  } else {
+    UserTxBufPtrOut = UserTxBufPtrIn;
   }
 }
 
