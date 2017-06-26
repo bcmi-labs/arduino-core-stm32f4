@@ -23,7 +23,7 @@ extern "C" {
 #endif
 
 // Pin number
-const PinName digital_arduino[] = {
+const PinName digitalPin[] = {
   PA1,  //D0
   PA0,  //D1
   PH6,  //D2
@@ -144,23 +144,6 @@ void serialEventRun(void)
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-void __libc_init_array(void);
-
-uint32_t pinNametoPinNumber(PinName p)
-{
-  uint32_t i = 0;
-  for(i = 0; i < NUM_DIGITAL_PINS; i++) {
-	  if (digital_arduino[i] == p)
-		  break;
-  }
-  return i;
-}
-
-void init( void )
-{
-  hw_config_init();
-}
 
 /**
   * @brief  System Clock Configuration
