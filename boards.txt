@@ -21,13 +21,15 @@ star_otto.upload.altID=0
 star_otto.build.mcu=cortex-m4
 star_otto.build.board=STM32_STAR_OTTO
 star_otto.build.f_cpu=180000000L
+star_otto.build.vid=0x2A03
+star_otto.build.pid=0x0058
 star_otto.build.core=arduino
 star_otto.build.esp_ch_uart_br=460800
-star_otto.build.extra_flags=-DSTM32F469xx -DMCU_STM32F469NI -mthumb -DSTM32_HIGH_DENSITY -DESP_CH_UART -DESP_CH_UART_BR={build.esp_ch_uart_br}
-star_otto.build.ldscript=link-tools/jtag.ld
+star_otto.build.series=STM32F4xx
 star_otto.build.variant=otto
-star_otto.build.variant_system_lib=libstm32f4_otto_gcc_rel.a
-star_otto.build.vect=VECT_TAB_BASE
-star_otto.build.density=STM32_HIGH_DENSITY
+star_otto.build.cmsis_lib_gcc=arm_cortexM4l_math
+#To enable USB add '-DUSBCON'
+#To enable CDC add also '-DUSBD_USE_CDC'
+star_otto.build.extra_flags=-DSTM32F469xx -DUSE_USB_FS -DUSBCON -DUSBD_USE_CDC {build.usb_flags} -DESP_CH_UART -DESP_CH_UART_BR={build.esp_ch_uart_br}
 
 ##############################################################

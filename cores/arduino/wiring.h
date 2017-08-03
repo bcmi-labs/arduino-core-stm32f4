@@ -1,80 +1,80 @@
-/******************************************************************************
- * The MIT License
- *
- * Copyright (c) 2010 Perry Hung.
- *
- * Permission is hereby granted, free of charge, to any person
- * obtaining a copy of this software and associated documentation
- * files (the "Software"), to deal in the Software without
- * restriction, including without limitation the rights to use, copy,
- * modify, merge, publish, distribute, sublicense, and/or sell copies
- * of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
- * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
- * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- *****************************************************************************/
+/*
+  Copyright (c) 2011 Arduino.  All right reserved.
+  Copyright (c) 2013 by Paul Stoffregen <paul@pjrc.com> (delayMicroseconds)
+
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either
+  version 2.1 of the License, or (at your option) any later version.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  See the GNU Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+#ifndef _WIRING_
+#define _WIRING_
+
+#include <clock.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
- * @brief Main include file for the Wirish core.
  *
- * Includes various Arduino wiring macros and bit defines
  */
+extern void initVariant( void ) ;
+extern void init( void ) ;
 
- /*
-  * Arduino srl - www.arduino.org
-  * 2016 Jun 9: Edited Francesco Alessi (alfran) - francesco@arduino.org
-  */
+/**
+ * \brief Returns the number of milliseconds since the Arduino board began running the current program.
+ *
+ * This number will overflow (go back to zero), after approximately 50 days.
+ *
+ * \return Number of milliseconds since the program started (uint32_t)
+ */
+extern uint32_t millis( void ) ;
 
-#ifndef _wiring_H_
-#define _wiring_H_
+/**
+ * \brief Returns the number of microseconds since the Arduino board began running the current program.
+ *
+ * This number will overflow (go back to zero), after approximately 70 minutes. On 16 MHz Arduino boards
+ * (e.g. Duemilanove and Nano), this function has a resolution of four microseconds (i.e. the value returned is
+ * always a multiple of four). On 8 MHz Arduino boards (e.g. the LilyPad), this function has a resolution
+ * of eight microseconds.
+ *
+ * \note There are 1,000 microseconds in a millisecond and 1,000,000 microseconds in a second.
+ */
+extern uint32_t micros( void ) ;
 
-#include <stdlib.h>
-#include "memory.h"
+/**
+ * \brief Pauses the program for the amount of time (in miliseconds) specified as parameter.
+ * (There are 1000 milliseconds in a second.)
+ *
+ * \param dwMs the number of milliseconds to pause (uint32_t)
+ */
+extern void delay( uint32_t dwMs ) ;
 
-#include "wiring_types.h"
-#include "boards.h"
-#include "io.h"
-#include "bits.h"
-#include "pwm.h"
-#include "interrupts.h"
-#include "wiring_debug.h"
-#include "WMath.h"
+/**
+ * \brief Pauses the program for the amount of time (in microseconds) specified as parameter.
+ *
+ * \param dwUs the number of microseconds to pause (uint32_t)
+ */
+static inline void delayMicroseconds(uint32_t) __attribute__((always_inline, unused));
+static inline void delayMicroseconds(uint32_t usec){
+  uint32_t start = GetCurrentMicro();
 
-#include "wiring_time.h"
-#include <wiring_constants.h>
-#include "SPI.h"
-#include "HardwareSerial.h"
-#include "HardwareTimer.h"
-#include "usb_serial.h"
-#include "Wire.h"
+  while((start+usec) > GetCurrentMicro());
+}
 
-/* Arduino wiring macros and bit defines  */
-#define HIGH 0x1
-#define LOW  0x0
-
-#define true 0x1
-#define false 0x0
-
-#define lowByte(w)                     ((w) & 0xFF)
-#define highByte(w)                    (((w) >> 8) & 0xFF)
-#define bitRead(value, bit)            (((value) >> (bit)) & 0x01)
-#define bitSet(value, bit)             ((value) |= (1UL << (bit)))
-#define bitClear(value, bit)           ((value) &= ~(1UL << (bit)))
-#define bitWrite(value, bit, bitvalue) (bitvalue ? bitSet(value, bit) : \
-                                                   bitClear(value, bit))
-#define bit(b)                         (1UL << (b))
-
-typedef uint8 boolean;
-typedef uint8 byte;
-
+#ifdef __cplusplus
+}
 #endif
+
+#endif /* _WIRING_ */

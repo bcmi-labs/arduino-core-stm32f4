@@ -1,262 +1,189 @@
-/******************************************************************************
- * The MIT License
- *
- * Copyright (c) 2010 Perry Hung.
- *
- * Permission is hereby granted, free of charge, to any person
- * obtaining a copy of this software and associated documentation
- * files (the "Software"), to deal in the Software without
- * restriction, including without limitation the rights to use, copy,
- * modify, merge, publish, distribute, sublicense, and/or sell copies
- * of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
- * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
- * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- *****************************************************************************/
+/*
+  HardwareSerial.cpp - Hardware serial library for Wiring
+  Copyright (c) 2006 Nicholas Zambetti.  All right reserved.
 
-/**
- * @file HardwareSerial.cpp
- * @brief Wirish serial port implementation.
- */
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either
+  version 2.1 of the License, or (at your option) any later version.
 
- /*
- * Arduino srl - www.arduino.org
- * 2016 Jun 9: Edited Francesco Alessi (alfran) - francesco@arduino.org
- */
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Lesser General Public License for more details.
 
-#include "memory.h"
-#include "gpio.h"
-#include "timer.h"
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
+  Modified 23 November 2006 by David A. Mellis
+  Modified 28 September 2010 by Mark Sproul
+  Modified 14 August 2012 by Alarus
+  Modified 3 December 2013 by Matthijs Kooijman
+*/
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <inttypes.h>
+#include "Arduino.h"
 #include "HardwareSerial.h"
-#include "boards.h"
 
-/* UART handler declaration */
-UART_HandleTypeDef UartHandle;
 
-HardwareSerial Serial(UART4_dev);//Serial0(UART4_dev);
-HardwareSerial Serial1(USART3_dev);
-HardwareSerial Serial2(USART2_dev);
-HardwareSerial Serial3(USART6_dev);
-HardwareSerial SerialWiFi(USART3_dev);
-
-HardwareSerial::HardwareSerial(usart_dev *usart_device)
+// Constructors ////////////////////////////////////////////////////////////////
+HardwareSerial::HardwareSerial(PinName _rx, PinName _tx)
 {
-    this->usart_device = usart_device;
+  _serial.pin_rx = _rx;
+  _serial.pin_tx = _tx;
+  _serial.rx_buff = _rx_buffer;
+  _serial.rx_head = 0;
+  _serial.rx_tail = 0;
+  _serial.tx_buff = _tx_buffer;
+  _serial.tx_head = 0;
+  _serial.tx_tail = 0;
 }
 
-void HardwareSerial::begin(uint32 baud)
+// Actual interrupt handlers //////////////////////////////////////////////////////////////
+
+void HardwareSerial::_rx_complete_irq(serial_t* obj)
 {
-    ASSERT(baud <= usart_device->max_baud);
+  // No Parity error, read byte and store it in the buffer if there is
+  // room
+  unsigned char c = uart_getc(obj);
 
-    if (baud > usart_device->max_baud)
-    {
-        return;
-    }
+  rx_buffer_index_t i = (unsigned int)(obj->rx_head + 1) % SERIAL_RX_BUFFER_SIZE;
 
-    if (usart_device == USART1_dev) // Arduino OTTO not use this device
-    {
-
-        // USART 1 pin definition
-
-        // USART1 TX
-        gpio_set_mode(USART1_TX_GPIO_DEV, USART1_TX_GPIO_PIN, GPIO_AF_OUTPUT_PP);
-        gpio_set_af_mode(USART1_TX_GPIO_DEV, USART1_TX_GPIO_PIN, USART1_TX_AF);
-
-        // USART1 RX
-        gpio_set_mode(USART1_RX_GPIO_DEV, USART1_RX_GPIO_PIN, GPIO_AF_OUTPUT_PP);
-        gpio_set_af_mode(USART1_RX_GPIO_DEV, USART1_RX_GPIO_PIN, USART1_RX_AF);
-
-        // enable USART1 clock
-        *((uint32_t*)(RCC_APB2ENR)) |= (1 <<  RCC_APB2ENR_USART1EN_BIT);
-
-    }
-
-    else if (usart_device == USART2_dev)
-    {
-        // USART 2 pin definition
-
-        // USART2 TX
-        gpio_set_mode(USART2_TX_GPIO_DEV, USART2_TX_GPIO_PIN, GPIO_AF_OUTPUT_PP);
-        gpio_set_af_mode(USART2_TX_GPIO_DEV, USART2_TX_GPIO_PIN, USART2_TX_AF);
-
-        // USART2 RX
-        gpio_set_mode(USART2_RX_GPIO_DEV, USART2_RX_GPIO_PIN, GPIO_AF_OUTPUT_PP);
-        gpio_set_af_mode(USART2_RX_GPIO_DEV, USART2_RX_GPIO_PIN, USART2_RX_AF);
-
-        // enable USART2 clock
-        *((uint32_t*)(RCC_APB1ENR)) |= (1 << RCC_APB1ENR_USART2EN_BIT);
-    }
-
-    else if (usart_device == USART3_dev)
-    {
-        // USART 3 pin definition (Used also for ESP8266)
-        // USART3 TX
-        gpio_set_mode(USART3_TX_GPIO_DEV, USART3_TX_GPIO_PIN, GPIO_AF_OUTPUT_PP);
-        gpio_set_af_mode(USART3_TX_GPIO_DEV, USART3_TX_GPIO_PIN, USART3_TX_AF);
-
-        // USART3 RX
-        gpio_set_mode(USART3_RX_GPIO_DEV, USART3_RX_GPIO_PIN, GPIO_AF_OUTPUT_PP);
-        gpio_set_af_mode(USART3_RX_GPIO_DEV, USART3_RX_GPIO_PIN, USART3_RX_AF);
-
-        // enable USART3 clock
-        *((uint32_t*)(RCC_APB1ENR)) |= (1 << RCC_APB1ENR_USART3EN_BIT);
-    }
-
-    else if (usart_device == UART4_dev)
-    {
-		// USART 4 pin definition
-
-		// USART4 TX
-        gpio_set_mode(UART4_TX_GPIO_DEV, UART4_TX_GPIO_PIN, GPIO_AF_OUTPUT_PP);
-        gpio_set_af_mode(UART4_TX_GPIO_DEV, UART4_TX_GPIO_PIN, UART4_TX_AF);
-
-		// USART4 RX
-        gpio_set_mode(UART4_RX_GPIO_DEV, UART4_RX_GPIO_PIN, GPIO_AF_OUTPUT_PP);
-        gpio_set_af_mode(UART4_RX_GPIO_DEV, UART4_RX_GPIO_PIN, UART4_RX_AF);
-
-        // enable UART4 clock
-        *((uint32_t*)(RCC_APB1ENR)) |= (1 << RCC_APB1ENR_UART4EN_BIT);
-    }
-
-    else if (usart_device == UART5_dev) // Arduino OTTO not use this device
-    {
-        // UART 5 pin definition
-
-        // UART5 TX
-        gpio_set_mode(UART5_TX_GPIO_DEV, UART5_TX_GPIO_PIN, GPIO_AF_OUTPUT_PP);
-        gpio_set_af_mode(UART5_TX_GPIO_DEV, UART5_TX_GPIO_PIN, UART5_TX_AF);
-
-        // UART5 RX
-        gpio_set_mode(UART5_RX_GPIO_DEV, UART5_RX_GPIO_PIN, GPIO_AF_OUTPUT_PP);
-        gpio_set_af_mode(UART5_RX_GPIO_DEV, UART5_RX_GPIO_PIN, UART5_RX_AF);
-
-        // enable UART5 clock
-        *((uint32_t*)(RCC_APB1ENR)) |= (1 << RCC_APB1ENR_UART5EN_BIT);
-    }
-
-    else if (usart_device == USART6_dev)
-    {
-        // USART 6 pin definition
-
-        // USART6 TX
-        gpio_set_mode(USART6_TX_GPIO_DEV, USART6_TX_GPIO_PIN, GPIO_AF_OUTPUT_PP);
-        gpio_set_af_mode(USART6_TX_GPIO_DEV, USART6_TX_GPIO_PIN, USART6_TX_AF);
-
-        // USART6 RX
-        gpio_set_mode(USART6_RX_GPIO_DEV, USART6_RX_GPIO_PIN, GPIO_AF_OUTPUT_PP);
-        gpio_set_af_mode(USART6_RX_GPIO_DEV, USART6_RX_GPIO_PIN, USART6_RX_AF);
-
-        // enable USART6 clock
-        *((uint32_t*)(RCC_APB2ENR)) |= (1 << RCC_APB2ENR_USART6EN_BIT);
-    }
-
-    else if (usart_device == UART7_dev) // Arduino OTTO not use this device
-    {
-        // UART 7 pin definition
-
-        // UART7 TX
-        gpio_set_mode(UART7_TX_GPIO_DEV, UART7_TX_GPIO_PIN, GPIO_AF_OUTPUT_PP);
-        gpio_set_af_mode(UART7_TX_GPIO_DEV, UART7_TX_GPIO_PIN, UART7_TX_AF);
-
-        // UART7 RX
-        gpio_set_mode(UART7_RX_GPIO_DEV, UART7_RX_GPIO_PIN, GPIO_AF_OUTPUT_PP);
-        gpio_set_af_mode(UART7_RX_GPIO_DEV, UART7_RX_GPIO_PIN, UART7_RX_AF);
-
-        // enable UART7 clock
-        *((uint32_t*)(RCC_APB1ENR)) |= (1 << RCC_APB1ENR_UART7EN_BIT);
-    }
-
-    else if (usart_device == UART8_dev) // Arduino OTTO not use this device
-    {
-        // UART 8 pin definition
-
-        // UART8 TX
-        gpio_set_mode(UART8_TX_GPIO_DEV, UART8_TX_GPIO_PIN, GPIO_AF_OUTPUT_PP);
-        gpio_set_af_mode(UART8_TX_GPIO_DEV, UART8_TX_GPIO_PIN, UART8_TX_AF);
-
-        // UART8 RX
-        gpio_set_mode(UART8_RX_GPIO_DEV, UART8_RX_GPIO_PIN, GPIO_AF_OUTPUT_PP);
-        gpio_set_af_mode(UART8_RX_GPIO_DEV, UART8_RX_GPIO_PIN, UART8_RX_AF);
-
-        // enable UART8 clock
-        *((uint32_t*)(RCC_APB1ENR)) |= (1 << RCC_APB1ENR_UART8EN_BIT);
-    }
-
-#if 0
-    if (txi->timer_device != NULL)
-    {
-        /* Turn off any PWM if there's a conflict on this GPIO bit. */
-        timer_set_mode(txi->timer_device, txi->timer_channel, TIMER_DISABLED);
-    }
-#endif
-
-
-    UartHandle.Instance          = (USART_TypeDef*)usart_device->regs;
-
-    UartHandle.Init.BaudRate     = baud;
-    UartHandle.Init.WordLength   = UART_WORDLENGTH_8B;
-    UartHandle.Init.StopBits     = UART_STOPBITS_1;
-    UartHandle.Init.Parity       = UART_PARITY_NONE;
-    UartHandle.Init.HwFlowCtl    = UART_HWCONTROL_NONE;
-    UartHandle.Init.Mode         = UART_MODE_TX_RX;
-    UartHandle.Init.OverSampling = UART_OVERSAMPLING_16;
-
-    HAL_UART_Init(&UartHandle);
-	usart_init(usart_device);
-    usart_enable(usart_device);
+  // if we should be storing the received character into the location
+  // just before the tail (meaning that the head would advance to the
+  // current location of the tail), we're about to overflow the buffer
+  // and so we don't write the character or advance the head.
+  if (i != obj->rx_tail) {
+    obj->rx_buff[obj->rx_head] = c;
+    obj->rx_head = i;
+  }
 }
 
-void HardwareSerial::end(void)
+// Actual interrupt handlers //////////////////////////////////////////////////////////////
+
+int HardwareSerial::_tx_complete_irq(serial_t* obj)
 {
-    usart_disable(usart_device);
+  // If interrupts are enabled, there must be more data in the output
+  // buffer. Send the next byte
+  obj->tx_tail = (obj->tx_tail + 1) % SERIAL_TX_BUFFER_SIZE;
+
+  if (obj->tx_head == obj->tx_tail) {
+    return -1;
+  }
+
+  return 0;
 }
 
+// Public Methods //////////////////////////////////////////////////////////////
 
-int HardwareSerial::read(void)
+void HardwareSerial::begin(unsigned long baud, byte config)
 {
-	if(usart_data_available(usart_device) > 0)
-    {
-		return usart_getc(usart_device);
-	}
-    else
-    {
-		return -1;
-	}
+  _serial.baudrate = (uint32_t)baud;
+
+  // Could be 8 or 9 bits. Could match with Arduino small data length?
+  _serial.databits = UART_WORDLENGTH_8B;
+
+  if((config & 0x30) == 0x30) {
+    _serial.parity = UART_PARITY_ODD;
+  } else if((config & 0x20) == 0x20) {
+    _serial.parity = UART_PARITY_EVEN;
+  } else {
+    _serial.parity = UART_PARITY_NONE;
+  }
+
+  if((config & 0x08) == 0x08) {
+    _serial.stopbits = UART_STOPBITS_2;
+  } else {
+    _serial.stopbits = UART_STOPBITS_1;
+  }
+
+  uart_init(&_serial);
+  uart_attach_rx_callback(&_serial, _rx_complete_irq);
+}
+
+void HardwareSerial::end()
+{
+  // wait for transmission of outgoing data
+  flush();
+
+  uart_deinit(&_serial);
+
+  // clear any received data
+  _serial.rx_head = _serial.rx_tail;
 }
 
 int HardwareSerial::available(void)
 {
-    return usart_data_available(usart_device);
+  return ((unsigned int)(SERIAL_RX_BUFFER_SIZE + _serial.rx_head - _serial.rx_tail)) % SERIAL_RX_BUFFER_SIZE;
 }
 
 int HardwareSerial::peek(void)
 {
-    return usart_peek(usart_device);
+  if (_serial.rx_head == _serial.rx_tail) {
+    return -1;
+  } else {
+    return _serial.rx_buff[_serial.rx_tail];
+  }
 }
 
-uint32 HardwareSerial::pending(void)
+int HardwareSerial::read(void)
 {
-    return usart_data_pending(usart_device);
+  // if the head isn't ahead of the tail, we don't have any characters
+  if (_serial.rx_head == _serial.rx_tail) {
+    return -1;
+  } else {
+    unsigned char c = _serial.rx_buff[_serial.rx_tail];
+    _serial.rx_tail = (rx_buffer_index_t)(_serial.rx_tail + 1) % SERIAL_RX_BUFFER_SIZE;
+    return c;
+  }
 }
 
-size_t HardwareSerial::write(unsigned char ch)
+int HardwareSerial::availableForWrite(void)
 {
-    usart_putc(usart_device, ch);
-    return 1;
+  tx_buffer_index_t head = _serial.tx_head;
+  tx_buffer_index_t tail = _serial.tx_tail;
+
+  if (head >= tail) return SERIAL_TX_BUFFER_SIZE - 1 - head + tail;
+  return tail - head - 1;
 }
 
-void HardwareSerial::flush(void)
+void HardwareSerial::flush()
 {
-    usart_reset_rx(usart_device);
+  // If we have never written a byte, no need to flush. This special
+  // case is needed since there is no way to force the TXC (transmit
+  // complete) bit to 1 during initialization
+  if (!_written)
+    return;
+
+  while((_serial.tx_head != _serial.tx_tail)) {
+    // nop, the interrupt handler will free up space for us
+  }
+  // If we get here, nothing is queued anymore (DRIE is disabled) and
+  // the hardware finished tranmission (TXC is set).
+}
+
+size_t HardwareSerial::write(uint8_t c)
+{
+  _written = true;
+
+  tx_buffer_index_t i = (_serial.tx_head + 1) % SERIAL_TX_BUFFER_SIZE;
+
+  // If the output buffer is full, there's nothing for it other than to
+  // wait for the interrupt handler to empty it a bit
+  while (i == _serial.tx_tail) {
+    // nop, the interrupt handler will free up space for us
+  }
+
+  _serial.tx_buff[_serial.tx_head] = c;
+  _serial.tx_head = i;
+
+  if(!serial_tx_active(&_serial)) {
+    uart_attach_tx_callback(&_serial, _tx_complete_irq);
+  }
+
+  return 1;
 }

@@ -1,6 +1,8 @@
 /*
  * Copyright (c) 2012 by Cristian Maglie <c.maglie@arduino.cc>
- * Audio library for Arduino Due.
+ * Audio library.
+ *
+ * Modified by Frederic Pillon <frederic.pillon@st.com>
  *
  * This file is free software; you can redistribute it and/or modify
  * it under the terms of either the GNU General Public License version 2
@@ -14,8 +16,8 @@
 #include <Arduino.h>
 #include <Print.h>
 #include "Wave.h"
-/* otto includes component */
-#include "otto_audio_inout.h"
+/* BSP includes component */
+#include "bsp_audio_inout.h"
 
 #define AUDIO_IN_BUFFER_SIZE 4*2304
 

@@ -8,7 +8,7 @@
 
   This library is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
   See the GNU Lesser General Public License for more details.
 
   You should have received a copy of the GNU Lesser General Public
@@ -28,20 +28,6 @@ extern uint16_t makeWord( uint16_t w ) ;
 extern uint16_t makeWord( uint8_t h, uint8_t l ) ;
 
 #define word(...) makeWord(__VA_ARGS__)
-
-#define min(a,b)                ((a)<(b)?(a):(b))
-#define max(a,b)                ((a)>(b)?(a):(b))
-#define constrain(amt,low,high) ((amt)<(low)?(low):((amt)>(high)?(high):(amt)))
-#define round(x)                ((x)>=0?(long)((x)+0.5):(long)((x)-0.5))
-#define radians(deg)            ((deg)*DEG_TO_RAD)
-#define degrees(rad)            ((rad)*RAD_TO_DEG)
-#define sq(x)                   ((x)*(x))
-
-/* undefine stdlib's abs if encountered */
-#ifdef abs
-#undef abs
-#endif
-#define abs(x) (((x) > 0) ? (x) : -(x))
 
 
 #endif /* _WIRING_MATH_ */

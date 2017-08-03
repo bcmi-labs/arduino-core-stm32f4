@@ -17,8 +17,8 @@ SdFatFs fatFs;
 void setup()
 {
   bool disp = false;
-  // Open serial communications and wait for port to open:
-  SerialUSB.begin(9600);
+  // Open SerialUSB communications and wait for port to open:
+  SerialUSB.begin(115200);
 
   while (!SerialUSB);
   SerialUSB.print("\nInitializing SD card...");
@@ -35,13 +35,13 @@ void setup()
   // print the type of card
   SerialUSB.print("\nCard type: ");
   switch (card.type()) {
-    case STD_CAPACITY_SD_CARD_V1_1:
+    case SD_CARD_TYPE_SD1:
       SerialUSB.println("SD1");
       break;
-    case STD_CAPACITY_SD_CARD_V2_0:
+    case SD_CARD_TYPE_SD2:
       SerialUSB.println("SD2");
       break;
-    case HIGH_CAPACITY_SD_CARD:
+    case SD_CARD_TYPE_SDHC:
       SerialUSB.println("SDHC");
       break;
     default:
@@ -55,7 +55,7 @@ void setup()
   }
 
   // print the type and size of the first FAT-type volume
-  uint32_t volumesize;
+  uint64_t volumesize;
   SerialUSB.print("\nVolume type is FAT");
   SerialUSB.println(fatFs.fatType(), DEC);
   SerialUSB.println();
@@ -78,6 +78,7 @@ void setup()
 
   // list all files in the card with date and size
   root.ls(LS_R | LS_DATE | LS_SIZE);
+  SerialUSB.println("###### End of the SD tests ######");
 }
 
 void loop(void) {

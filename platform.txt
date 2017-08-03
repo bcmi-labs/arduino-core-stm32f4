@@ -2,7 +2,7 @@
 # ------------------------------
 #
 # For more info:
-# https://github.com/arduino/Arduino/wiki/Arduino-IDE-1.5---3rd-party-Hardware-specification
+# https://github.com/arduino/Arduino/wiki/Arduino-IDE-1.5-3rd-party-Hardware-specification
 
 name=Arduino STM32F4 (32-bits ARM Cortex-M4) Boards
 version=1.0.1
@@ -12,13 +12,13 @@ version=1.0.1
 
 compiler.path={runtime.tools.arm-none-eabi-gcc.path}/bin/
 compiler.c.cmd=arm-none-eabi-gcc
-compiler.c.flags=-c -Os {compiler.warning_flags} -std=gnu11 -ffunction-sections -fdata-sections -nostdlib --param max-inline-insns-single=500 -D{build.vect} -Dprintf=iprintf -MMD {compiler.libs.c.flags}
+compiler.c.flags=-mthumb -c -Os {compiler.warning_flags} -std=gnu11 -ffunction-sections -fdata-sections -nostdlib --param max-inline-insns-single=500 -Dprintf=iprintf -MMD {compiler.libs.c.flags}
 compiler.c.elf.cmd=arm-none-eabi-gcc
-compiler.c.elf.flags=-Os -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl,--warn-section-align
+compiler.c.elf.flags=-mthumb -Os -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl,--warn-section-align
 compiler.S.cmd=arm-none-eabi-gcc
-compiler.S.flags=-c -x assembler-with-cpp {compiler.libs.c.flags}
+compiler.S.flags=-mthumb -c -x assembler-with-cpp {compiler.libs.c.flags}
 compiler.cpp.cmd=arm-none-eabi-g++
-compiler.cpp.flags=-c -Os {compiler.warning_flags} -std=gnu++11 -ffunction-sections -fdata-sections -nostdlib -fno-threadsafe-statics --param max-inline-insns-single=500 -fno-rtti -fno-exceptions -D{build.vect} -Dprintf=iprintf -MMD {compiler.libs.c.flags}
+compiler.cpp.flags=-mthumb -c -Os {compiler.warning_flags} -std=gnu++11 -ffunction-sections -fdata-sections -nostdlib -fno-threadsafe-statics --param max-inline-insns-single=500 -fno-rtti -fno-exceptions -Dprintf=iprintf -MMD {compiler.libs.c.flags}
 
 compiler.ar.cmd=arm-none-eabi-ar
 compiler.ar.flags=rcs
@@ -36,16 +36,20 @@ build.cpu_flags=
 build.hs_flag=
 build.common_flags=
 build.extra_flags= {build.cpu_flags} {build.hs_flag} {build.common_flags}
+build.ldscript=ldscript.ld
 
 # These can be overridden in platform.local.txt
 compiler.c.extra_flags=
-compiler.c.elf.extra_flags="-L{build.variant.path}/link-tools"
+compiler.c.elf.extra_flags=
 compiler.cpp.extra_flags=
 compiler.S.extra_flags=
 compiler.ar.extra_flags=
 compiler.elf2hex.extra_flags=
 
-compiler.libs.c.flags="-I{build.system.path}/libstm32f4" "-I{build.system.path}/libstm32f4/include" "-I{build.system.path}/Drivers/STM32F4xx_HAL_Driver/Inc/" "-I{build.system.path}/Drivers/CMSIS/Include/" "-I{build.system.path}/Drivers/CMSIS/Device/ST/STM32F4xx/Include" "-I{build.system.path}/Middlewares/ST/STM32_USB_Device_Library/Core/Inc" "-I{build.variant.path}/usb" "-I{build.system.path}/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc/" "-I{build.system.path}/Drivers/BSP/Components" "-I{build.system.path}/Middlewares/Third_Party/FatFs/src"
+compiler.libs.c.flags="-I{build.core.path}/avr" "-I{build.core.path}/stm32" "-I{build.system.path}/Drivers/{build.series}_HAL_Driver/Inc/" "-I{build.system.path}/Drivers/{build.series}_HAL_Driver/Src/" "-I{build.system.path}/{build.series}/" "-I{build.variant.path}/usb" "-I{build.system.path}/Middlewares/ST/STM32_USB_Device_Library/Core/Inc" "-I{build.system.path}/Middlewares/ST/STM32_USB_Device_Library/Core/Src" "-I{build.system.path}/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc" "-I{build.system.path}/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src"
+
+compiler.arm.cmsis.c.flags="-I{runtime.tools.CMSIS-4.5.0.path}/CMSIS/Include/" "-I{build.system.path}/Drivers/CMSIS/Device/ST/{build.series}/Include/" "-I{build.system.path}/Drivers/CMSIS/Device/ST/{build.series}/Source/Templates/gcc/"
+compiler.arm.cmsis.ldflags="-L{runtime.tools.CMSIS-4.5.0.path}/CMSIS/Lib/GCC/" -l{build.cmsis_lib_gcc}
 
 compiler.warning_flags=-w
 compiler.warning_flags.none=-w
@@ -53,23 +57,32 @@ compiler.warning_flags.default=
 compiler.warning_flags.more=-Wall
 compiler.warning_flags.all=-Wall -Wextra
 
+#
+# USB Flags
+# ---------
+build.usb_flags=-DUSBD_VID={build.vid} -DUSBD_PID={build.pid} '-DUSB_MANUFACTURER={build.usb_manufacturer}' '-DUSB_PRODUCT={build.usb_product}'
+
+# Default usb manufacturer will be replaced at compile time using
+# numeric vendor ID if available or by board's specific value.
+build.usb_manufacturer="Unknown"
+
 # STM32 compile patterns
 # -----------------------
 
 ## Compile c files
-recipe.c.o.pattern="{compiler.path}{compiler.c.cmd}" {compiler.c.flags} -mcpu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.c.extra_flags} {build.extra_flags} {compiler.libs.c.flags} {includes} "{source_file}" -o "{object_file}"
+recipe.c.o.pattern="{compiler.path}{compiler.c.cmd}" {compiler.c.flags} -mcpu={build.mcu} -DF_CPU={build.f_cpu} -D{build.series} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.c.extra_flags} {build.extra_flags} {compiler.arm.cmsis.c.flags} {includes} "{source_file}" -o "{object_file}"
 
 ## Compile c++ files
-recipe.cpp.o.pattern="{compiler.path}{compiler.cpp.cmd}" {compiler.cpp.flags} -mcpu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {build.cpu_flags} {build.hs_flag} {build.common_flags} {compiler.libs.c.flags} {includes} "{source_file}" -o "{object_file}"
+recipe.cpp.o.pattern="{compiler.path}{compiler.cpp.cmd}" {compiler.cpp.flags} -mcpu={build.mcu} -DF_CPU={build.f_cpu} -D{build.series} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {compiler.arm.cmsis.c.flags} {includes} "{source_file}" -o "{object_file}"
 
 ## Compile S files
-recipe.S.o.pattern="{compiler.path}{compiler.c.cmd}" {compiler.S.flags} -mcpu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.S.extra_flags} {build.extra_flags} {build.cpu_flags} {build.hs_flag} {build.common_flags} {compiler.libs.c.flags} {includes} "{source_file}" -o "{object_file}"
+recipe.S.o.pattern="{compiler.path}{compiler.S.cmd}" {compiler.S.flags} -mcpu={build.mcu} -DF_CPU={build.f_cpu} -D{build.series} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.S.extra_flags} {build.extra_flags} {compiler.arm.cmsis.c.flags} {includes} "{source_file}" -o "{object_file}"
 
 ## Create archives
 recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} {compiler.ar.extra_flags} "{archive_file_path}" "{object_file}"
 
 ## Combine gc-sections, archives, and objects
-recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" {compiler.c.elf.flags} -mcpu={build.mcu} "-T{build.variant.path}/{build.ldscript}" "-Wl,-Map,{build.path}/{build.project_name}.map" {compiler.c.elf.extra_flags} -o "{build.path}/{build.project_name}.elf" "-L{build.path}" -mthumb -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl,--warn-section-align -Wl,--warn-unresolved-symbols -Wl,--start-group {object_files} -Wl,--whole-archive  "{build.variant.path}/{build.variant_system_lib}" -Wl,--no-whole-archive "{build.path}/{archive_file}" -Wl,--end-group -lm -lgcc
+recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" {compiler.c.elf.flags} -mcpu={build.mcu} -DF_CPU={build.f_cpu} "-T{build.variant.path}/{build.ldscript}" "-Wl,-Map,{build.path}/{build.project_name}.map" {compiler.c.elf.extra_flags} {compiler.ldflags} -o "{build.path}/{build.project_name}.elf" "-L{build.path}" -Wl,--start-group {object_files} {compiler.arm.cmsis.ldflags} -Wl,--whole-archive "{build.path}/{archive_file}" -Wl,--no-whole-archive -lc -Wl,--end-group -lm -lgcc --specs=nano.specs
 
 ## Create eeprom
 recipe.objcopy.eep.pattern=
@@ -107,12 +120,3 @@ tools.arduinoSTM32load.upload.params.quiet=
 tools.arduinoSTM32load.upload.pattern="{path}/{cmd}" -dfu "{runtime.tools.dfu-util-0.9.0-arduino1.path}" -bin "{build.path}/{build.project_name}.bin" -port="{serial.port}" "{upload.params.verbose}"
 
 #tools.arduinoSTM32load.upload.network_pattern="{runtime.tools.wifilink_mcuota-1.0.0.path}/wifilink_mcuota" -f "{build.path}/{build.project_name}.hex" -i "{serial.port}"
-
-
-#
-# USB Flags
-# ---------
-
-# Default usb manufacturer will be replaced at compile time using
-# numeric vendor ID if available or by board's specific value.
-build.usb_manufacturer="Unknown"

@@ -22,19 +22,21 @@
 #ifndef Sd2Card_h
 #define Sd2Card_h
 
-/* otto includes component */
-#include "otto_sd.h"
+#include "bsp_sd.h"
 
 #define   FALSE      ((uint8_t)0x00)
 #define   TRUE       ((uint8_t)0x01)
 
 // card types to match Arduino definition
+#define SD_CARD_TYPE_UKN      0
 /** Standard capacity V1 SD card */
-#define SD_CARD_TYPE_SD1	STD_CAPACITY_SD_CARD_V1_1
+#define SD_CARD_TYPE_SD1      1
 /** Standard capacity V2 SD card */
-#define SD_CARD_TYPE_SD2	STD_CAPACITY_SD_CARD_V2_0
+#define SD_CARD_TYPE_SD2      2
 /** High Capacity SD card */
-#define SD_CARD_TYPE_SDHC	HIGH_CAPACITY_SD_CARD
+#define SD_CARD_TYPE_SDHC     3
+/** High Capacity SD card */
+#define SD_CARD_TYPE_SECURED  4
 
 class Sd2Card {
  public:
@@ -43,7 +45,7 @@ class Sd2Card {
   uint8_t init(uint8_t cspin);
 
   /** Return the card type: SD V1, SD V2 or SDHC */
-  uint8_t type(void) const {return _SdCardInfo.CardType;}
+  uint8_t type(void) const;
 
 private:
   SD_CardInfo _SdCardInfo;

@@ -2,7 +2,7 @@
   SD card file dump
 
  This example shows how to read a file from the SD card using the
- SD library and send it over the serial port.
+ SD library and send it over the SerialUSB port.
 
  The circuit:
  * SD card attached
@@ -15,10 +15,10 @@
 
 void setup()
 {
-  // Open serial communications and wait for port to open:
-  SerialUSB.begin(9600);
+  // Open SerialUSB communications and wait for port to open:
+  SerialUSB.begin(115200);
   while (!SerialUSB) {
-    ; // wait for serial port to connect. Needed for Leonardo only
+    ; // wait for SerialUSB port to connect. Needed for Leonardo only
   }
 
 
@@ -46,6 +46,7 @@ void setup()
   else {
     SerialUSB.println("error opening datalog.txt");
   }
+  SerialUSB.println("###### End of the SD tests ######");
 }
 
 void loop()

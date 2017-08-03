@@ -1,6 +1,8 @@
 /*
  * Copyright (c) 2012 by Cristian Maglie <c.maglie@arduino.cc>
- * Audio library for Arduino Due.
+ * Audio library.
+ *
+ * Modified by Frederic Pillon <frederic.pillon@st.com>
  *
  * This file is free software; you can redistribute it and/or modify
  * it under the terms of either the GNU General Public License version 2
@@ -9,7 +11,7 @@
  */
 
 #include "Audio.h"
-#include "otto_audio_inout.h"
+//#include "bsp_audio_inout.h"
 
 AudioClass Audio;
 
@@ -140,7 +142,7 @@ size_t AudioClass::write(const uint32_t *data, size_t size) {
 	if (!audio_out_init) return 0;
 
 	if (size > (bufferOutSize / 2))
-		return size;
+		return 0;
 
     /* Not running yet, need to fill-in full FIFO */
 	if (running == NULL) {
@@ -189,7 +191,7 @@ uint32_t AudioClass::amp(uint8_t volume, AudioMode audioMode) {
 	uint32_t ret = AUDIO_OK;
 	if ((!audio_in_init) && (!audio_out_init))
 		ret = AUDIO_ERROR;
-	if ((audio_out_init) && (audioMode != AUDIO_IN))
+	if ((audio_out_init) || (audio_in_init))
 		ret = BSP_AUDIO_OUT_SetVolume(volume);
 	if ((audio_in_init) && (audioMode != AUDIO_OUT))
 		ret |= BSP_AUDIO_IN_SetVolume(volume);

@@ -33,20 +33,23 @@
   * 2016 Jun 9: Edited Francesco Alessi (alfran) - francesco@arduino.org
   */
 
+#ifdef USBCON
+#ifdef USBD_USE_CDC
+
 #include <string.h>
 
 #include "wiring.h"
 #include "usb_serial.h"
-#include "usb_device.h"
+
+#include "usb_interface.h"
 #include "usbd_core.h"
 #include "usbd_desc.h"
 #include "usbd_cdc.h"
 #include "usbd_cdc_if.h"
 
 #define USB_TIMEOUT 50
-
 /* USB Device Core handle declaration */
-USBD_HandleTypeDef hUsbDeviceFS;
+extern USBD_HandleTypeDef hUSBD_Device_CDC;
 extern __IO  uint32_t device_connection_status;
 extern __IO  uint32_t lineState;
 extern __IO uint8_t UserTxBufferFS[APP_TX_DATA_SIZE];
@@ -57,7 +60,6 @@ extern __IO uint32_t UserRxBufPtrIn;
 extern __IO uint32_t UserRxBufPtrOut;
 __IO  uint32_t usbEnableBlockingTx;
 
-//USBSerial Serial;
 USBSerial SerialUSB;
 
 
@@ -73,7 +75,7 @@ void USBSerial::begin(int) {
 
 void USBSerial::end(void) {
 
-  USBD_LL_DeInit(&hUsbDeviceFS);
+  USBD_LL_DeInit(&hUSBD_Device_CDC);
 }
 
 int USBSerial::availableForWrite(void)
@@ -170,23 +172,23 @@ void USBSerial::flush(void)
 
 #if 0
   /* Flush EP1 for data IN */
-  USBD_LL_FlushEP(&hUsbDeviceFS, CDC_IN_EP);
+  USBD_LL_FlushEP(&hUSBD_Device_CDC, CDC_IN_EP);
   /* Flush EP1 for data OUT */
-  USBD_LL_FlushEP(&hUsbDeviceFS, CDC_IN_EP);
+  USBD_LL_FlushEP(&hUSBD_Device_CDC, CDC_IN_EP);
   /* Flush EP1 for CDC commands */
-  USBD_LL_FlushEP(&hUsbDeviceFS, CDC_IN_EP);
+  USBD_LL_FlushEP(&hUSBD_Device_CDC, CDC_IN_EP);
 
   return;
 #endif
 
 }
 
-uint8 USBSerial::pending(void) {
+uint8_t USBSerial::pending(void) {
 //    return usbGetPending(); // No equivalent in HAL
 
 }
 
-uint8 USBSerial::isConnected(void) {
+uint8_t USBSerial::isConnected(void) {
 
   if(device_connection_status == 1)
   {
@@ -198,11 +200,11 @@ uint8 USBSerial::isConnected(void) {
   }
 }
 
-uint8 USBSerial::getDTR(void) {
+uint8_t USBSerial::getDTR(void) {
 //    return usbGetDTR();
 }
 
-uint8 USBSerial::getRTS(void) {
+uint8_t USBSerial::getRTS(void) {
 //    return usbGetRTS();
 }
 
@@ -213,3 +215,5 @@ USBSerial::operator bool() {
   delay(10);
  return result;
 }
+#endif // USBD_USE_CDC
+#endif // USBCON

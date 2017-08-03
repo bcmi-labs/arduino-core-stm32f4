@@ -36,8 +36,10 @@
 #ifndef _USB_SERIAL_H_
 #define _USB_SERIAL_H_
 
+#if !defined (USBCON) || !defined (USBD_USE_CDC)
+#warning "Using legacy CDC core (non pluggable)"
+#else
 #include "Stream.h"
-
 /**
  * @brief Virtual serial terminal.
  */
@@ -62,16 +64,15 @@ public:
     inline size_t write(int n) { return write((uint8_t)n); }
     using Print::write;
 
-    uint8 getRTS();
-    uint8 getDTR();
-    uint8 isConnected();
-    uint8 pending();
+    uint8_t getRTS();
+    uint8_t getDTR();
+    uint8_t isConnected();
+    uint8_t pending();
 
     virtual operator bool(void);
 
 };
 
-//extern USBSerial Serial;
 extern USBSerial SerialUSB;
-
+#endif
 #endif
